@@ -36,5 +36,11 @@
     "prettier": "3.6.2",
     "prisma": "^6.16.2",
     "supertest": "^7.1.4"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   }
 }
