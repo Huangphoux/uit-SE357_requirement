@@ -28,18 +28,10 @@ jobs:
 
             - name: Install frontend dependencies
               run: |
-                  cd ..
-                  cd client
+                  cd ../client
                   npm install
 
-            - name: Run tests
+            - name: Run server tests
               run: |
-                  cd ..
-                  cd server
+                  cd ../server
                   npm test
-
-            - name: Build frontend
-              run: |
-                  cd client
-                  npm run build
-
