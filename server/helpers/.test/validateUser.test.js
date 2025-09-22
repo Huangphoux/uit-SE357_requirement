@@ -1,5 +1,5 @@
 const validateUser = require("../validateUser.js");
 
 it("should fail", () => {
-  expect(validateUser(123, 123)).toBe("just a test");
+  expect(validateUser(123, 123)).toBeFalsy();
 });
