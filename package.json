@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "jest",
     "start": "node server",
     "server": "cd server && nodemon",
     "client": "npm start --prefix client",
