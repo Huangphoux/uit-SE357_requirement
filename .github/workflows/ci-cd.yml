@@ -1,37 +1,80 @@
 name: CI-CD Pipeline for MERN App
 
 on:
-    push:
-        branches:
-            - main
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  test-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
 
-            - name: Set up Node.js
-              uses: actions/setup-node@v2
-              with:
-                  node-version: "20"
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Install concurrently
-              run: npm install
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: client/package-lock.json
 
-            - name: Install backend dependencies
-              run: |
-                  cd server
-                  npm install
+      - name: Install dependencies
+        run: npm install
 
-            - name: Install frontend dependencies
-              run: |
-                  cd client
-                  npm install
+      - name: Run linting
+        run: npm run lint
 
-            - name: Run server tests
-              run: |
-                  cd server
-                  npm test
+      - name: Run tests
+        run: npm test -- --coverage --watchAll=false
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ./client/coverage
+
+  test-backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
+
+    # services:
+    #   mongodb:
+    #     image: mongo:latest
+    #     ports:
+    #       - 27017:27017
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+        # env:
+        #   MONGODB_URI: mongodb://localhost:27017/taskflow-test
+        #   JWT_SECRET: test-secret-key

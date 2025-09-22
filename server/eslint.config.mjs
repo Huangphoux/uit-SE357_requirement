@@ -7,12 +7,22 @@ export default defineConfig([
     files: ["**/*.{js,mjs,cjs}"],
     plugins: { js },
     extends: ["js/recommended"],
-    languageOptions: { globals: globals.browser },
-    env: {
-      commonjs: true,
-      es2021: true,
-      node: true,
-      jest: true,
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "module",
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.jest,
+        ...globals.commonjs,
+        myCustomGlobal: "readonly",
+      },
     },
+    // env: {
+    //   commonjs: true,
+    //   es2021: true,
+    //   node: true,
+    //   jest: true,
+    // },
   },
 ]);
