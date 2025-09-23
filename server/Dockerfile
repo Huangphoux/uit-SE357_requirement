@@ -7,4 +7,6 @@ COPY package-lock.json /server/package-lock.json
 
 RUN npm install
 
+# EXPOSE 5000
+
 CMD ["npm", "run", "dev"]

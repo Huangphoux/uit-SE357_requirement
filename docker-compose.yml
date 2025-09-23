@@ -1,8 +1,6 @@
-version: "3"
-
 services:
   database:
-    container_name: db
+    container_name: database
     image: postgres:latest
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-pern_db}
@@ -17,7 +15,7 @@ services:
       - database
     restart: unless-stopped
   database_manager:
-    container_name: db_manager
+    container_name: database_manager
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
@@ -47,6 +45,13 @@ services:
       - database
       - client
     restart: unless-stopped
+    develop:
+      watch:
+        - path: ./server/
+          action: sync
+          target: /usr/local/app/src
+        - path: ./server/package.json
+          action: rebuild
   client:
     container_name: client
     build:
@@ -60,6 +65,13 @@ services:
     networks:
       - client
     restart: unless-stopped
+    develop:
+      watch:
+        - path: ./client/src
+          action: sync
+          target: /usr/local/app/src
+        - path: ./client/package.json
+          action: rebuild
 networks:
   client:
   database:
