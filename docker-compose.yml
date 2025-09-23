@@ -12,24 +12,32 @@ services:
 
   server:
     container_name: server
-    build: ./server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     volumes:
       - ./server:/app
       - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm run dev
     depends_on:
       - database
-    command: npm run dev
 
   client:
     container_name: client
-    build: ./client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
     ports:
       - "5173:5173"
     volumes:
-      - ./client:/client
-      - /client/node_modules
+      - ./client:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm run dev -- --host 0.0.0.0
     depends_on:
       - server
-    command: npm run dev -- --host 0.0.0.0
