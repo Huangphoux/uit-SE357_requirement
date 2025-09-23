@@ -1,29 +1,12 @@
 # uit-SE357_Requirement_Engineering
 
-## Run Locally
+## Getting Started with Docker
 
-Clone the project
-
-```bash
-  git clone git@github.com:Huangphoux/uit-SE357_Requirement_Engineering.git
-```
-
-Go to the project directory
-
-```bash
-  cd uit-SE357_Requirement_Engineering
-```
-
-Install dependencies
-
-```bash
-  bash install.sh
-```
-
-Start both client and server concurrently from the root directory
-
-```bash
-  npm run dev
-```
-
-Go to http://localhost:5173/ to view the app running on your browser.
+1. Install Docker and Docker Compose
+2. Clone the repository
+3. Start Docker Desktop
+4. Run `docker-compose up` to start all services
+5. Access the app at [http://localhost:5173](http://localhost:5173)
+6. Use `docker-compose build` then `docker-compose up` to rebuild the containers.
+7. After developing, run `docker-compose down` to stop and remove the containers.
+8. Use `docker system prune -a --volumes` to remove all Docker-related data (containers, images, volumes).

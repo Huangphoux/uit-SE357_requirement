@@ -1,12 +1,11 @@
 FROM node:latest
-# RUN mkdir -p /api/config /api/src
 WORKDIR /server
 
-COPY package.json /server/package.json
-COPY package-lock.json /server/package-lock.json
-
+COPY package.json .
 RUN npm install
 
-# EXPOSE 5000
+COPY . .
+
+EXPOSE 3000
 
 CMD ["npm", "run", "dev"]
