@@ -7,7 +7,11 @@
     "start": "node server",
     "server": "cd server && nodemon",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "docker:build": "docker-compose -p pern_stack build",
+    "docker:up": "docker-compose -p pern_stack up",
+    "docker:down": "docker-compose -p pern_stack down",
+    "docker:down:volumes": "docker-compose -p pern_stack down --volumes"
   },
   "author": "",
   "license": "ISC",

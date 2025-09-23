@@ -1,0 +1,66 @@
+version: "3"
+
+services:
+  database:
+    container_name: db
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-pern_db}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-root}
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
+      - ./database/docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - database
+    restart: unless-stopped
+  database_manager:
+    container_name: db_manager
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    volumes:
+      - ./database/database_manager:/root/.pgadmin
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    depends_on:
+      - database
+    networks:
+      - database
+    restart: unless-stopped
+  server:
+    container_name: server
+    build:
+      context: ./server
+      dockerfile: Dockerfile # on move to prod, update this
+    volumes:
+      - /server/node_modules
+      - ./server:/server
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+    networks:
+      - database
+      - client
+    restart: unless-stopped
+  client:
+    container_name: client
+    build:
+      context: ./client
+      dockerfile: Dockerfile # on move to prod, update this
+    volumes:
+      - /client/node_modules
+      - ./client:/client
+    ports:
+      - "8000:3000"
+    networks:
+      - client
+    restart: unless-stopped
+networks:
+  client:
+  database:
+    driver: bridge
