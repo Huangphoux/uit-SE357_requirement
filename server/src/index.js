@@ -5,12 +5,12 @@ require("dotenv").config();
 const PORT = process.env.PORT || 3000;
 
 const authorRouter = require("./routes/authorRouter");
-const bookRouter = require("./routes/bookRouter");
-const indexRouter = require("./routes/indexRouter");
+// const bookRouter = require("./routes/bookRouter");
+// const indexRouter = require("./routes/indexRouter");
 
 app.use("/authors", authorRouter);
-app.use("/books", bookRouter);
-app.use("/", indexRouter);
+// app.use("/books", bookRouter);
+// app.use("/", indexRouter);
 
 app.listen(PORT, (error) => {
   if (error) {
