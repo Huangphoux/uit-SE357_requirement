@@ -5,5 +5,5 @@
   "singleQuote": false,
   "trailingComma": "es5",
   "endOfLine": "auto",
-  "bracketSameLine": false
+  "bracketSameLine": true
 }

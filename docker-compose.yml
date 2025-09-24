@@ -22,6 +22,8 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_INTERVAL=1000
     command: npm run dev
     depends_on:
       - database
@@ -38,6 +40,9 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
-    command: npm run dev -- --host 0.0.0.0
+      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_INTERVAL=1000
+      - VITE_FORCE_HMR=true
+    command: npm run dev -- --host 0.0.0.0 --force
     depends_on:
       - server
