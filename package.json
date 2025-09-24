@@ -8,10 +8,10 @@
     "server": "npm start --prefix server",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "docker:build": "docker-compose -p pern_stack build",
-    "docker:up": "docker-compose -p pern_stack up",
-    "docker:down": "docker-compose -p pern_stack down",
-    "docker:down:volumes": "docker-compose -p pern_stack down --volumes"
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up",
+    "docker:down": "docker-compose down",
+    "docker:down:volumes": "docker-compose --volumes"
   },
   "author": "",
   "license": "ISC",
