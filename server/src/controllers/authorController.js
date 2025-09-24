@@ -1,6 +1,6 @@
-const db = require("../db");
+import db from "../db.js";
 
-async function getAuthorById(req, res) {
+export async function getAuthorById(req, res) {
     const { authorId } = req.params;
 
     const author = await db.getAuthorById(+authorId);
@@ -11,6 +11,4 @@ async function getAuthorById(req, res) {
     }
 
     res.send(`Author Name: ${author.name}`);
-};
-
-module.exports = { getAuthorById };
+}

@@ -1,10 +1,11 @@
-const express = require("express");
-const app = express();
+import express from "express";
+import dotenv from "dotenv";
+import authorRouter from "./routes/authorRouter.js";  // Note: added .js extension
 
-require("dotenv").config();
+const app = express();
+dotenv.config();
 const PORT = process.env.PORT || 3000;
 
-const authorRouter = require("./routes/authorRouter");
 // const bookRouter = require("./routes/bookRouter");
 // const indexRouter = require("./routes/indexRouter");
 

@@ -2,6 +2,6 @@
   "watch": ["src"],
   "ext": ".js,.json",
   "ignore": ["node_modules", "coverage", "dist"],
-  "exec": "node ./src/index.js",
+  "exec": "node --experimental-json-modules ./src/index.js",
   "legacyWatch": true
 }
