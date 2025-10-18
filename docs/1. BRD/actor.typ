@@ -2,7 +2,7 @@
 
 = Admin
 
-The *administrator* manages the overall system. Their responsibilities include:
+The administrator manages the overall system. Their responsibilities include:
 
 - Creating and managing user accounts (students, teachers)
 - Assigning roles
@@ -14,7 +14,7 @@ The *administrator* manages the overall system. Their responsibilities include:
 
 = Teacher
 
-A *teacher* is responsible for:
+A teacher is responsible for:
 
 - Managing classes
 - Managing learning materials
@@ -23,7 +23,7 @@ A *teacher* is responsible for:
 
 = Student
 
-A *student* can:
+A student can:
 
 - Register independently
 - Log in

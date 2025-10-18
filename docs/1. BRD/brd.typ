@@ -1,15 +1,12 @@
 #import "@preview/basic-report:0.3.1": *
 
 #show: it => basic-report(
-  doc-category: "Quản lý dự án Phát triển Phần mềm - SE358.Q11
-
-Đề tài 2: Ứng dụng quản lý lớp học trực tuyến cho trung tâm ngoại ngữ.",
+  doc-category: "Kỹ thuật phân tích yêu cầu - SE357.Q12
+  
+Xây dựng website quản lí trung tâm tiếng Anh",
   doc-title: "Business Requirement Document",
   author: "23521224 Trương Hoàng Phúc
-23521736 Bùi Văn Tùng
-23520657 Vũ Quốc Huy
-23520466 Tạ Hoàng Hiệp
-23520682 Đỗ Đình Khang",
+23520448 Nguyễn Văn Hào",
   language: "vi",
   compact-mode: false,
   it
@@ -33,4 +30,8 @@
 
 = Domain objects
 
+#include "domain.typ"
+
 = Components
+
+#include "component.typ"
