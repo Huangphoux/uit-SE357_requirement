@@ -1,0 +1,17 @@
+@startuml EnrollStudent
+title Enroll Student Sequence Diagram
+
+actor Admin
+boundary "Class or Student Profile UI"
+control "EnrollmentController"
+entity "Enrollment Repository"
+
+Admin -> "Class or Student Profile UI" : Open profile
+Admin -> "Class or Student Profile UI" : Click 'Enroll' button
+"Class or Student Profile UI" -> "EnrollmentController" : Enroll student request
+"EnrollmentController" -> "Enrollment Repository" : Add enrollment record
+"Enrollment Repository" --> "EnrollmentController" : Confirmation
+"EnrollmentController" --> "Class or Student Profile UI" : Success response
+"Class or Student Profile UI" -> Admin : Update UI with enrollment status
+
+@enduml

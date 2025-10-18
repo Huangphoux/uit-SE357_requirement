@@ -1,0 +1,18 @@
+@startuml RemoveTeacher
+title Remove Teacher from Class Sequence Diagram
+
+actor Admin
+boundary "Class Details UI"
+control "TeacherAssignmentController"
+entity "TeacherAssignment Repository"
+
+Admin -> "Class Details UI" : Open class details
+Admin -> "Class Details UI" : Select assigned teacher
+Admin -> "Class Details UI" : Click 'Remove' button
+"Class Details UI" -> "TeacherAssignmentController" : Remove teacher request
+"TeacherAssignmentController" -> "TeacherAssignment Repository" : Delete teacher-class assignment
+"TeacherAssignment Repository" --> "TeacherAssignmentController" : Confirmation
+"TeacherAssignmentController" --> "Class Details UI" : Success response
+"Class Details UI" -> Admin : Update UI to reflect removal
+
+@enduml

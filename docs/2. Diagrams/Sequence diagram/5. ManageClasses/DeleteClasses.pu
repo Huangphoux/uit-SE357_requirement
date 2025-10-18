@@ -1,0 +1,18 @@
+@startuml DeleteClass
+title Delete Class Sequence Diagram
+
+actor Admin
+boundary "Class Management UI"
+control "ClassController"
+entity "Class Repository"
+
+Admin -> "Class Management UI" : Open class management UI
+Admin -> "Class Management UI" : Select class to delete
+Admin -> "Class Management UI" : Confirm delete action
+"Class Management UI" -> "ClassController" : Delete class request
+"ClassController" -> "Class Repository" : Remove class
+"Class Repository" --> "ClassController" : Confirmation
+"ClassController" --> "Class Management UI" : Success response
+"Class Management UI" -> Admin : Show updated class list
+
+@enduml

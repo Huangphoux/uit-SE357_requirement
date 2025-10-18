@@ -1,0 +1,20 @@
+@startuml CreateClass
+title Create Class Sequence Diagram
+
+actor Admin
+boundary "Class Management UI"
+control "ClassController"
+entity "Class Repository"
+
+Admin -> "Class Management UI" : Open class management UI
+Admin -> "Class Management UI" : Click 'Create Class'
+"Class Management UI" -> Admin : Show class creation form
+Admin -> "Class Management UI" : Fill in class form (course link, schedule, etc.)
+Admin -> "Class Management UI" : Submit class form
+"Class Management UI" -> "ClassController" : Create class request
+"ClassController" -> "Class Repository" : Save new class
+"Class Repository" --> "ClassController" : Confirmation
+"ClassController" --> "Class Management UI" : Success response
+"Class Management UI" -> Admin : Show updated class list
+
+@enduml

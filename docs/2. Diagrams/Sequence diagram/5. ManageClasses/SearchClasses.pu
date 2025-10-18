@@ -1,0 +1,17 @@
+@startuml SearchClasses
+title Search Classes Sequence Diagram
+
+actor Admin
+boundary "Class Management UI"
+control "ClassController"
+entity "Class Repository"
+
+Admin -> "Class Management UI" : Open class management UI
+Admin -> "Class Management UI" : Enter search query/filter
+"Class Management UI" -> "ClassController" : Search classes request
+"ClassController" -> "Class Repository" : Query classes by criteria
+"Class Repository" --> "ClassController" : Return matching classes
+"ClassController" --> "Class Management UI" : Return search results
+"Class Management UI" -> Admin : Display filtered class list
+
+@enduml

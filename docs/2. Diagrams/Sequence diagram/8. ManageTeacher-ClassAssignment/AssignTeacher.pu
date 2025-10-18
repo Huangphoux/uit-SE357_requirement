@@ -1,0 +1,18 @@
+@startuml AssignTeacher
+title Assign Teacher to Class Sequence Diagram
+
+actor Admin
+boundary "Class Details UI"
+control "TeacherAssignmentController"
+entity "TeacherAssignment Repository"
+
+Admin -> "Class Details UI" : Open class details
+Admin -> "Class Details UI" : Select teacher from dropdown
+Admin -> "Class Details UI" : Click 'Assign' button
+"Class Details UI" -> "TeacherAssignmentController" : Assign teacher request
+"TeacherAssignmentController" -> "TeacherAssignment Repository" : Create teacher-class assignment
+"TeacherAssignment Repository" --> "TeacherAssignmentController" : Confirmation
+"TeacherAssignmentController" --> "Class Details UI" : Success response
+"Class Details UI" -> Admin : Update UI to reflect assignment
+
+@enduml

@@ -1,0 +1,17 @@
+@startuml RemoveStudent
+title Remove Student Sequence Diagram
+
+actor Admin
+boundary "Class or Student Profile UI"
+control "EnrollmentController"
+entity "Enrollment Repository"
+
+Admin -> "Class or Student Profile UI" : Open profile
+Admin -> "Class or Student Profile UI" : Click 'Remove' button
+"Class or Student Profile UI" -> "EnrollmentController" : Remove enrollment request
+"EnrollmentController" -> "Enrollment Repository" : Delete enrollment record
+"Enrollment Repository" --> "EnrollmentController" : Confirmation
+"EnrollmentController" --> "Class or Student Profile UI" : Success response
+"Class or Student Profile UI" -> Admin : Update UI with enrollment status
+
+@enduml
