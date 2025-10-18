@@ -1,0 +1,20 @@
+@startuml SelfEnrollInCourses
+title Self-Enroll in Courses Sequence Diagram (US2.6 / UC2.6)
+
+actor Student
+boundary "Course Catalog"
+control "EnrollmentController"
+boundary "Student Dashboard"
+
+Student -> "Course Catalog" : Access course catalog
+"Course Catalog" -> Student : Display available courses
+
+Student -> "Course Catalog" : Click Enroll/Unenroll
+"Course Catalog" -> "EnrollmentController" : Update enrollment status
+"EnrollmentController" -> "EnrollmentController" : Save enrollment changes in backend
+"EnrollmentController" --> "Course Catalog" : Confirm update success
+
+"Course Catalog" -> "Student Dashboard" : Refresh current enrollments
+"Student Dashboard" -> Student : Show updated enrolled courses
+
+@enduml

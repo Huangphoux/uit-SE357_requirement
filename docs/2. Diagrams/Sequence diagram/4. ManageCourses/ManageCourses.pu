@@ -1,0 +1,21 @@
+@startuml ManageCourses
+title Manage Courses Sequence Diagram (US2.1 / UC2.1)
+
+actor Admin
+boundary "Course Dashboard"
+control "CourseController"
+
+Admin -> "Course Dashboard" : Open course dashboard
+"Course Dashboard" -> Admin : Display course list and options
+
+Admin -> "Course Dashboard" : Create/Edit/Delete course
+Admin -> "Course Dashboard" : Fill in course form (title, description, etc.)
+Admin -> "Course Dashboard" : Submit course form
+
+"Course Dashboard" -> "CourseController" : Process course data
+"CourseController" -> "CourseController" : Create/Edit/Delete course in backend
+"CourseController" --> "Course Dashboard" : Confirm operation success
+
+"Course Dashboard" -> Admin : Display updated course list
+
+@enduml

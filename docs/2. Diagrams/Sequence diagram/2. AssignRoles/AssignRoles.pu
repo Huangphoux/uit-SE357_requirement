@@ -1,0 +1,23 @@
+@startuml Assign Roles
+title Assign Roles Sequence Diagram (US1.3 / UC1.3)
+
+actor Admin
+boundary "Admin Panel"
+control "AdminController"
+
+Admin -> "Admin Panel" : Open user management panel
+"Admin Panel" -> Admin : Display list of users
+
+Admin -> "Admin Panel" : Select user
+"Admin Panel" -> Admin : Show user details and role options
+
+Admin -> "Admin Panel" : Choose role (Student/Teacher/Admin)
+Admin -> "Admin Panel" : Submit role change
+
+"Admin Panel" -> "AdminController" : Update user role
+"AdminController" -> "AdminController" : Update permissions in backend
+"AdminController" --> "Admin Panel" : Confirm update success
+
+"Admin Panel" -> Admin : Display confirmation / updated user info
+
+@enduml

@@ -1,0 +1,19 @@
+@startuml ManageTeacherClassAssignment
+title Manage Teacher-Class Assignment Sequence Diagram (US2.5 / UC2.5)
+
+actor Admin
+boundary "Class Management UI"
+control "TeacherAssignmentController"
+
+Admin -> "Class Management UI" : Open class details
+"Class Management UI" -> Admin : Display class info and teacher options
+
+Admin -> "Class Management UI" : Choose teacher from dropdown
+Admin -> "Class Management UI" : Assign/remove teacher
+"Class Management UI" -> "TeacherAssignmentController" : Update teacher-class assignment
+"TeacherAssignmentController" -> "TeacherAssignmentController" : Save changes in backend
+"TeacherAssignmentController" --> "Class Management UI" : Confirm update success
+
+"Class Management UI" -> Admin : Reflect updated assignment in views
+
+@enduml

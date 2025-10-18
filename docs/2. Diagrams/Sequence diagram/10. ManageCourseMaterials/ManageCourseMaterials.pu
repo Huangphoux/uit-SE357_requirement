@@ -1,0 +1,19 @@
+@startuml ManageCourseMaterials
+title Manage Course Materials Sequence Diagram (US3.1 / UC3.1)
+
+actor Teacher
+boundary "Material Management UI"
+control "MaterialController"
+
+Teacher -> "Material Management UI" : Open course materials tab
+"Material Management UI" -> Teacher : Display existing materials and upload options
+
+Teacher -> "Material Management UI" : Upload files or add links
+Teacher -> "Material Management UI" : Tag materials with course/topic
+"Material Management UI" -> "MaterialController" : Save material info and files
+"MaterialController" -> "MaterialController" : Store materials in backend
+"MaterialController" --> "Material Management UI" : Confirm save success
+
+"Material Management UI" -> Teacher : Provide edit/delete options and updated material list
+
+@enduml
