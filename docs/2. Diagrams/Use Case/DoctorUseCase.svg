@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="1610px" preserveAspectRatio="none" style="width:1044px;height:1610px;background:#FFFFFF;" version="1.1" viewBox="0 0 1044 1610" width="1044px" zoomAndPan="magnify"><defs/><g><!--MD5=[519c8698fbb4f5027723de750eb4def2]
+cluster Child Health Care App--><g id="cluster_Child Health Care App"><rect fill="none" height="1597" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;" width="943" x="95" y="7"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="153" x="490" y="23.5332">Child Health Care App</text></g><g id="elem_SuperviseChild"><ellipse cx="224.6111" cy="273.2222" fill="#F1F1F1" rx="74.1111" ry="17.2222" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="99" x="172.1111" y="277.7388">Supervise Child</text></g><g id="elem_CreateChild"><ellipse cx="566.5842" cy="371.8168" fill="#F1F1F1" rx="67.0842" ry="15.8168" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79" x="524.0842" y="376.3334">Create Child</text></g><g id="elem_UpdateChild"><ellipse cx="566.2517" cy="304.9503" fill="#F1F1F1" rx="67.7517" ry="15.9503" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="81" x="522.7517" y="309.4669">Update Child</text></g><g id="elem_DeleteChild"><ellipse cx="566.4254" cy="238.1851" fill="#F1F1F1" rx="66.4254" ry="15.6851" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="77" x="524.9254" y="242.7017">Delete Child</text></g><g id="elem_SearchChild"><ellipse cx="908.2517" cy="173.9503" fill="#F1F1F1" rx="67.7517" ry="15.9503" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="81" x="864.7517" y="178.4669">Search Child</text></g><g id="elem_ViewHealthUpdateHistory"><ellipse cx="566.5391" cy="70.9034" fill="#F1F1F1" rx="76.5391" ry="27.9034" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73" x="530.0391" y="65.8272">View Health</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92" x="520.5391" y="83.4366">Update History</text></g><g id="elem_SupervisePrescription"><ellipse cx="224.6965" cy="603.2393" fill="#F1F1F1" rx="91.6965" ry="20.7393" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="142" x="153.6965" y="606.9678">Supervise Prescription</text></g><g id="elem_CreatePrescription"><ellipse cx="566.669" cy="676.0338" fill="#F1F1F1" rx="83.169" ry="19.0338" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="122" x="505.669" y="679.7623">Create Prescription</text></g><g id="elem_UpdatePrescription"><ellipse cx="566.5066" cy="603.2013" fill="#F1F1F1" rx="84.0066" ry="19.2013" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="124" x="504.5066" y="606.9298">Update Prescription</text></g><g id="elem_DeletePrescription"><ellipse cx="566.3351" cy="529.867" fill="#F1F1F1" rx="82.3351" ry="18.867" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="120" x="506.3351" y="533.5955">Delete Prescription</text></g><g id="elem_SearchPrescription"><ellipse cx="908.5066" cy="530.2013" fill="#F1F1F1" rx="84.0066" ry="19.2013" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="124" x="846.5066" y="533.9298">Search Prescription</text></g><g id="elem_SuperviseImmunizationSchedule"><ellipse cx="224.3087" cy="895.9034" fill="#F1F1F1" rx="113.3087" ry="27.9034" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="63" x="192.8087" y="890.8272">Supervise</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="144" x="152.3087" y="908.4366">Immunization Schedule</text></g><g id="elem_CreateImmunizationSchedule"><ellipse cx="566.3087" cy="1027.9034" fill="#F1F1F1" rx="113.3087" ry="27.9034" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="43" x="544.8087" y="1022.8272">Create</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="144" x="494.3087" y="1040.4366">Immunization Schedule</text></g><g id="elem_UpdateImmunizationSchedule"><ellipse cx="566.3087" cy="936.9034" fill="#F1F1F1" rx="113.3087" ry="27.9034" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="45" x="543.8087" y="931.8272">Update</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="144" x="494.3087" y="949.4366">Immunization Schedule</text></g><g id="elem_DeleteImmunizationSchedule"><ellipse cx="566.3087" cy="845.9034" fill="#F1F1F1" rx="113.3087" ry="27.9034" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="41" x="545.8087" y="840.8272">Delete</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="144" x="494.3087" y="858.4366">Immunization Schedule</text></g><g id="elem_SearchImmunizationSchedule"><ellipse cx="908.3087" cy="845.9034" fill="#F1F1F1" rx="113.3087" ry="27.9034" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="45" x="885.8087" y="840.8272">Search</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="144" x="836.3087" y="858.4366">Immunization Schedule</text></g><g id="elem_Chat"><ellipse cx="224.6985" cy="1175.9517" fill="#F1F1F1" rx="32.6985" ry="15.4517" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="30" x="209.6985" y="1179.6802">Chat</text></g><g id="elem_ReplyMessage"><ellipse cx="566.376" cy="1330.0752" fill="#F1F1F1" rx="73.376" ry="17.0752" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97" x="514.876" y="1334.5918">Reply Message</text></g><g id="elem_DeleteChat"><ellipse cx="566.341" cy="1262.1182" fill="#F1F1F1" rx="65.341" ry="15.6182" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="75" x="525.841" y="1266.6348">Delete Chat</text></g><g id="elem_SearchChat"><ellipse cx="908.5842" cy="1261.8168" fill="#F1F1F1" rx="67.0842" ry="15.8168" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79" x="866.0842" y="1266.3334">Search Chat</text></g><g id="elem_CreateChat"><ellipse cx="566.4254" cy="1107.1851" fill="#F1F1F1" rx="66.4254" ry="15.6851" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="77" x="524.9254" y="1111.7017">Create Chat</text></g><g id="elem_MonitorChildHealthStatus"><ellipse cx="224.3823" cy="1439.9034" fill="#F1F1F1" rx="70.8823" ry="27.9034" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="83" x="182.8823" y="1434.8272">Monitor Child</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="84" x="182.3823" y="1452.4366">Health Status</text></g><g id="elem_MonitorChildSleepTime"><ellipse cx="566.3456" cy="1564.1691" fill="#F1F1F1" rx="106.3456" ry="23.6691" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="175" x="478.8456" y="1567.8976">Monitor Child's Sleep Times</text></g><g id="elem_MonitorChildMealTime"><ellipse cx="566.6395" cy="1482.1279" fill="#F1F1F1" rx="103.6395" ry="23.1279" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="169" x="482.1395" y="1485.8564">Monitor Child's Meal Times</text></g><g id="elem_MonitorChildEventChart"><ellipse cx="566.3297" cy="1403.0659" fill="#F1F1F1" rx="90.8297" ry="20.5659" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="140" x="496.3297" y="1406.7945">Monitor Child's Events</text></g><!--MD5=[5a5d35bcfc46556bdff8e646cc6c81c2]
+entity Doctor--><g id="elem_Doctor"><ellipse cx="27" cy="865.5" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M27,873.5 L27,900.5 M14,881.5 L40,881.5 M27,900.5 L14,915.5 M27,900.5 L40,915.5 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="42" x="6" y="931.5332">Doctor</text></g><!--MD5=[d1917adc5ce6c6d7bf38ec20bb2338ce]
+link Doctor to SupervisePrescription--><g id="link_Doctor_SupervisePrescription"><path d="M48,866.02 C87.81,806.37 176.01,674.18 209.88,623.41 " fill="none" id="Doctor-SupervisePrescription" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[898d9273c2f56eb2a4b49c6662e0673a]
+reverse link SupervisePrescription to CreatePrescription--><g id="link_SupervisePrescription_CreatePrescription"><path d="M296.2,618.18 C358.01,631.45 446.79,650.51 505.28,663.07 " fill="none" id="SupervisePrescription-backto-CreatePrescription" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="291.06,617.08,299.0302,622.8659,295.9505,618.1208,300.6955,615.0411,291.06,617.08" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="369" y="632.4951">«extend»</text></g><!--MD5=[4494172bcbe4a13bc4e8258d92ff29c7]
+reverse link SupervisePrescription to UpdatePrescription--><g id="link_SupervisePrescription_UpdatePrescription"><path d="M321.35,603 C372.06,603 433.7,603 482.37,603 " fill="none" id="SupervisePrescription-backto-UpdatePrescription" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="316.17,603,325.17,607,321.17,603,325.17,599,316.17,603" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="369" y="599.4951">«extend»</text></g><!--MD5=[bad1c2fa6459bc220748673b82a53ae6]
+reverse link SupervisePrescription to DeletePrescription--><g id="link_SupervisePrescription_DeletePrescription"><path d="M296.21,587.82 C358.12,574.53 447.08,555.43 505.56,542.87 " fill="none" id="SupervisePrescription-backto-DeletePrescription" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="291.06,588.92,300.6955,590.9589,295.9505,587.8792,299.0302,583.1341,291.06,588.92" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="369" y="559.4951">«extend»</text></g><!--MD5=[8814fff1c45bc05f67720f328031c21d]
+reverse link UpdatePrescription to SearchPrescription--><g id="link_UpdatePrescription_SearchPrescription"><path d="M633.43,588.84 C695.26,575.57 786.94,555.89 846.96,543 " fill="none" id="UpdatePrescription-backto-SearchPrescription" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="628.29,589.95,637.9267,591.9831,633.1798,588.9063,636.2567,584.1594,628.29,589.95" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="711" y="559.4951">«extend»</text></g><!--MD5=[754c66304d481814273dd2adaebb9a90]
+reverse link DeletePrescription to SearchPrescription--><g id="link_DeletePrescription_SearchPrescription"><path d="M654.38,530 C706.61,530 772.72,530 824.27,530 " fill="none" id="DeletePrescription-backto-SearchPrescription" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="649.37,530,658.37,534,654.37,530,658.37,526,649.37,530" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="711" y="526.4951">«extend»</text></g><!--MD5=[17c0ebfaae9fe72a86fa6451952efddf]
+reverse link SupervisePrescription to SearchPrescription--><g id="link_SupervisePrescription_SearchPrescription"><path d="M259.08,580.73 C301.95,553.76 379.41,509.86 453,493 C595.57,460.34 769.07,494.09 854.61,515.41 " fill="none" id="SupervisePrescription-backto-SearchPrescription" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="254.79,583.44,264.5352,582.0148,259.0171,580.7695,260.2624,575.2514,254.79,583.44" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="540" y="476.4951">«extend»</text></g><!--MD5=[67196deba0c12afef839faac2294c37e]
+link Doctor to SuperviseChild--><g id="link_Doctor_SuperviseChild"><path d="M31.62,856.99 C38.18,794.27 54.47,667.66 87,565 C121.65,455.64 188.34,334.18 213.53,290.13 " fill="none" id="Doctor-SuperviseChild" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[e1a2aeb97d11a6d2b286d4d5ce1e1d1a]
+reverse link SuperviseChild to ViewHealthUpdateHistory--><g id="link_SuperviseChild_ViewHealthUpdateHistory"><path d="M243.64,251.95 C268.96,223.71 317.49,173.59 368,143 C410.14,117.48 462.76,98.85 503.09,86.94 " fill="none" id="SuperviseChild-backto-ViewHealthUpdateHistory" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="240.08,255.95,249.0412,251.8638,243.3947,252.2067,243.0518,246.5602,240.08,255.95" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="369" y="113.4951">«extend»</text></g><!--MD5=[edc6d7802471a18b9588df2ef98f9425]
+reverse link SuperviseChild to CreateChild--><g id="link_SuperviseChild_CreateChild"><path d="M261.58,290.61 C289.95,303.86 330.75,321.61 368,333 C414.46,347.21 468.69,357.48 508.56,363.91 " fill="none" id="SuperviseChild-backto-CreateChild" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="256.79,288.36,263.2336,295.8085,261.3151,290.4869,266.6367,288.5684,256.79,288.36" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="369" y="329.4951">«extend»</text></g><!--MD5=[c02cbf88f5202aaaaa56337e685c5373]
+reverse link SuperviseChild to UpdateChild--><g id="link_SuperviseChild_UpdateChild"><path d="M278.81,286.83 C305.41,293.06 338.19,299.74 368,303 C411.46,307.75 460.62,308.26 499.02,307.58 " fill="none" id="SuperviseChild-backto-UpdateChild" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="273.92,285.68,281.7519,291.6517,278.7846,286.8355,283.6008,283.8682,273.92,285.68" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="369" y="299.4951">«extend»</text></g><!--MD5=[e530f1f3e0bb6318d36683965a687214]
+reverse link SuperviseChild to DeleteChild--><g id="link_SuperviseChild_DeleteChild"><path d="M297.42,265.6 C359.23,259.23 447.33,250.16 505.44,244.18 " fill="none" id="SuperviseChild-backto-DeleteChild" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="292.27,266.13,301.6329,269.1854,297.2436,265.617,300.8121,261.2276,292.27,266.13" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="369" y="250.4951">«extend»</text></g><!--MD5=[f7f03c18fc551eed0bc41a5c411a7bb2]
+reverse link UpdateChild to SearchChild--><g id="link_UpdateChild_SearchChild"><path d="M616.09,291.44 C636.03,285.58 659.27,278.38 680,271 C752,245.36 833.86,208.48 877.06,188.39 " fill="none" id="UpdateChild-backto-SearchChild" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="611.09,292.9,620.85,294.22,615.89,291.5,618.61,286.54,611.09,292.9" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="711" y="235.4951">«extend»</text></g><!--MD5=[8b884be4a6ba088e40fccc91ebe4be0f]
+reverse link DeleteChild to SearchChild--><g id="link_DeleteChild_SearchChild"><path d="M623.71,227.42 C687.96,215.33 792.3,195.68 854.97,183.89 " fill="none" id="DeleteChild-backto-SearchChild" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="618.77,228.35,628.3562,230.6094,623.6831,227.4217,626.8708,222.7485,618.77,228.35" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="711" y="199.4951">«extend»</text></g><!--MD5=[ee1ac42169a85e14bcd7993c57efe129]
+reverse link ViewHealthUpdateHistory to SearchChild--><g id="link_ViewHealthUpdateHistory_SearchChild"><path d="M630.82,90.18 C699.49,110.99 807.14,143.6 865.86,161.39 " fill="none" id="ViewHealthUpdateHistory-backto-SearchChild" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="625.95,88.71,633.4123,95.1377,630.7372,90.1533,635.7215,87.4782,625.95,88.71" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="711" y="113.4951">«extend»</text></g><!--MD5=[92f7b87568a16b1244bc19166c077286]
+reverse link SuperviseChild to SearchChild--><g id="link_SuperviseChild_SearchChild"><path d="M272.83,257.51 C300.49,248.59 336.12,237.34 368,228 C405.56,216.99 414.54,212.25 453,205 C565.91,183.71 595.32,184.1 710,177 C753.3,174.32 802.03,173.55 840.25,173.47 " fill="none" id="SuperviseChild-backto-SearchChild" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="267.76,259.15,277.555,260.1783,272.5161,257.6075,275.087,252.5686,267.76,259.15" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="540" y="175.4951">«extend»</text></g><!--MD5=[fee3716f8ce749d385597adc912a3da2]
+link Doctor to SuperviseImmunizationSchedule--><g id="link_Doctor_SuperviseImmunizationSchedule"><path d="M48.19,896 C63.79,896 86.77,896 110.98,896 " fill="none" id="Doctor-SuperviseImmunizationSchedule" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[b1a719d683d3f21cb60b604d8017f47d]
+reverse link SuperviseImmunizationSchedule to CreateImmunizationSchedule--><g id="link_SuperviseImmunizationSchedule_CreateImmunizationSchedule"><path d="M287.12,922.12 C312.13,932.56 341.36,944.57 368,955 C412.25,972.33 462.49,990.88 501.22,1004.95 " fill="none" id="SuperviseImmunizationSchedule-backto-CreateImmunizationSchedule" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="282.5,920.19,289.2614,927.3513,287.1133,922.1181,292.3464,919.97,282.5,920.19" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="369" y="951.4951">«extend»</text></g><!--MD5=[f39b40b2078994e7f46541572e8a2f70]
+reverse link SuperviseImmunizationSchedule to UpdateImmunizationSchedule--><g id="link_SuperviseImmunizationSchedule_UpdateImmunizationSchedule"><path d="M317.11,914.99 C333.98,918.02 351.48,920.86 368,923 C396.12,926.65 426.63,929.4 455.07,931.45 " fill="none" id="SuperviseImmunizationSchedule-backto-UpdateImmunizationSchedule" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="311.9,914.04,320.0506,919.5688,316.8212,914.9244,321.4656,911.695,311.9,914.04" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="369" y="919.4951">«extend»</text></g><!--MD5=[5ec1bb6948c9b40a1caf5790aa80e690]
+reverse link SuperviseImmunizationSchedule to DeleteImmunizationSchedule--><g id="link_SuperviseImmunizationSchedule_DeleteImmunizationSchedule"><path d="M327.61,880.98 C372.34,874.41 424.58,866.72 468.69,860.24 " fill="none" id="SuperviseImmunizationSchedule-backto-DeleteImmunizationSchedule" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="322.48,881.74,331.9671,884.3848,327.4266,881.0109,330.8005,876.4703,322.48,881.74" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="369" y="865.4951">«extend»</text></g><!--MD5=[7b7966523c70148a23ff8f8d833295ee]
+reverse link UpdateImmunizationSchedule to SearchImmunizationSchedule--><g id="link_UpdateImmunizationSchedule_SearchImmunizationSchedule"><path d="M649.17,915.14 C704.33,900.38 776.67,881.02 830.76,866.54 " fill="none" id="UpdateImmunizationSchedule-backto-SearchImmunizationSchedule" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="644.23,916.46,653.9604,917.9827,649.0581,915.1601,651.8806,910.2578,644.23,916.46" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="711" y="883.4951">«extend»</text></g><!--MD5=[466cad00b36f1163f6e48e0afb3250f7]
+reverse link DeleteImmunizationSchedule to SearchImmunizationSchedule--><g id="link_DeleteImmunizationSchedule_SearchImmunizationSchedule"><path d="M685.45,846 C720.89,846 759.68,846 794.77,846 " fill="none" id="DeleteImmunizationSchedule-backto-SearchImmunizationSchedule" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="680.24,846,689.24,850,685.24,846,689.24,842,680.24,846" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="711" y="842.4951">«extend»</text></g><!--MD5=[4050cee1b36a0eb929c8b95334dd929c]
+reverse link SuperviseImmunizationSchedule to SearchImmunizationSchedule--><g id="link_SuperviseImmunizationSchedule_SearchImmunizationSchedule"><path d="M275.77,867.87 C320.66,844.46 389.02,812.95 453,800 C585.34,773.22 742.67,802.4 833.22,824.96 " fill="none" id="SuperviseImmunizationSchedule-backto-SearchImmunizationSchedule" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="271.23,870.25,281.0591,869.6267,275.6614,867.9342,277.3539,862.5365,271.23,870.25" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="540" y="786.4951">«extend»</text></g><!--MD5=[d4310c235887f6dbd71e022f0779949a]
+link Doctor to Chat--><g id="link_Doctor_Chat"><path d="M48,924.65 C89.17,983.61 182.1,1116.71 213.17,1161.2 " fill="none" id="Doctor-Chat" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[31db66abd57a10f235697865d9cbccdd]
+reverse link Chat to CreateChat--><g id="link_Chat_CreateChat"><path d="M259.72,1169.06 C320.13,1156.8 445.88,1131.28 515.84,1117.08 " fill="none" id="Chat-backto-CreateChat" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="254.78,1170.06,264.3981,1172.1796,259.679,1169.0602,262.7984,1164.3411,254.78,1170.06" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="369" y="1134.4951">«extend»</text></g><!--MD5=[6772aa0697724d39a84c443c1a5a95d6]
+reverse link Chat to ReplyMessage--><g id="link_Chat_ReplyMessage"><path d="M250.06,1190.79 C291.02,1214.99 376.33,1263.52 453,1295 C473.81,1303.55 497.51,1311.21 517.77,1317.17 " fill="none" id="Chat-backto-ReplyMessage" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="245.29,1187.96,250.981,1195.9982,249.5875,1190.5157,255.07,1189.1222,245.29,1187.96" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="369" y="1253.4951">«extend»</text></g><!--MD5=[b8221bfcca50dec16e2f406c38f86eaf]
+reverse link Chat to DeleteChat--><g id="link_Chat_DeleteChat"><path d="M258.63,1184.38 C320.1,1199.93 451.83,1233.25 521,1250.74 " fill="none" id="Chat-backto-DeleteChat" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="253.61,1183.11,261.3501,1189.2003,258.4565,1184.3395,263.3173,1181.4459,253.61,1183.11" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="369" y="1210.4951">«extend»</text></g><!--MD5=[829390db60d408bf535df6a48f619812]
+reverse link DeleteChat to SearchChat--><g id="link_DeleteChat_SearchChat"><path d="M637.59,1262 C697.34,1262 782.62,1262 841.25,1262 " fill="none" id="DeleteChat-backto-SearchChat" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="632.25,1262,641.25,1266,637.25,1262,641.25,1258,632.25,1262" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="711" y="1258.4951">«extend»</text></g><!--MD5=[6b1c86921d1d2c9d7cb81d65238e0990]
+reverse link ReplyMessage to SearchChat--><g id="link_ReplyMessage_SearchChat"><path d="M627.89,1317.92 C692.98,1304.9 795.44,1284.41 856.59,1272.18 " fill="none" id="ReplyMessage-backto-SearchChat" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="622.88,1318.92,632.4921,1321.0665,627.7818,1317.9339,630.9144,1313.2236,622.88,1318.92" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="711" y="1288.4951">«extend»</text></g><!--MD5=[84f6149f53b3fb575f24dece5201e085]
+reverse link Chat to SearchChat--><g id="link_Chat_SearchChat"><path d="M262.22,1177.37 C301.93,1179.04 367.06,1182.38 423,1188 C575.72,1203.33 613.47,1211.55 765,1236 C795.16,1240.87 828.8,1246.97 855.81,1252.04 " fill="none" id="Chat-backto-SearchChat" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="257.03,1177.15,265.8505,1181.5317,262.0254,1177.3641,266.193,1173.539,257.03,1177.15" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="540" y="1188.4951">«extend»</text></g><!--MD5=[7b650125c3ce8c59ef05db6b6bc7fc3f]
+link Doctor to MonitorChildHealthStatus--><g id="link_Doctor_MonitorChildHealthStatus"><path d="M31.01,935.23 C36.6,995.7 51.45,1114.55 87,1209 C116.87,1288.35 173.26,1371.63 203.36,1413.14 " fill="none" id="Doctor-MonitorChildHealthStatus" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[d0e2d29a2be8514b61b59f9cae260e4e]
+reverse link MonitorChildHealthStatus to MonitorChildEventChart--><g id="link_MonitorChildHealthStatus_MonitorChildEventChart"><path d="M298.3,1432.08 C352.92,1426.13 427.71,1418 484.27,1411.84 " fill="none" id="MonitorChildHealthStatus-backto-MonitorChildEventChart" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="293.08,1432.65,302.462,1435.6465,298.0503,1432.1057,301.5911,1427.694,293.08,1432.65" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="369" y="1416.4951">«extend»</text></g><!--MD5=[e00a7fded0ae0d1db3e2d89eead6a1ef]
+reverse link MonitorChildHealthStatus to MonitorChildMealTime--><g id="link_MonitorChildHealthStatus_MonitorChildMealTime"><path d="M297.64,1448.91 C349.58,1455.33 420,1464.03 475.6,1470.9 " fill="none" id="MonitorChildHealthStatus-backto-MonitorChildMealTime" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="292.67,1448.3,301.1115,1453.3735,297.6323,1448.9132,302.0926,1445.4339,292.67,1448.3" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="369" y="1455.4951">«extend»</text></g><!--MD5=[66a94960f74f55d0dd89db4e449ac7cb]
+reverse link MonitorChildHealthStatus to MonitorChildSleepTime--><g id="link_MonitorChildHealthStatus_MonitorChildSleepTime"><path d="M282.02,1460.61 C345.47,1483.75 447.75,1521.05 510.55,1543.96 " fill="none" id="MonitorChildHealthStatus-backto-MonitorChildSleepTime" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="277.14,1458.83,284.2245,1465.6718,281.8373,1460.5433,286.9658,1458.1561,277.14,1458.83" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="369" y="1491.4951">«extend»</text></g><!--MD5=[c6f127728ab1089e14a8f9aa9fb8391e]
+@startuml DoctorUseCase
+
+left to right direction
+
+actor Doctor as "Doctor"
+
+rectangle "Child Health Care App" {    
+    ' Child
+    usecase "Supervise Child" as SuperviseChild
+        usecase "Create Child" as CreateChild
+        usecase "Update Child" as UpdateChild
+        usecase "Delete Child" as DeleteChild
+        usecase "Search Child" as SearchChild
+        usecase "View Health\nUpdate History" as ViewHealthUpdateHistory
+
+    ' Prescription
+    usecase "Supervise Prescription" as SupervisePrescription
+        usecase "Create Prescription" as CreatePrescription
+        usecase "Update Prescription" as UpdatePrescription
+        usecase "Delete Prescription" as DeletePrescription
+        usecase "Search Prescription" as SearchPrescription
+
+    ' Immunization
+    usecase "Supervise\nImmunization Schedule" as SuperviseImmunizationSchedule
+        usecase "Create\nImmunization Schedule" as CreateImmunizationSchedule
+        usecase "Update\nImmunization Schedule" as UpdateImmunizationSchedule
+        usecase "Delete\nImmunization Schedule" as DeleteImmunizationSchedule
+        usecase "Search\nImmunization Schedule" as SearchImmunizationSchedule
+    
+    ' Chat
+    usecase "Chat" as Chat
+        usecase "Reply Message" as ReplyMessage 
+        usecase "Delete Chat" as DeleteChat
+        usecase "Search Chat" as SearchChat
+        usecase "Create Chat" as CreateChat
+        
+    ' Monitor Child Health
+    usecase "Monitor Child\nHealth Status" as MonitorChildHealthStatus 
+        usecase "Monitor Child's Sleep Times" as MonitorChildSleepTime
+        usecase "Monitor Child's Meal Times" as MonitorChildMealTime
+        usecase "Monitor Child's Events" as MonitorChildEventChart
+}
+
+    Doctor - - SupervisePrescription
+        SupervisePrescription <.. CreatePrescription: <<extend>>
+        SupervisePrescription <.. UpdatePrescription: <<extend>>
+        SupervisePrescription <.. DeletePrescription: <<extend>>
+            UpdatePrescription <.. SearchPrescription: <<extend>>
+            DeletePrescription <.. SearchPrescription: <<extend>>
+        SupervisePrescription <.. SearchPrescription: <<extend>>
+
+    Doctor - - SuperviseChild
+        SuperviseChild <.. ViewHealthUpdateHistory: <<extend>>
+        SuperviseChild <.. CreateChild: <<extend>>
+        SuperviseChild <.. UpdateChild: <<extend>>
+        SuperviseChild <.. DeleteChild: <<extend>>
+            UpdateChild <.. SearchChild: <<extend>>
+            DeleteChild <.. SearchChild: <<extend>>
+            ViewHealthUpdateHistory <.. SearchChild: <<extend>>
+        SuperviseChild <.. SearchChild: <<extend>>
+    
+    Doctor - - SuperviseImmunizationSchedule
+        SuperviseImmunizationSchedule <.. CreateImmunizationSchedule: <<extend>>
+        SuperviseImmunizationSchedule <.. UpdateImmunizationSchedule: <<extend>>
+        SuperviseImmunizationSchedule <.. DeleteImmunizationSchedule: <<extend>>
+            UpdateImmunizationSchedule <.. SearchImmunizationSchedule: <<extend>>
+            DeleteImmunizationSchedule <.. SearchImmunizationSchedule: <<extend>>
+        SuperviseImmunizationSchedule <.. SearchImmunizationSchedule: <<extend>>
+
+    Doctor - - Chat
+        Chat <.. CreateChat: <<extend>>
+        Chat <.. ReplyMessage: <<extend>>
+        Chat <.. DeleteChat: <<extend>>
+            DeleteChat <.. SearchChat: <<extend>>
+            ReplyMessage <.. SearchChat: <<extend>>
+        Chat <.. SearchChat: <<extend>>
+
+    Doctor - - MonitorChildHealthStatus
+        MonitorChildHealthStatus <.. MonitorChildEventChart: <<extend>>
+        MonitorChildHealthStatus <.. MonitorChildMealTime: <<extend>>
+        MonitorChildHealthStatus <.. MonitorChildSleepTime: <<extend>>
+@enduml
+
+@startuml DoctorUseCase
+
+left to right direction
+
+actor Doctor as "Doctor"
+
+rectangle "Child Health Care App" {    
+    usecase "Supervise Child" as SuperviseChild
+        usecase "Create Child" as CreateChild
+        usecase "Update Child" as UpdateChild
+        usecase "Delete Child" as DeleteChild
+        usecase "Search Child" as SearchChild
+        usecase "View Health\nUpdate History" as ViewHealthUpdateHistory
+
+    usecase "Supervise Prescription" as SupervisePrescription
+        usecase "Create Prescription" as CreatePrescription
+        usecase "Update Prescription" as UpdatePrescription
+        usecase "Delete Prescription" as DeletePrescription
+        usecase "Search Prescription" as SearchPrescription
+
+    usecase "Supervise\nImmunization Schedule" as SuperviseImmunizationSchedule
+        usecase "Create\nImmunization Schedule" as CreateImmunizationSchedule
+        usecase "Update\nImmunization Schedule" as UpdateImmunizationSchedule
+        usecase "Delete\nImmunization Schedule" as DeleteImmunizationSchedule
+        usecase "Search\nImmunization Schedule" as SearchImmunizationSchedule
+    
+    usecase "Chat" as Chat
+        usecase "Reply Message" as ReplyMessage 
+        usecase "Delete Chat" as DeleteChat
+        usecase "Search Chat" as SearchChat
+        usecase "Create Chat" as CreateChat
+        
+    usecase "Monitor Child\nHealth Status" as MonitorChildHealthStatus 
+        usecase "Monitor Child's Sleep Times" as MonitorChildSleepTime
+        usecase "Monitor Child's Meal Times" as MonitorChildMealTime
+        usecase "Monitor Child's Events" as MonitorChildEventChart
+}
+
+    Doctor - - SupervisePrescription
+        SupervisePrescription <.. CreatePrescription: <<extend>>
+        SupervisePrescription <.. UpdatePrescription: <<extend>>
+        SupervisePrescription <.. DeletePrescription: <<extend>>
+            UpdatePrescription <.. SearchPrescription: <<extend>>
+            DeletePrescription <.. SearchPrescription: <<extend>>
+        SupervisePrescription <.. SearchPrescription: <<extend>>
+
+    Doctor - - SuperviseChild
+        SuperviseChild <.. ViewHealthUpdateHistory: <<extend>>
+        SuperviseChild <.. CreateChild: <<extend>>
+        SuperviseChild <.. UpdateChild: <<extend>>
+        SuperviseChild <.. DeleteChild: <<extend>>
+            UpdateChild <.. SearchChild: <<extend>>
+            DeleteChild <.. SearchChild: <<extend>>
+            ViewHealthUpdateHistory <.. SearchChild: <<extend>>
+        SuperviseChild <.. SearchChild: <<extend>>
+    
+    Doctor - - SuperviseImmunizationSchedule
+        SuperviseImmunizationSchedule <.. CreateImmunizationSchedule: <<extend>>
+        SuperviseImmunizationSchedule <.. UpdateImmunizationSchedule: <<extend>>
+        SuperviseImmunizationSchedule <.. DeleteImmunizationSchedule: <<extend>>
+            UpdateImmunizationSchedule <.. SearchImmunizationSchedule: <<extend>>
+            DeleteImmunizationSchedule <.. SearchImmunizationSchedule: <<extend>>
+        SuperviseImmunizationSchedule <.. SearchImmunizationSchedule: <<extend>>
+
+    Doctor - - Chat
+        Chat <.. CreateChat: <<extend>>
+        Chat <.. ReplyMessage: <<extend>>
+        Chat <.. DeleteChat: <<extend>>
+            DeleteChat <.. SearchChat: <<extend>>
+            ReplyMessage <.. SearchChat: <<extend>>
+        Chat <.. SearchChat: <<extend>>
+
+    Doctor - - MonitorChildHealthStatus
+        MonitorChildHealthStatus <.. MonitorChildEventChart: <<extend>>
+        MonitorChildHealthStatus <.. MonitorChildMealTime: <<extend>>
+        MonitorChildHealthStatus <.. MonitorChildSleepTime: <<extend>>
+@enduml
+
+PlantUML version 1.2022.7(Tue Aug 23 00:01:30 ICT 2022)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: Cp1252
+Language: en
+Country: US
+--></g></svg>

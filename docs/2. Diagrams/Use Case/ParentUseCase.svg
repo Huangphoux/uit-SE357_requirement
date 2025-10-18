@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="1858px" preserveAspectRatio="none" style="width:953px;height:1858px;background:#FFFFFF;" version="1.1" viewBox="0 0 953 1858" width="953px" zoomAndPan="magnify"><defs/><g><!--MD5=[519c8698fbb4f5027723de750eb4def2]
+cluster Child Health Care App--><g id="cluster_Child Health Care App"><rect fill="none" height="1845" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;" width="852" x="95" y="7"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="153" x="444.5" y="23.5332">Child Health Care App</text></g><g id="elem_Chat"><ellipse cx="215.6985" cy="213.9517" fill="#F1F1F1" rx="32.6985" ry="15.4517" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="30" x="200.6985" y="217.6802">Chat</text></g><g id="elem_ReplyMessage"><ellipse cx="542.376" cy="282.0752" fill="#F1F1F1" rx="73.376" ry="17.0752" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97" x="490.876" y="286.5918">Reply Message</text></g><g id="elem_DeleteChat"><ellipse cx="542.341" cy="214.1182" fill="#F1F1F1" rx="65.341" ry="15.6182" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="75" x="501.841" y="218.6348">Delete Chat</text></g><g id="elem_SearchChat"><ellipse cx="848.0842" cy="213.8168" fill="#F1F1F1" rx="67.0842" ry="15.8168" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79" x="805.5842" y="218.3334">Search Chat</text></g><g id="elem_CreateChat"><ellipse cx="542.4254" cy="59.1851" fill="#F1F1F1" rx="66.4254" ry="15.6851" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="77" x="500.9254" y="63.7017">Create Chat</text></g><g id="elem_SuperviseChild"><ellipse cx="215.6111" cy="564.2222" fill="#F1F1F1" rx="74.1111" ry="17.2222" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="99" x="163.1111" y="568.7388">Supervise Child</text></g><g id="elem_CreateChild"><ellipse cx="542.5842" cy="662.8168" fill="#F1F1F1" rx="67.0842" ry="15.8168" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="79" x="500.0842" y="667.3334">Create Child</text></g><g id="elem_UpdateChild"><ellipse cx="542.2517" cy="595.9503" fill="#F1F1F1" rx="67.7517" ry="15.9503" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="81" x="498.7517" y="600.4669">Update Child</text></g><g id="elem_DeleteChild"><ellipse cx="542.4254" cy="529.1851" fill="#F1F1F1" rx="66.4254" ry="15.6851" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="77" x="500.9254" y="533.7017">Delete Child</text></g><g id="elem_SearchChild"><ellipse cx="847.7517" cy="463.9503" fill="#F1F1F1" rx="67.7517" ry="15.9503" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="81" x="804.2517" y="468.4669">Search Child</text></g><g id="elem_ViewHealthUpdateHistory"><ellipse cx="542.5391" cy="361.9034" fill="#F1F1F1" rx="76.5391" ry="27.9034" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="73" x="506.0391" y="356.8272">View Health</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="92" x="496.5391" y="374.4366">Update History</text></g><g id="elem_MonitorChildHealthStatus"><ellipse cx="215.5397" cy="822.8079" fill="#F1F1F1" rx="104.5397" ry="23.3079" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="171" x="130.0397" y="826.5365">Monitor Child Health Status</text></g><g id="elem_MonitorChildEventChart"><ellipse cx="542.3297" cy="899.0659" fill="#F1F1F1" rx="90.8297" ry="20.5659" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="140" x="472.3297" y="902.7945">Monitor Child's Events</text></g><g id="elem_MonitorChildMealTime"><ellipse cx="542.6395" cy="820.1279" fill="#F1F1F1" rx="103.6395" ry="23.1279" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="169" x="458.1395" y="823.8564">Monitor Child's Meal Times</text></g><g id="elem_MonitorChildSleepTime"><ellipse cx="542.3456" cy="738.1691" fill="#F1F1F1" rx="106.3456" ry="23.6691" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="175" x="454.8456" y="741.8976">Monitor Child's Sleep Times</text></g><g id="elem_SignUpForParent"><ellipse cx="215.6887" cy="904.0377" fill="#F1F1F1" rx="80.6887" ry="18.5377" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="116" x="157.0015" y="907.9661">Sign Up for Parent</text></g><g id="elem_ViewDocument"><ellipse cx="215.376" cy="975.0752" fill="#F1F1F1" rx="73.376" ry="17.0752" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97" x="163.876" y="979.5918">View Document</text></g><g id="elem_ViewDoctorInstruction"><ellipse cx="215.566" cy="1047.9132" fill="#F1F1F1" rx="92.566" ry="20.9132" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="144" x="143.566" y="1051.6417">View Doctor Instruction</text></g><g id="elem_ViewImmunizationSchedule"><ellipse cx="542.2512" cy="1049.8502" fill="#F1F1F1" rx="107.2512" ry="23.8502" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="177" x="453.7512" y="1053.5788">View Immunization Schedule</text></g><g id="elem_ViewPrescription"><ellipse cx="542.5069" cy="972.9014" fill="#F1F1F1" rx="77.5069" ry="17.9014" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="108" x="486.3567" y="977.216">View Prescription</text></g><g id="elem_TrackChildEvents"><ellipse cx="215.4202" cy="1215.784" fill="#F1F1F1" rx="81.9202" ry="18.784" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="119" x="155.7512" y="1219.5629">Track Child Events</text></g><g id="elem_CreateChildEvent"><ellipse cx="542.4202" cy="1361.784" fill="#F1F1F1" rx="81.9202" ry="18.784" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="119" x="482.7512" y="1365.5629">Create Child Event</text></g><g id="elem_UpdateChildEvent"><ellipse cx="542.2516" cy="1288.9503" fill="#F1F1F1" rx="82.7516" ry="18.9503" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="121" x="481.7516" y="1292.6788">Update Child Event</text></g><g id="elem_DeleteChildEvent"><ellipse cx="542.597" cy="1216.1194" fill="#F1F1F1" rx="81.097" ry="18.6194" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="117" x="483.5843" y="1219.9982">Delete Child Event</text></g><g id="elem_SearchChildEvent"><ellipse cx="847.7516" cy="1215.9503" fill="#F1F1F1" rx="82.7516" ry="18.9503" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="121" x="787.2516" y="1219.6788">Search Child Event</text></g><g id="elem_TrackMealTimes"><ellipse cx="215.5785" cy="1522.2157" fill="#F1F1F1" rx="79.0785" ry="18.2157" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="112" x="158.1751" y="1526.3395">Track Meal Times</text></g><g id="elem_CreateMealTime"><ellipse cx="542.5785" cy="1666.2157" fill="#F1F1F1" rx="79.0785" ry="18.2157" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="112" x="485.1751" y="1670.3395">Create Meal Time</text></g><g id="elem_UpdateMealTime"><ellipse cx="542.3789" cy="1593.8758" fill="#F1F1F1" rx="79.8789" ry="18.3758" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="114" x="484.3373" y="1597.9024">Update Meal Time</text></g><g id="elem_DeleteMealTime"><ellipse cx="542.2877" cy="1522.0575" fill="#F1F1F1" rx="78.2877" ry="18.0575" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="110" x="485.5149" y="1526.2774">Delete Meal Time</text></g><g id="elem_SearchMealTime"><ellipse cx="847.8789" cy="1521.8758" fill="#F1F1F1" rx="79.8789" ry="18.3758" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="114" x="789.8373" y="1525.9024">Search Meal Time</text></g><g id="elem_TrackSleepTimes"><ellipse cx="215.5075" cy="1741.2015" fill="#F1F1F1" rx="81.5075" ry="18.7015" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="118" x="156.1675" y="1745.0304">Track Sleep Times</text></g><g id="elem_UpdateSleepTime"><ellipse cx="542.3351" cy="1816.867" fill="#F1F1F1" rx="82.3351" ry="18.867" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="120" x="482.3351" y="1820.5955">Update Sleep Time</text></g><g id="elem_ViewSleepTimeHistory"><ellipse cx="542.63" cy="1741.026" fill="#F1F1F1" rx="95.63" ry="21.526" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="151" x="467.13" y="1744.7545">View Sleep Time History</text></g><!--MD5=[174d9f225ba2a322a43f0f82f3551ccd]
+entity Parent--><g id="elem_Parent"><ellipse cx="27" cy="944.5" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M27,952.5 L27,979.5 M14,960.5 L40,960.5 M27,979.5 L14,994.5 M27,979.5 L40,994.5 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="42" x="6" y="1010.5332">Parent</text></g><!--MD5=[9f2b83c84a62e5dbed7c04a41dd0da35]
+link Parent to SignUpForParent--><g id="link_Parent_SignUpForParent"><path d="M48.06,961.32 C59.16,954.22 73.43,945.82 87,940 C109.3,930.43 134.87,922.64 157.24,916.78 " fill="none" id="Parent-SignUpForParent" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[ce9ff87bd267b7d8521baf8e99931a26]
+link Parent to ViewDocument--><g id="link_Parent_ViewDocument"><path d="M48.31,975 C70.78,975 108.27,975 141.96,975 " fill="none" id="Parent-ViewDocument" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[bb00e664bafd2c476b32cdbad75ab785]
+link Parent to ViewDoctorInstruction--><g id="link_Parent_ViewDoctorInstruction"><path d="M48.16,988.14 C59.29,995 73.55,1003.16 87,1009 C108.12,1018.18 132.09,1026.11 153.49,1032.38 " fill="none" id="Parent-ViewDoctorInstruction" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[15b2f6936e25f9f92fa2600d00e53cfd]
+reverse link ViewDoctorInstruction to ViewImmunizationSchedule--><g id="link_ViewDoctorInstruction_ViewImmunizationSchedule"><path d="M313.45,1048.6 C351.72,1048.83 395.81,1049.1 434.97,1049.34 " fill="none" id="ViewDoctorInstruction-backto-ViewImmunizationSchedule" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="308.33,1048.57,317.307,1052.6214,313.3299,1048.5986,317.3527,1044.6215,308.33,1048.57" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="1045.4951">«extend»</text></g><!--MD5=[32d8170ea004cb2a890e9b77507921fd]
+reverse link ViewDoctorInstruction to ViewPrescription--><g id="link_ViewDoctorInstruction_ViewPrescription"><path d="M286.1,1031.94 C346.19,1018.07 431.79,998.32 487,985.58 " fill="none" id="ViewDoctorInstruction-backto-ViewPrescription" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="281.1,1033.09,290.7653,1034.9825,285.9741,1031.9751,288.9815,1027.1839,281.1,1033.09" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="1003.4951">«extend»</text></g><!--MD5=[12c69c72f8726200e70a496c8e6a2e98]
+link Parent to Chat--><g id="link_Parent_Chat"><path d="M29.85,935.88 C34.28,857.49 48.18,676.07 87,529 C118.62,409.21 184.16,273.98 206.69,229.25 " fill="none" id="Parent-Chat" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[31db66abd57a10f235697865d9cbccdd]
+reverse link Chat to CreateChat--><g id="link_Chat_CreateChat"><path d="M236.01,197.08 C260.96,176.19 306.17,140.77 350,119 C396.49,95.9 453.74,79.37 493.47,69.58 " fill="none" id="Chat-backto-CreateChat" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="231.89,200.55,241.3498,197.8092,235.7134,197.328,236.1946,191.6916,231.89,200.55" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="94.4951">«extend»</text></g><!--MD5=[6772aa0697724d39a84c443c1a5a95d6]
+reverse link Chat to ReplyMessage--><g id="link_Chat_ReplyMessage"><path d="M250.57,221.13 C306.95,232.93 420.09,256.6 487.46,270.69 " fill="none" id="Chat-backto-ReplyMessage" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="245.63,220.09,253.6129,225.8583,250.5227,221.1201,255.261,218.0299,245.63,220.09" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="240.4951">«extend»</text></g><!--MD5=[b8221bfcca50dec16e2f406c38f86eaf]
+reverse link Chat to DeleteChat--><g id="link_Chat_DeleteChat"><path d="M253.36,214 C307.68,214 410.03,214 476.98,214 " fill="none" id="Chat-backto-DeleteChat" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="248.25,214,257.25,218,253.25,214,257.25,210,248.25,214" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="210.4951">«extend»</text></g><!--MD5=[829390db60d408bf535df6a48f619812]
+reverse link DeleteChat to SearchChat--><g id="link_DeleteChat_SearchChat"><path d="M613.36,214 C663.73,214 731.28,214 780.79,214 " fill="none" id="DeleteChat-backto-SearchChat" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="608.24,214,617.24,218,613.24,214,617.24,210,608.24,214" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="681" y="210.4951">«extend»</text></g><!--MD5=[6b1c86921d1d2c9d7cb81d65238e0990]
+reverse link ReplyMessage to SearchChat--><g id="link_ReplyMessage_SearchChat"><path d="M601.82,269.4 C639.78,261.16 690.36,250.08 735,240 C756.22,235.21 779.68,229.78 799.62,225.13 " fill="none" id="ReplyMessage-backto-SearchChat" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="596.78,270.5,606.4224,272.5062,601.6669,269.4426,604.7305,264.6871,596.78,270.5" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="681" y="236.4951">«extend»</text></g><!--MD5=[84f6149f53b3fb575f24dece5201e085]
+reverse link Chat to SearchChat--><g id="link_Chat_SearchChat"><path d="M250.47,206.31 C277.35,200.49 315.9,192.71 350,188 C519.5,164.59 565.94,161.56 735,188 C757.48,191.52 782.15,197.06 802.6,202.12 " fill="none" id="Chat-backto-SearchChat" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="245.25,207.45,254.8924,209.4562,250.1369,206.3926,253.2005,201.6371,245.25,207.45" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="516" y="166.4951">«extend»</text></g><!--MD5=[646861f12d8ad9b2ea44199448fcab55]
+link Parent to MonitorChildHealthStatus--><g id="link_Parent_MonitorChildHealthStatus"><path d="M41.41,935.97 C50.96,913.35 65.88,885.9 87,868 C102.13,855.18 121.16,845.91 139.88,839.26 " fill="none" id="Parent-MonitorChildHealthStatus" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[d0e2d29a2be8514b61b59f9cae260e4e]
+reverse link MonitorChildHealthStatus to MonitorChildEventChart--><g id="link_MonitorChildHealthStatus_MonitorChildEventChart"><path d="M293.69,841.05 C350.16,854.26 425.82,871.95 478.62,884.3 " fill="none" id="MonitorChildHealthStatus-backto-MonitorChildEventChart" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="288.63,839.87,296.4785,845.8199,293.4978,841.012,298.3057,838.0314,288.63,839.87" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="853.4951">«extend»</text></g><!--MD5=[e00a7fded0ae0d1db3e2d89eead6a1ef]
+reverse link MonitorChildHealthStatus to MonitorChildMealTime--><g id="link_MonitorChildHealthStatus_MonitorChildMealTime"><path d="M325.6,821.99 C362.23,821.65 402.93,821.28 439.04,820.95 " fill="none" id="MonitorChildHealthStatus-backto-MonitorChildMealTime" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="320.23,822.04,329.264,825.9627,325.2298,821.9971,329.1954,817.963,320.23,822.04" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="818.4951">«extend»</text></g><!--MD5=[66a94960f74f55d0dd89db4e449ac7cb]
+reverse link MonitorChildHealthStatus to MonitorChildSleepTime--><g id="link_MonitorChildHealthStatus_MonitorChildSleepTime"><path d="M289.16,804 C344.12,789.62 419.09,770.01 473.01,755.91 " fill="none" id="MonitorChildHealthStatus-backto-MonitorChildSleepTime" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="284.24,805.28,293.9619,806.8564,289.0752,804.0068,291.9248,799.1201,284.24,805.28" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="772.4951">«extend»</text></g><!--MD5=[138990045b0393a92d9b50f295319e2f]
+link Parent to SuperviseChild--><g id="link_Parent_SuperviseChild"><path d="M37.08,935.97 C46.97,896.29 64.43,833.51 87,782 C121.66,702.89 178.48,616.44 202.83,580.79 " fill="none" id="Parent-SuperviseChild" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[edc6d7802471a18b9588df2ef98f9425]
+reverse link SuperviseChild to CreateChild--><g id="link_SuperviseChild_CreateChild"><path d="M250.45,581.79 C276.95,595.04 315.02,612.73 350,624 C394.24,638.25 445.98,648.42 484.51,654.79 " fill="none" id="SuperviseChild-backto-CreateChild" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="245.97,579.53,252.2115,587.1486,250.4364,581.7775,255.8075,580.0024,245.97,579.53" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="620.4951">«extend»</text></g><!--MD5=[e1a2aeb97d11a6d2b286d4d5ce1e1d1a]
+reverse link SuperviseChild to ViewHealthUpdateHistory--><g id="link_SuperviseChild_ViewHealthUpdateHistory"><path d="M233.25,542.95 C256.69,514.71 301.85,464.58 350,434 C390.18,408.48 440.76,389.95 479.85,378.08 " fill="none" id="SuperviseChild-backto-ViewHealthUpdateHistory" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="229.95,546.95,238.7654,542.558,233.134,543.0949,232.5972,537.4636,229.95,546.95" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="402.4951">«extend»</text></g><!--MD5=[c02cbf88f5202aaaaa56337e685c5373]
+reverse link SuperviseChild to UpdateChild--><g id="link_SuperviseChild_UpdateChild"><path d="M268.5,578.36 C293.01,584.44 322.79,590.84 350,594 C391.45,598.82 438.28,599.39 475.26,598.73 " fill="none" id="SuperviseChild-backto-UpdateChild" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="263.35,577.07,271.1069,583.1388,268.1999,578.286,273.0526,575.379,263.35,577.07" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="590.4951">«extend»</text></g><!--MD5=[e530f1f3e0bb6318d36683965a687214]
+reverse link SuperviseChild to DeleteChild--><g id="link_SuperviseChild_DeleteChild"><path d="M288.25,556.27 C346.37,550.01 427.27,541.3 481.87,535.42 " fill="none" id="SuperviseChild-backto-DeleteChild" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="283.05,556.83,292.4225,559.856,288.022,556.3014,291.5767,551.9009,283.05,556.83" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="541.4951">«extend»</text></g><!--MD5=[ee1ac42169a85e14bcd7993c57efe129]
+reverse link ViewHealthUpdateHistory to SearchChild--><g id="link_ViewHealthUpdateHistory_SearchChild"><path d="M604.57,382.52 C665.32,402.94 756.69,433.65 808.17,450.95 " fill="none" id="ViewHealthUpdateHistory-backto-SearchChild" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="599.52,380.83,606.7692,387.497,604.2577,382.4283,609.3264,379.9167,599.52,380.83" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="681" y="406.4951">«extend»</text></g><!--MD5=[f7f03c18fc551eed0bc41a5c411a7bb2]
+reverse link UpdateChild to SearchChild--><g id="link_UpdateChild_SearchChild"><path d="M590.98,581.98 C609.53,576.2 630.9,569.18 650,562 C688.56,547.49 697.98,543.09 735,525 C765.04,510.32 798.61,491.73 821.09,478.96 " fill="none" id="UpdateChild-backto-SearchChild" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="585.82,583.57,595.6023,584.7135,590.5939,582.0835,593.2239,577.0752,585.82,583.57" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="681" y="521.4951">«extend»</text></g><!--MD5=[8b884be4a6ba088e40fccc91ebe4be0f]
+reverse link DeleteChild to SearchChild--><g id="link_DeleteChild_SearchChild"><path d="M596.96,517.55 C653.53,505.43 742.1,486.47 797.23,474.66 " fill="none" id="DeleteChild-backto-SearchChild" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="591.93,518.63,601.5667,520.6631,596.8198,517.5863,599.8967,512.8394,591.93,518.63" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="681" y="485.4951">«extend»</text></g><!--MD5=[92f7b87568a16b1244bc19166c077286]
+reverse link SuperviseChild to SearchChild--><g id="link_SuperviseChild_SearchChild"><path d="M261.34,548.13 C287.14,539.18 320.26,528.03 350,519 C387.45,507.63 396.64,503.74 435,496 C542.7,474.27 570.37,470.35 680,463 C704.39,461.36 710.56,462.89 735,463 C749.49,463.06 765.03,463.18 779.78,463.3 " fill="none" id="SuperviseChild-backto-SearchChild" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="256.6,549.77,266.415,550.5855,261.3215,548.1246,263.7824,543.0311,256.6,549.77" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="516" y="462.4951">«extend»</text></g><!--MD5=[6d8c33a7b2bdf7607df64af5f50eae12]
+link Parent to TrackChildEvents--><g id="link_Parent_TrackChildEvents"><path d="M45.37,1014.12 C55.98,1036.15 70.62,1063.64 87,1086 C119.13,1129.87 165.64,1173.47 192.7,1197.36 " fill="none" id="Parent-TrackChildEvents" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[c4d03c895b05a6665233f82e40973b43]
+reverse link TrackChildEvents to CreateChildEvent--><g id="link_TrackChildEvents_CreateChildEvent"><path d="M253.01,1236.08 C295.84,1259.2 369.36,1297.51 435,1325 C453.78,1332.86 474.87,1340.45 493.31,1346.68 " fill="none" id="TrackChildEvents-backto-CreateChildEvent" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="248.45,1233.61,254.4748,1241.4011,252.8514,1235.9822,258.2704,1234.3588,248.45,1233.61" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="1285.4951">«extend»</text></g><!--MD5=[e48b1949fff5dc0faa404491a86e9b8e]
+reverse link TrackChildEvents to UpdateChildEvent--><g id="link_TrackChildEvents_UpdateChildEvent"><path d="M279.87,1230.23 C338.64,1243.43 425.4,1262.92 482.67,1275.79 " fill="none" id="TrackChildEvents-backto-UpdateChildEvent" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="274.98,1229.14,282.8816,1235.0191,279.8579,1230.2382,284.6388,1227.2145,274.98,1229.14" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="1245.4951">«extend»</text></g><!--MD5=[250856d28f0797f86cc94de437574027]
+reverse link TrackChildEvents to DeleteChildEvent--><g id="link_TrackChildEvents_DeleteChildEvent"><path d="M302.7,1216 C351.91,1216 413.2,1216 461.36,1216 " fill="none" id="TrackChildEvents-backto-DeleteChildEvent" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="297.67,1216,306.67,1220,302.67,1216,306.67,1212,297.67,1216" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="1212.4951">«extend»</text></g><!--MD5=[bd2f294e6c938dd3f1401f5ffed5cfd1]
+reverse link UpdateChildEvent to SearchChildEvent--><g id="link_UpdateChildEvent_SearchChildEvent"><path d="M605.75,1274.03 C659.89,1261 737.69,1242.29 790.17,1229.67 " fill="none" id="UpdateChildEvent-backto-SearchChildEvent" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="600.59,1275.27,610.277,1277.0484,605.4506,1274.0977,608.4013,1269.2714,600.59,1275.27" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="681" y="1240.4951">«extend»</text></g><!--MD5=[8feead6d6e29104578b37c8865c85733]
+reverse link DeleteChildEvent to SearchChildEvent--><g id="link_DeleteChildEvent_SearchChildEvent"><path d="M628.79,1216 C671.38,1216 722.67,1216 764.82,1216 " fill="none" id="DeleteChildEvent-backto-SearchChildEvent" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="623.64,1216,632.64,1220,628.64,1216,632.64,1212,623.64,1216" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="681" y="1212.4951">«extend»</text></g><!--MD5=[ae02b5128050d0275e9a0817c54fabb8]
+reverse link TrackChildEvents to SearchChildEvent--><g id="link_TrackChildEvents_SearchChildEvent"><path d="M281.95,1202.23 C303.56,1197.96 327.75,1193.47 350,1190 C519.07,1163.63 566.43,1160.61 735,1190 C753.68,1193.26 773.92,1197.68 791.99,1201.95 " fill="none" id="TrackChildEvents-backto-SearchChildEvent" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="276.81,1203.26,286.416,1205.4334,281.7145,1202.2877,284.8603,1197.5862,276.81,1203.26" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="516" y="1166.4951">«extend»</text></g><!--MD5=[2f093347285118d449d4a1803235e8b8]
+link Parent to TrackMealTimes--><g id="link_Parent_TrackMealTimes"><path d="M33.44,1014.3 C41.62,1068.69 59.17,1169.54 87,1252 C120.4,1350.97 180.21,1461.42 204.17,1503.96 " fill="none" id="Parent-TrackMealTimes" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[8f412f80daee74175c7f423bf412f109]
+reverse link TrackMealTimes to CreateMealTime--><g id="link_TrackMealTimes_CreateMealTime"><path d="M251.14,1541.05 C293.64,1563.97 368.29,1602.76 435,1630 C454.24,1637.86 475.91,1645.41 494.65,1651.55 " fill="none" id="TrackMealTimes-backto-CreateMealTime" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="246.62,1538.61,252.6448,1546.4011,251.0214,1540.9822,256.4404,1539.3588,246.62,1538.61" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="1591.4951">«extend»</text></g><!--MD5=[010708a0d654c32af3eba47a15e30328]
+reverse link TrackMealTimes to UpdateMealTime--><g id="link_TrackMealTimes_UpdateMealTime"><path d="M277.66,1535.55 C336.91,1548.68 426.08,1568.43 484.04,1581.27 " fill="none" id="TrackMealTimes-backto-UpdateMealTime" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="272.74,1534.46,280.658,1540.3171,277.6209,1535.5447,282.3934,1532.5076,272.74,1534.46" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="1550.4951">«extend»</text></g><!--MD5=[7ba4b8d99261798cfdc97f380d22c730]
+reverse link TrackMealTimes to DeleteMealTime--><g id="link_TrackMealTimes_DeleteMealTime"><path d="M299.92,1522 C350.45,1522 414.48,1522 463.92,1522 " fill="none" id="TrackMealTimes-backto-DeleteMealTime" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="294.76,1522,303.76,1526,299.76,1522,303.76,1518,294.76,1522" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="1518.4951">«extend»</text></g><!--MD5=[236709bafe1d6596d247a7fac7facfe5]
+reverse link DeleteMealTime to SearchMealTime--><g id="link_DeleteMealTime_SearchMealTime"><path d="M626.32,1522 C670.4,1522 724.34,1522 767.85,1522 " fill="none" id="DeleteMealTime-backto-SearchMealTime" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="621.26,1522,630.26,1526,626.26,1522,630.26,1518,621.26,1522" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="681" y="1518.4951">«extend»</text></g><!--MD5=[545f90ffb32ece8e233b9fe313dc6d9b]
+reverse link UpdateMealTime to SearchMealTime--><g id="link_UpdateMealTime_SearchMealTime"><path d="M604.04,1579.64 C658.68,1566.68 738.39,1547.77 791.43,1535.18 " fill="none" id="UpdateMealTime-backto-SearchMealTime" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="599.17,1580.79,608.852,1582.5954,604.0339,1579.6313,606.998,1574.8132,599.17,1580.79" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="681" y="1546.4951">«extend»</text></g><!--MD5=[1703ebc3d31dcf8d553021748e7e7a8f]
+reverse link TrackMealTimes to SearchMealTime--><g id="link_TrackMealTimes_SearchMealTime"><path d="M278.85,1508.85 C301.23,1504.4 326.68,1499.64 350,1496 C519.07,1469.63 566.43,1466.61 735,1496 C754.27,1499.36 775.2,1503.96 793.7,1508.35 " fill="none" id="TrackMealTimes-backto-SearchMealTime" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="273.83,1509.85,283.4421,1511.9965,278.7318,1508.8639,281.8644,1504.1536,273.83,1509.85" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="516" y="1472.4951">«extend»</text></g><!--MD5=[d77abbc685b9bea100de60565dfac1bc]
+link Parent to TrackSleepTimes--><g id="link_Parent_TrackSleepTimes"><path d="M29.42,1014.12 C33.96,1127.85 50,1456.72 87,1557 C112.16,1625.18 168.59,1691.93 197.19,1722.96 " fill="none" id="Parent-TrackSleepTimes" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[8f87882fe8f47bdbd03e8ff6a3b5e46d]
+reverse link TrackSleepTimes to UpdateSleepTime--><g id="link_TrackSleepTimes_UpdateSleepTime"><path d="M278.03,1755.39 C337.23,1769.23 426.05,1790 483.9,1803.53 " fill="none" id="TrackSleepTimes-backto-UpdateSleepTime" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="273.11,1754.24,280.9585,1760.1899,277.9778,1755.382,282.7857,1752.4014,273.11,1754.24" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="1771.4951">«extend»</text></g><!--MD5=[3a0da9bc739a6c32e977fc43fe395571]
+reverse link TrackSleepTimes to ViewSleepTimeHistory--><g id="link_TrackSleepTimes_ViewSleepTimeHistory"><path d="M302.34,1741 C346.76,1741 401.09,1741 446.73,1741 " fill="none" id="TrackSleepTimes-backto-ViewSleepTimeHistory" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="297.25,1741,306.25,1745,302.25,1741,306.25,1737,297.25,1741" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="351" y="1737.4951">«extend»</text></g><!--MD5=[e41efecc9cf776f6c1b08488f9e48309]
+@startuml ParentUseCase
+
+left to right direction
+
+actor Parent as "Parent"
+
+rectangle "Child Health Care App" {    
+    ' Chat
+    usecase "Chat" as Chat
+        usecase "Reply Message" as ReplyMessage 
+        usecase "Delete Chat" as DeleteChat
+        usecase "Search Chat" as SearchChat
+        usecase "Create Chat" as CreateChat
+        
+    ' Child for Parent  
+    usecase "Supervise Child" as SuperviseChild
+        usecase "Create Child" as CreateChild
+        usecase "Update Child" as UpdateChild
+        usecase "Delete Child" as DeleteChild
+        usecase "Search Child" as SearchChild
+        usecase "View Health\nUpdate History" as ViewHealthUpdateHistory
+
+    ' Monitor Child Health
+    usecase "Monitor Child Health Status" as MonitorChildHealthStatus 
+        usecase "Monitor Child's Events" as MonitorChildEventChart
+        usecase "Monitor Child's Meal Times" as MonitorChildMealTime
+        usecase "Monitor Child's Sleep Times" as MonitorChildSleepTime
+
+    ' Sign Up
+    usecase "Sign Up for Parent" as SignUpForParent
+
+    ' View Document
+    usecase "View Document" as ViewDocument
+
+    ' View Instruction
+    usecase "View Doctor Instruction" as ViewDoctorInstruction
+        usecase "View Immunization Schedule" as ViewImmunizationSchedule
+        usecase "View Prescription" as ViewPrescription
+
+    ' Events
+    usecase "Track Child Events" as TrackChildEvents
+        usecase "Create Child Event" as CreateChildEvent
+        usecase "Update Child Event" as UpdateChildEvent
+        usecase "Delete Child Event" as DeleteChildEvent
+        usecase "Search Child Event" as SearchChildEvent
+    
+    ' Meal Times
+    usecase "Track Meal Times" as TrackMealTimes
+        usecase "Create Meal Time" as CreateMealTime
+        usecase "Update Meal Time" as UpdateMealTime
+        usecase "Delete Meal Time" as DeleteMealTime
+        usecase "Search Meal Time" as SearchMealTime
+
+    ' Sleep Times
+    usecase "Track Sleep Times" as TrackSleepTimes
+        usecase "Update Sleep Time" as UpdateSleepTime
+        usecase "View Sleep Time History" as ViewSleepTimeHistory
+}
+    Parent - - SignUpForParent
+
+    Parent - - ViewDocument
+
+    Parent - - ViewDoctorInstruction
+        ViewDoctorInstruction <.. ViewImmunizationSchedule: <<extend>>
+        ViewDoctorInstruction <.. ViewPrescription: <<extend>>
+
+    Parent - - Chat
+        Chat <.. CreateChat: <<extend>>
+        Chat <.. ReplyMessage: <<extend>>
+        Chat <.. DeleteChat: <<extend>>
+            DeleteChat <.. SearchChat: <<extend>>
+            ReplyMessage <.. SearchChat: <<extend>>
+        Chat <.. SearchChat: <<extend>>
+
+    Parent - - MonitorChildHealthStatus
+        MonitorChildHealthStatus <.. MonitorChildEventChart: <<extend>>
+        MonitorChildHealthStatus <.. MonitorChildMealTime: <<extend>>
+        MonitorChildHealthStatus <.. MonitorChildSleepTime: <<extend>>
+
+    Parent - - SuperviseChild
+        SuperviseChild <.. CreateChild: <<extend>>
+        SuperviseChild <.. ViewHealthUpdateHistory: <<extend>>
+        SuperviseChild <.. UpdateChild: <<extend>>
+        SuperviseChild <.. DeleteChild: <<extend>>
+            ViewHealthUpdateHistory <.. SearchChild: <<extend>>
+            UpdateChild <.. SearchChild: <<extend>>
+            DeleteChild <.. SearchChild: <<extend>>
+        SuperviseChild <.. SearchChild: <<extend>>
+    
+    Parent - - TrackChildEvents
+        TrackChildEvents <.. CreateChildEvent: <<extend>>
+        TrackChildEvents <.. UpdateChildEvent: <<extend>>
+        TrackChildEvents <.. DeleteChildEvent: <<extend>>
+            UpdateChildEvent <.. SearchChildEvent: <<extend>>
+            DeleteChildEvent <.. SearchChildEvent: <<extend>>
+        TrackChildEvents <.. SearchChildEvent: <<extend>>
+
+    Parent - - TrackMealTimes
+        TrackMealTimes <.. CreateMealTime: <<extend>>
+        TrackMealTimes <.. UpdateMealTime: <<extend>>
+        TrackMealTimes <.. DeleteMealTime: <<extend>>
+            DeleteMealTime <.. SearchMealTime: <<extend>>
+            UpdateMealTime <.. SearchMealTime: <<extend>>
+        TrackMealTimes <.. SearchMealTime: <<extend>>
+
+    Parent - - TrackSleepTimes
+        TrackSleepTimes <.. UpdateSleepTime: <<extend>>
+        TrackSleepTimes <.. ViewSleepTimeHistory: <<extend>>
+
+@enduml
+
+@startuml ParentUseCase
+
+left to right direction
+
+actor Parent as "Parent"
+
+rectangle "Child Health Care App" {    
+    usecase "Chat" as Chat
+        usecase "Reply Message" as ReplyMessage 
+        usecase "Delete Chat" as DeleteChat
+        usecase "Search Chat" as SearchChat
+        usecase "Create Chat" as CreateChat
+        
+    usecase "Supervise Child" as SuperviseChild
+        usecase "Create Child" as CreateChild
+        usecase "Update Child" as UpdateChild
+        usecase "Delete Child" as DeleteChild
+        usecase "Search Child" as SearchChild
+        usecase "View Health\nUpdate History" as ViewHealthUpdateHistory
+
+    usecase "Monitor Child Health Status" as MonitorChildHealthStatus 
+        usecase "Monitor Child's Events" as MonitorChildEventChart
+        usecase "Monitor Child's Meal Times" as MonitorChildMealTime
+        usecase "Monitor Child's Sleep Times" as MonitorChildSleepTime
+
+    usecase "Sign Up for Parent" as SignUpForParent
+
+    usecase "View Document" as ViewDocument
+
+    usecase "View Doctor Instruction" as ViewDoctorInstruction
+        usecase "View Immunization Schedule" as ViewImmunizationSchedule
+        usecase "View Prescription" as ViewPrescription
+
+    usecase "Track Child Events" as TrackChildEvents
+        usecase "Create Child Event" as CreateChildEvent
+        usecase "Update Child Event" as UpdateChildEvent
+        usecase "Delete Child Event" as DeleteChildEvent
+        usecase "Search Child Event" as SearchChildEvent
+    
+    usecase "Track Meal Times" as TrackMealTimes
+        usecase "Create Meal Time" as CreateMealTime
+        usecase "Update Meal Time" as UpdateMealTime
+        usecase "Delete Meal Time" as DeleteMealTime
+        usecase "Search Meal Time" as SearchMealTime
+
+    usecase "Track Sleep Times" as TrackSleepTimes
+        usecase "Update Sleep Time" as UpdateSleepTime
+        usecase "View Sleep Time History" as ViewSleepTimeHistory
+}
+    Parent - - SignUpForParent
+
+    Parent - - ViewDocument
+
+    Parent - - ViewDoctorInstruction
+        ViewDoctorInstruction <.. ViewImmunizationSchedule: <<extend>>
+        ViewDoctorInstruction <.. ViewPrescription: <<extend>>
+
+    Parent - - Chat
+        Chat <.. CreateChat: <<extend>>
+        Chat <.. ReplyMessage: <<extend>>
+        Chat <.. DeleteChat: <<extend>>
+            DeleteChat <.. SearchChat: <<extend>>
+            ReplyMessage <.. SearchChat: <<extend>>
+        Chat <.. SearchChat: <<extend>>
+
+    Parent - - MonitorChildHealthStatus
+        MonitorChildHealthStatus <.. MonitorChildEventChart: <<extend>>
+        MonitorChildHealthStatus <.. MonitorChildMealTime: <<extend>>
+        MonitorChildHealthStatus <.. MonitorChildSleepTime: <<extend>>
+
+    Parent - - SuperviseChild
+        SuperviseChild <.. CreateChild: <<extend>>
+        SuperviseChild <.. ViewHealthUpdateHistory: <<extend>>
+        SuperviseChild <.. UpdateChild: <<extend>>
+        SuperviseChild <.. DeleteChild: <<extend>>
+            ViewHealthUpdateHistory <.. SearchChild: <<extend>>
+            UpdateChild <.. SearchChild: <<extend>>
+            DeleteChild <.. SearchChild: <<extend>>
+        SuperviseChild <.. SearchChild: <<extend>>
+    
+    Parent - - TrackChildEvents
+        TrackChildEvents <.. CreateChildEvent: <<extend>>
+        TrackChildEvents <.. UpdateChildEvent: <<extend>>
+        TrackChildEvents <.. DeleteChildEvent: <<extend>>
+            UpdateChildEvent <.. SearchChildEvent: <<extend>>
+            DeleteChildEvent <.. SearchChildEvent: <<extend>>
+        TrackChildEvents <.. SearchChildEvent: <<extend>>
+
+    Parent - - TrackMealTimes
+        TrackMealTimes <.. CreateMealTime: <<extend>>
+        TrackMealTimes <.. UpdateMealTime: <<extend>>
+        TrackMealTimes <.. DeleteMealTime: <<extend>>
+            DeleteMealTime <.. SearchMealTime: <<extend>>
+            UpdateMealTime <.. SearchMealTime: <<extend>>
+        TrackMealTimes <.. SearchMealTime: <<extend>>
+
+    Parent - - TrackSleepTimes
+        TrackSleepTimes <.. UpdateSleepTime: <<extend>>
+        TrackSleepTimes <.. ViewSleepTimeHistory: <<extend>>
+
+@enduml
+
+PlantUML version 1.2022.7(Tue Aug 23 00:01:30 ICT 2022)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: Cp1252
+Language: en
+Country: US
+--></g></svg>

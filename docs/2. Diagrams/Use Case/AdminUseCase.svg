@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="919px" preserveAspectRatio="none" style="width:904px;height:919px;background:#FFFFFF;" version="1.1" viewBox="0 0 904 919" width="904px" zoomAndPan="magnify"><defs/><g><!--MD5=[519c8698fbb4f5027723de750eb4def2]
+cluster Child Health Care App--><g id="cluster_Child Health Care App"><rect fill="none" height="906" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;" width="744" x="154" y="7"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="153" x="449.5" y="23.5332">Child Health Care App</text></g><g id="elem_AdjustDoctor"><ellipse cx="252.1119" cy="216.2224" fill="#F1F1F1" rx="69.1119" ry="16.2224" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85" x="206.6119" y="220.739">Adjust Doctor</text></g><g id="elem_CreateDoctor"><ellipse cx="528.5039" cy="284.0008" fill="#F1F1F1" rx="70.5039" ry="16.5008" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="89" x="481.0039" y="288.5174">Create Doctor</text></g><g id="elem_UpdateDoctor"><ellipse cx="528.7113" cy="216.1423" fill="#F1F1F1" rx="71.2113" ry="16.6423" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="91" x="480.2113" y="220.6589">Update Doctor</text></g><g id="elem_DeleteDoctor"><ellipse cx="528.3041" cy="147.8608" fill="#F1F1F1" rx="69.8041" ry="16.3608" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="87" x="481.8041" y="152.3774">Delete Doctor</text></g><g id="elem_SearchDoctor"><ellipse cx="802.7113" cy="148.1423" fill="#F1F1F1" rx="71.2113" ry="16.6423" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="91" x="754.2113" y="152.6589">Search Doctor</text></g><g id="elem_AdjustParent"><ellipse cx="252.1119" cy="509.2224" fill="#F1F1F1" rx="69.1119" ry="16.2224" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85" x="206.6119" y="513.739">Adjust Parent</text></g><g id="elem_CreateParent"><ellipse cx="528.5039" cy="577.0008" fill="#F1F1F1" rx="70.5039" ry="16.5008" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="89" x="481.0039" y="581.5174">Create Parent</text></g><g id="elem_UpdateParent"><ellipse cx="528.7113" cy="509.1423" fill="#F1F1F1" rx="71.2113" ry="16.6423" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="91" x="480.2113" y="513.6589">Update Parent</text></g><g id="elem_DeleteParent"><ellipse cx="528.3041" cy="440.8608" fill="#F1F1F1" rx="69.8041" ry="16.3608" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="87" x="481.8041" y="445.3774">Delete Parent</text></g><g id="elem_SearchParent"><ellipse cx="802.7113" cy="441.1423" fill="#F1F1F1" rx="71.2113" ry="16.6423" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="91" x="754.2113" y="445.6589">Search Parent</text></g><g id="elem_AdjustDocument"><ellipse cx="252.1203" cy="663.8241" fill="#F1F1F1" rx="77.1203" ry="17.8241" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="107" x="196.2783" y="668.1856">Adjust Document</text></g><g id="elem_CreateDocument"><ellipse cx="528.6819" cy="879.1364" fill="#F1F1F1" rx="78.6819" ry="18.1364" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="111" x="471.5947" y="883.3083">Create Document</text></g><g id="elem_UpdateDocument"><ellipse cx="528.4775" cy="806.7955" fill="#F1F1F1" rx="79.4775" ry="18.2955" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="113" x="470.756" y="810.8709">Update Document</text></g><g id="elem_DeleteDocument"><ellipse cx="528.396" cy="734.9792" fill="#F1F1F1" rx="77.896" ry="17.9792" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="109" x="471.9355" y="739.2466">Delete Document</text></g><g id="elem_SearchDocument"><ellipse cx="802.4775" cy="734.7955" fill="#F1F1F1" rx="79.4775" ry="18.2955" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="113" x="744.756" y="738.8709">Search Document</text></g><g id="elem_ViewUserReport"><ellipse cx="251.9202" cy="735.784" fill="#F1F1F1" rx="81.9202" ry="18.784" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="119" x="192.2512" y="739.5629">View User's Report</text></g><!--MD5=[97ab183161fd5d1db7fba7485cf76add]
+entity Admin--><g id="elem_Admin"><ellipse cx="25.5" cy="581.5" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M25.5,589.5 L25.5,616.5 M12.5,597.5 L38.5,597.5 M25.5,616.5 L12.5,631.5 M25.5,616.5 L38.5,631.5 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="39" x="6" y="647.5332">Admin</text></g><!--MD5=[cf433d95b84011f079a58eb03c017dd4]
+link Admin to AdjustDoctor--><g id="link_Admin_AdjustDoctor"><path d="M45.06,579.26 C90.97,498.28 208.54,290.9 241.99,231.89 " fill="none" id="Admin-AdjustDoctor" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[6a5c746f6a9a9644360b0ca797505edb]
+reverse link AdjustDoctor to CreateDoctor--><g id="link_AdjustDoctor_CreateDoctor"><path d="M304.96,228.87 C355.16,241.31 430.59,259.99 479.43,272.09 " fill="none" id="AdjustDoctor-backto-CreateDoctor" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="299.88,227.61,307.6538,233.6572,304.7332,228.8126,309.5779,225.892,299.88,227.61" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="365" y="240.4951">«extend»</text></g><!--MD5=[753d7f90ea9abe48b3be21e60eb1fa13]
+reverse link AdjustDoctor to UpdateDoctor--><g id="link_AdjustDoctor_UpdateDoctor"><path d="M326.61,216 C367.17,216 417.24,216 457.25,216 " fill="none" id="AdjustDoctor-backto-UpdateDoctor" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="321.21,216,330.21,220,326.21,216,330.21,212,321.21,216" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="365" y="212.4951">«extend»</text></g><!--MD5=[173f93d00df3e8b009c3b6ab44024b48]
+reverse link AdjustDoctor to DeleteDoctor--><g id="link_AdjustDoctor_DeleteDoctor"><path d="M304.96,203.13 C355.16,190.69 430.59,172.01 479.43,159.91 " fill="none" id="AdjustDoctor-backto-DeleteDoctor" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="299.88,204.39,309.5779,206.108,304.7332,203.1874,307.6538,198.3428,299.88,204.39" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="365" y="172.4951">«extend»</text></g><!--MD5=[bbadb2bf9674b1b5ad353aaef9d26e7d]
+reverse link DeleteDoctor to SearchDoctor--><g id="link_DeleteDoctor_SearchDoctor"><path d="M604.13,148 C643.82,148 692.34,148 731.34,148 " fill="none" id="DeleteDoctor-backto-SearchDoctor" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="598.84,148,607.84,152,603.84,148,607.84,144,598.84,148" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="639" y="144.4951">«extend»</text></g><!--MD5=[2f2621c6fde32f82a2462119cb62c263]
+reverse link UpdateDoctor to SearchDoctor--><g id="link_UpdateDoctor_SearchDoctor"><path d="M582.53,202.74 C632.14,190.34 705.61,171.97 753.52,159.99 " fill="none" id="UpdateDoctor-backto-SearchDoctor" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="577.5,204,587.2026,205.691,582.3499,202.784,585.2569,197.9312,577.5,204" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="639" y="172.4951">«extend»</text></g><!--MD5=[e1f03e23e596c038d63e5a47748d88ef]
+reverse link AdjustDoctor to SearchDoctor--><g id="link_AdjustDoctor_SearchDoctor"><path d="M277.14,197.67 C312.53,172.19 381.63,127.68 449,114 C558.21,91.83 689.48,118.09 756.82,135.33 " fill="none" id="AdjustDoctor-backto-SearchDoctor" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="272.99,200.68,282.6239,198.6335,277.0374,197.7442,277.9267,192.1577,272.99,200.68" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="502" y="102.4951">«extend»</text></g><!--MD5=[765e31d3f3738457be36cb66e9aef313]
+link Admin to AdjustParent--><g id="link_Admin_AdjustParent"><path d="M45.25,603.4 C83.82,585.7 172.39,545.07 219.76,523.33 " fill="none" id="Admin-AdjustParent" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[9b7c331fca19fdbaa4d637ad3fbc619f]
+reverse link AdjustParent to CreateParent--><g id="link_AdjustParent_CreateParent"><path d="M304.96,521.87 C355.16,534.31 430.59,552.99 479.43,565.09 " fill="none" id="AdjustParent-backto-CreateParent" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="299.88,520.61,307.6538,526.6572,304.7332,521.8126,309.5779,518.892,299.88,520.61" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="365" y="533.4951">«extend»</text></g><!--MD5=[5e8a908c46d92ec32e29770f90244a69]
+reverse link AdjustParent to UpdateParent--><g id="link_AdjustParent_UpdateParent"><path d="M326.61,509 C367.17,509 417.24,509 457.25,509 " fill="none" id="AdjustParent-backto-UpdateParent" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="321.21,509,330.21,513,326.21,509,330.21,505,321.21,509" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="365" y="505.4951">«extend»</text></g><!--MD5=[fce6e981a9169c8014de5eb851839016]
+reverse link AdjustParent to DeleteParent--><g id="link_AdjustParent_DeleteParent"><path d="M304.96,496.13 C355.16,483.69 430.59,465.01 479.43,452.91 " fill="none" id="AdjustParent-backto-DeleteParent" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="299.88,497.39,309.5779,499.108,304.7332,496.1874,307.6538,491.3428,299.88,497.39" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="365" y="465.4951">«extend»</text></g><!--MD5=[308a4d21f8b293543c19d23cc7078155]
+reverse link UpdateParent to SearchParent--><g id="link_UpdateParent_SearchParent"><path d="M582.53,495.74 C632.14,483.34 705.61,464.97 753.52,452.99 " fill="none" id="UpdateParent-backto-SearchParent" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="577.5,497,587.2026,498.691,582.3499,495.784,585.2569,490.9312,577.5,497" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="639" y="465.4951">«extend»</text></g><!--MD5=[4d14a242d0a136f4c49baa7f85cda5cf]
+reverse link DeleteParent to SearchParent--><g id="link_DeleteParent_SearchParent"><path d="M604.13,441 C643.82,441 692.34,441 731.34,441 " fill="none" id="DeleteParent-backto-SearchParent" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="598.84,441,607.84,445,603.84,441,607.84,437,598.84,441" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="639" y="437.4951">«extend»</text></g><!--MD5=[875b1d3f81224843a72ed67ac417361a]
+reverse link AdjustParent to SearchParent--><g id="link_AdjustParent_SearchParent"><path d="M277.14,490.67 C312.53,465.19 381.63,420.68 449,407 C558.21,384.83 689.48,411.09 756.82,428.33 " fill="none" id="AdjustParent-backto-SearchParent" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="272.99,493.68,282.6239,491.6335,277.0374,490.7442,277.9267,485.1577,272.99,493.68" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="502" y="395.4951">«extend»</text></g><!--MD5=[c3e445bd82ce3d22b2533168e8668adf]
+link Admin to AdjustDocument--><g id="link_Admin_AdjustDocument"><path d="M45.25,616.34 C78.13,623.96 147.34,639.99 196.4,651.35 " fill="none" id="Admin-AdjustDocument" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[38eef7eb8f9f1a978ffdc7cc128e026c]
+reverse link AdjustDocument to CreateDocument--><g id="link_AdjustDocument_CreateDocument"><path d="M307.24,679.8 C317.15,684.67 326.66,690.95 334,699 C362.97,730.79 337.34,757.25 364,791 C393.27,828.06 442.58,851.52 479.42,864.81 " fill="none" id="AdjustDocument-backto-CreateDocument" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="302.67,677.66,309.1136,685.1085,307.1951,679.7869,312.5167,677.8684,302.67,677.66" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="365" y="787.4951">«extend»</text></g><!--MD5=[60d11ad58c57aa7c418c8a8fe8f1e1eb]
+reverse link AdjustDocument to UpdateDocument--><g id="link_AdjustDocument_UpdateDocument"><path d="M301.23,680.85 C312.49,685.84 324.08,691.91 334,699 C350.13,710.52 348,720.3 364,732 C400.42,758.64 447.82,779.1 482.2,791.87 " fill="none" id="AdjustDocument-backto-UpdateDocument" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="296.44,678.78,303.1177,686.0194,301.0305,680.7616,306.2883,678.6745,296.44,678.78" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="365" y="728.4951">«extend»</text></g><!--MD5=[92eb8abd6b52132e81b5538d1d30e473]
+reverse link AdjustDocument to DeleteDocument--><g id="link_AdjustDocument_DeleteDocument"><path d="M309.27,678.56 C358.2,691.21 428.5,709.39 475.98,721.67 " fill="none" id="AdjustDocument-backto-DeleteDocument" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="304.31,677.27,312.0162,683.403,309.1496,678.5263,314.0263,675.6597,304.31,677.27" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="365" y="690.4951">«extend»</text></g><!--MD5=[0e20c77a02a904b088fe484804c99862]
+reverse link UpdateDocument to SearchDocument--><g id="link_UpdateDocument_SearchDocument"><path d="M586.49,791.91 C634.45,779.22 702.47,761.21 749.09,748.87 " fill="none" id="UpdateDocument-backto-SearchDocument" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="581.62,793.2,591.3407,794.7835,586.4561,791.9303,589.3093,787.0457,581.62,793.2" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="639" y="761.4951">«extend»</text></g><!--MD5=[d87a29ffbebbd2b568898e763afb3246]
+reverse link DeleteDocument to SearchDocument--><g id="link_DeleteDocument_SearchDocument"><path d="M611.86,735 C647.03,735 687.9,735 722.67,735 " fill="none" id="DeleteDocument-backto-SearchDocument" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="606.72,735,615.72,739,611.72,735,615.72,731,606.72,735" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="639" y="731.4951">«extend»</text></g><!--MD5=[5146eba06393294661d9e97e7cd8842c]
+reverse link AdjustDocument to SearchDocument--><g id="link_AdjustDocument_SearchDocument"><path d="M334.15,663.94 C361.18,664.45 391.42,665.61 419,668 C541.68,678.61 572.13,685.52 693,709 C711.16,712.53 730.87,717.04 748.45,721.31 " fill="none" id="AdjustDocument-backto-SearchDocument" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="329.14,663.85,338.0701,668.0037,334.1393,663.9357,338.2072,660.0049,329.14,663.85" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="53" x="502" y="667.4951">«extend»</text></g><!--MD5=[7b90aede77f7d3d0110e4f8b376a985d]
+link Admin to ViewUserReport--><g id="link_Admin_ViewUserReport"><path d="M45.22,628.32 C67.83,647.37 107.61,678.82 146,699 C162.85,707.86 182.28,715.38 199.81,721.28 " fill="none" id="Admin-ViewUserReport" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[3745ec369bfcf41c3cbc5c62cd4171d2]
+@startuml AdminUseCase
+
+left to right direction
+
+actor Admin as "Admin"
+
+rectangle "Child Health Care App" {    
+    ' Doctor
+    usecase "Adjust Doctor" as AdjustDoctor
+        usecase "Create Doctor" as CreateDoctor
+        usecase "Update Doctor" as UpdateDoctor
+        usecase "Delete Doctor" as DeleteDoctor
+        usecase "Search Doctor" as SearchDoctor
+
+    ' Parent
+    usecase "Adjust Parent" as AdjustParent
+        usecase "Create Parent" as CreateParent
+        usecase "Update Parent" as UpdateParent
+        usecase "Delete Parent" as DeleteParent
+        usecase "Search Parent" as SearchParent
+    
+    ' Document
+    usecase "Adjust Document" as AdjustDocument
+        usecase "Create Document" as CreateDocument
+        usecase "Update Document" as UpdateDocument
+        usecase "Delete Document" as DeleteDocument
+        usecase "Search Document" as SearchDocument
+
+    ' User's reports
+    usecase "View User's Report" as ViewUserReport
+}
+    Admin - - AdjustDoctor
+        AdjustDoctor <.. CreateDoctor: <<extend>>
+        AdjustDoctor <.. UpdateDoctor: <<extend>>
+        AdjustDoctor <.. DeleteDoctor: <<extend>>
+            DeleteDoctor <.. SearchDoctor: <<extend>>
+            UpdateDoctor <.. SearchDoctor: <<extend>>
+        AdjustDoctor <.. SearchDoctor: <<extend>>
+    
+    Admin - - AdjustParent
+        AdjustParent <.. CreateParent: <<extend>>
+        AdjustParent <.. UpdateParent: <<extend>>
+        AdjustParent <.. DeleteParent: <<extend>>
+            UpdateParent <.. SearchParent: <<extend>>
+            DeleteParent <.. SearchParent: <<extend>>
+        AdjustParent <.. SearchParent: <<extend>>
+
+    Admin - - AdjustDocument
+        AdjustDocument <.. CreateDocument: <<extend>>
+        AdjustDocument <.. UpdateDocument: <<extend>>
+        AdjustDocument <.. DeleteDocument: <<extend>>
+            UpdateDocument <.. SearchDocument: <<extend>>
+            DeleteDocument <.. SearchDocument: <<extend>>
+        AdjustDocument <.. SearchDocument: <<extend>>
+
+    Admin - - - ViewUserReport
+@enduml
+
+@startuml AdminUseCase
+
+left to right direction
+
+actor Admin as "Admin"
+
+rectangle "Child Health Care App" {    
+    usecase "Adjust Doctor" as AdjustDoctor
+        usecase "Create Doctor" as CreateDoctor
+        usecase "Update Doctor" as UpdateDoctor
+        usecase "Delete Doctor" as DeleteDoctor
+        usecase "Search Doctor" as SearchDoctor
+
+    usecase "Adjust Parent" as AdjustParent
+        usecase "Create Parent" as CreateParent
+        usecase "Update Parent" as UpdateParent
+        usecase "Delete Parent" as DeleteParent
+        usecase "Search Parent" as SearchParent
+    
+    usecase "Adjust Document" as AdjustDocument
+        usecase "Create Document" as CreateDocument
+        usecase "Update Document" as UpdateDocument
+        usecase "Delete Document" as DeleteDocument
+        usecase "Search Document" as SearchDocument
+
+    usecase "View User's Report" as ViewUserReport
+}
+    Admin - - AdjustDoctor
+        AdjustDoctor <.. CreateDoctor: <<extend>>
+        AdjustDoctor <.. UpdateDoctor: <<extend>>
+        AdjustDoctor <.. DeleteDoctor: <<extend>>
+            DeleteDoctor <.. SearchDoctor: <<extend>>
+            UpdateDoctor <.. SearchDoctor: <<extend>>
+        AdjustDoctor <.. SearchDoctor: <<extend>>
+    
+    Admin - - AdjustParent
+        AdjustParent <.. CreateParent: <<extend>>
+        AdjustParent <.. UpdateParent: <<extend>>
+        AdjustParent <.. DeleteParent: <<extend>>
+            UpdateParent <.. SearchParent: <<extend>>
+            DeleteParent <.. SearchParent: <<extend>>
+        AdjustParent <.. SearchParent: <<extend>>
+
+    Admin - - AdjustDocument
+        AdjustDocument <.. CreateDocument: <<extend>>
+        AdjustDocument <.. UpdateDocument: <<extend>>
+        AdjustDocument <.. DeleteDocument: <<extend>>
+            UpdateDocument <.. SearchDocument: <<extend>>
+            DeleteDocument <.. SearchDocument: <<extend>>
+        AdjustDocument <.. SearchDocument: <<extend>>
+
+    Admin - - - ViewUserReport
+@enduml
+
+PlantUML version 1.2022.7(Tue Aug 23 00:01:30 ICT 2022)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: Cp1252
+Language: en
+Country: US
+--></g></svg>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="1129px" preserveAspectRatio="none" style="width:561px;height:1129px;background:#FFFFFF;" version="1.1" viewBox="0 0 561 1129" width="561px" zoomAndPan="magnify"><defs/><g><!--MD5=[519c8698fbb4f5027723de750eb4def2]
+cluster Child Health Care App--><g id="cluster_Child Health Care App"><rect fill="none" height="1116" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1.0;" width="460" x="95" y="7"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="153" x="248.5" y="23.5332">Child Health Care App</text></g><g id="elem_SignIn"><ellipse cx="496.8909" cy="540.9517" fill="#F1F1F1" rx="41.8909" ry="15.4517" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="43" x="475.3454" y="544.6948">Sign In</text></g><g id="elem_AdjustDoctor"><ellipse cx="224.6119" cy="59.2224" fill="#F1F1F1" rx="69.1119" ry="16.2224" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85" x="179.1119" y="63.739">Adjust Doctor</text></g><g id="elem_AdjustParent"><ellipse cx="224.6119" cy="126.2224" fill="#F1F1F1" rx="69.1119" ry="16.2224" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85" x="179.1119" y="130.739">Adjust Parent</text></g><g id="elem_AdjustDocument"><ellipse cx="224.6203" cy="194.8241" fill="#F1F1F1" rx="77.1203" ry="17.8241" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="107" x="168.7783" y="199.1856">Adjust Document</text></g><g id="elem_ViewUserReport"><ellipse cx="224.4202" cy="266.784" fill="#F1F1F1" rx="81.9202" ry="18.784" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="119" x="164.7512" y="270.5629">View User's Report</text></g><g id="elem_SuperviseImmunizationSchedule"><ellipse cx="224.3087" cy="425.9034" fill="#F1F1F1" rx="113.3087" ry="27.9034" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="63" x="192.8087" y="420.8272">Supervise</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="144" x="152.3087" y="438.4366">Immunization Schedule</text></g><g id="elem_SupervisePrescription"><ellipse cx="224.6965" cy="342.2393" fill="#F1F1F1" rx="91.6965" ry="20.7393" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="142" x="153.6965" y="345.9678">Supervise Prescription</text></g><g id="elem_MonitorChildHealthStatus"><ellipse cx="224.5397" cy="647.8079" fill="#F1F1F1" rx="104.5397" ry="23.3079" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="171" x="139.0397" y="651.5365">Monitor Child Health Status</text></g><g id="elem_SuperviseChild"><ellipse cx="224.6111" cy="506.2222" fill="#F1F1F1" rx="74.1111" ry="17.2222" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="99" x="172.1111" y="510.7388">Supervise Child</text></g><g id="elem_Chat"><ellipse cx="224.6985" cy="573.9517" fill="#F1F1F1" rx="32.6985" ry="15.4517" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="30" x="209.6985" y="577.6802">Chat</text></g><g id="elem_ViewDocument"><ellipse cx="224.376" cy="801.0752" fill="#F1F1F1" rx="73.376" ry="17.0752" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="97" x="172.876" y="805.5918">View Document</text></g><g id="elem_TrackChildEvents"><ellipse cx="224.4202" cy="871.784" fill="#F1F1F1" rx="81.9202" ry="18.784" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="119" x="164.7512" y="875.5629">Track Child Events</text></g><g id="elem_TrackMealTimes"><ellipse cx="224.5785" cy="944.2157" fill="#F1F1F1" rx="79.0785" ry="18.2157" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="112" x="167.1751" y="948.3395">Track Meal Times</text></g><g id="elem_TrackSleepTimes"><ellipse cx="224.5075" cy="1016.2015" fill="#F1F1F1" rx="81.5075" ry="18.7015" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="118" x="165.1675" y="1020.0304">Track Sleep Times</text></g><g id="elem_SignUpForParent"><ellipse cx="224.6887" cy="1088.0377" fill="#F1F1F1" rx="80.6887" ry="18.5377" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="116" x="166.0015" y="1091.9661">Sign Up for Parent</text></g><g id="elem_ViewDoctorInstruction"><ellipse cx="224.566" cy="727.9132" fill="#F1F1F1" rx="92.566" ry="20.9132" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="144" x="152.566" y="731.6417">View Doctor Instruction</text></g><!--MD5=[97ab183161fd5d1db7fba7485cf76add]
+entity Admin--><g id="elem_Admin"><ellipse cx="27" cy="130.5" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M27,138.5 L27,165.5 M14,146.5 L40,146.5 M27,165.5 L14,180.5 M27,165.5 L40,180.5 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="39" x="7.5" y="196.5332">Admin</text></g><!--MD5=[5a5d35bcfc46556bdff8e646cc6c81c2]
+entity Doctor--><g id="elem_Doctor"><ellipse cx="27" cy="475.5" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M27,483.5 L27,510.5 M14,491.5 L40,491.5 M27,510.5 L14,525.5 M27,510.5 L40,525.5 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="42" x="6" y="541.5332">Doctor</text></g><!--MD5=[174d9f225ba2a322a43f0f82f3551ccd]
+entity Parent--><g id="elem_Parent"><ellipse cx="27" cy="770.5" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><path d="M27,778.5 L27,805.5 M14,786.5 L40,786.5 M27,805.5 L14,820.5 M27,805.5 L40,820.5 " fill="none" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="42" x="6" y="836.5332">Parent</text></g><!--MD5=[ad4e87af7e10ece252caea0511a16921]
+link AdjustDoctor to SignIn--><g id="link_AdjustDoctor_SignIn"><path d="M284.28,67.21 C330.87,77.11 393.24,98.63 425,145 C467.7,207.34 488.94,447.17 494.49,519.94 " fill="none" id="AdjustDoctor-to-SignIn" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="494.89,525.28,498.2103,516.0077,494.5185,520.2938,490.2324,516.602,494.89,525.28" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="369" y="93.4951">«include»</text></g><!--MD5=[a1f3396d04a452ec5e162b6f946f6f38]
+link AdjustParent to SignIn--><g id="link_AdjustParent_SignIn"><path d="M279.74,135.77 C326.81,147.37 392.38,171.75 425,221 C489.71,318.7 496.26,466.28 496.34,520.28 " fill="none" id="AdjustParent-to-SignIn" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="496.33,525.5,500.3557,516.5115,496.3443,520.5,492.3557,516.4886,496.33,525.5" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="369" y="167.4951">«include»</text></g><!--MD5=[05ae574431d159bd786eb52adcd87f18]
+link AdjustDocument to SignIn--><g id="link_AdjustDocument_SignIn"><path d="M281.4,207.25 C327.87,220.57 391.61,246.72 425,295 C475.17,367.55 490.22,475.43 494.46,520.28 " fill="none" id="AdjustDocument-to-SignIn" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="494.92,525.43,498.1057,516.1106,494.4764,520.4497,490.1372,516.8204,494.92,525.43" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="369" y="243.4951">«include»</text></g><!--MD5=[baf4dedc32ba481b2fe3e0c61da30154]
+link ViewUserReport to SignIn--><g id="link_ViewUserReport_SignIn"><path d="M280.61,280.88 C299.41,286.7 320.17,294.4 338,304 C381.45,327.41 395.13,333.71 425,373 C460.47,419.66 481.77,486.67 490.84,520.21 " fill="none" id="ViewUserReport-to-SignIn" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="492.19,525.3,493.7396,515.5738,490.9035,520.4684,486.0089,517.6323,492.19,525.3" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="369" y="317.4951">«include»</text></g><!--MD5=[de5f35d018f0fe542adbba71fa43b8a9]
+link SuperviseImmunizationSchedule to SignIn--><g id="link_SuperviseImmunizationSchedule_SignIn"><path d="M295.1,447.96 C334.02,461.11 383.01,479.1 425,499 C440.81,506.49 457.71,516.4 471.05,524.71 " fill="none" id="SuperviseImmunizationSchedule-to-SignIn" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="475.43,527.46,469.9254,519.293,471.1924,524.8062,465.6793,526.0732,475.43,527.46" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="369" y="472.4951">«include»</text></g><!--MD5=[d13c7325fedd5657e7b38efffaeca1c7]
+link SupervisePrescription to SignIn--><g id="link_SupervisePrescription_SignIn"><path d="M284.38,357.58 C302.16,363.41 321.37,370.88 338,380 C381.51,403.86 390.17,414.65 425,450 C447.49,472.83 469.58,502.64 483,521.81 " fill="none" id="SupervisePrescription-to-SignIn" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="485.9,525.97,484.0519,516.2961,483.048,521.8632,477.481,520.8593,485.9,525.97" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="369" y="395.4951">«include»</text></g><!--MD5=[677c2e75c4788f5e3080c60b9f28f3b0]
+link Chat to SignIn--><g id="link_Chat_SignIn"><path d="M256.65,576.86 C296.24,579.71 366.48,582.1 425,570 C439.27,567.05 454.32,561.32 466.87,555.73 " fill="none" id="Chat-to-SignIn" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="471.73,553.51,461.8815,553.5928,467.1782,555.579,465.1919,560.8757,471.73,553.51" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="369" y="566.4951">«include»</text></g><!--MD5=[8848aae1435922274597a56d2c2e0251]
+link SuperviseChild to SignIn--><g id="link_SuperviseChild_SignIn"><path d="M289.26,514.25 C339.34,520.73 407.78,529.59 451.94,535.3 " fill="none" id="SuperviseChild-to-SignIn" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="456.93,535.95,448.5192,530.8258,451.9715,535.307,447.4903,538.7593,456.93,535.95" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="369" y="521.4951">«include»</text></g><!--MD5=[d9661bc64d05d9d74463466aac680c73]
+link MonitorChildHealthStatus to SignIn--><g id="link_MonitorChildHealthStatus_SignIn"><path d="M318.22,637.6 C353.05,631.15 392.14,620.75 425,604 C446.47,593.05 466.58,574.05 479.88,559.77 " fill="none" id="MonitorChildHealthStatus-to-SignIn" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="483.45,555.88,474.424,559.821,480.0753,559.5693,480.3269,565.2206,483.45,555.88" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="369" y="600.4951">«include»</text></g><!--MD5=[1cef7ec219a277445fab20114f8ca2c8]
+link TrackChildEvents to SignIn--><g id="link_TrackChildEvents_SignIn"><path d="M288.45,860.06 C333.53,848.12 391.9,825.09 425,782 C477.73,713.36 491.37,606.33 494.84,561.67 " fill="none" id="TrackChildEvents-to-SignIn" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="495.22,556.54,490.5624,565.218,494.8485,561.5262,498.5403,565.8123,495.22,556.54" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="369" y="778.4951">«include»</text></g><!--MD5=[a4ead15b95f4feab35fcee27cd6cab45]
+link TrackMealTimes to SignIn--><g id="link_TrackMealTimes_SignIn"><path d="M288.04,933.17 C333.84,921.74 393.32,898.84 425,854 C491.05,760.5 496.81,615.49 496.51,561.86 " fill="none" id="TrackMealTimes-to-SignIn" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="496.46,556.66,492.5373,565.694,496.5029,561.6598,500.537,565.6254,496.46,556.66" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="369" y="850.4951">«include»</text></g><!--MD5=[ca35f5891ca2ca2647d5bda269ada286]
+link TrackSleepTimes to SignIn--><g id="link_TrackSleepTimes_SignIn"><path d="M290.37,1004.99 C336.12,993.54 394.48,970.72 425,926 C466.35,865.4 488.45,633.23 494.36,561.94 " fill="none" id="TrackSleepTimes-to-SignIn" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="494.79,556.7,490.0585,565.3379,494.376,561.6828,498.031,566.0003,494.79,556.7" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="369" y="922.4951">«include»</text></g><!--MD5=[3bd96d844331603e8015b0e504446435]
+link ViewDoctorInstruction to SignIn--><g id="link_ViewDoctorInstruction_SignIn"><path d="M293.36,713.91 C335.01,702.52 387.38,682.99 425,651 C454.54,625.88 476.25,585.38 487.43,561.16 " fill="none" id="ViewDoctorInstruction-to-SignIn" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="489.53,556.54,482.1643,563.0781,487.461,561.0918,489.4472,566.3885,489.53,556.54" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="369" y="647.4951">«include»</text></g><!--MD5=[dd75680fe07b7b09be5aee28ccd234da]
+link ViewDocument to SignIn--><g id="link_ViewDocument_SignIn"><path d="M281.29,790.04 C326.41,778.3 388.28,755.2 425,712 C463.73,666.43 483.67,596.78 491.67,562.12 " fill="none" id="ViewDocument-to-SignIn" style="stroke:#181818;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#181818" points="492.85,556.87,486.9659,564.7679,491.7487,561.7472,494.7694,566.53,492.85,556.87" style="stroke:#181818;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="369" y="708.4951">«include»</text></g><!--MD5=[cf433d95b84011f079a58eb03c017dd4]
+link Admin to AdjustDoctor--><g id="link_Admin_AdjustDoctor"><path d="M46.61,131.64 C56.91,117.67 70.88,101.89 87,92 C109.34,78.29 136.99,70.28 161.55,65.59 " fill="none" id="Admin-AdjustDoctor" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[765e31d3f3738457be36cb66e9aef313]
+link Admin to AdjustParent--><g id="link_Admin_AdjustParent"><path d="M46.75,157.64 C74.65,152.65 128.22,143.06 169.1,135.74 " fill="none" id="Admin-AdjustParent" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[c3e445bd82ce3d22b2533168e8668adf]
+link Admin to AdjustDocument--><g id="link_Admin_AdjustDocument"><path d="M46.75,164.26 C73.12,168.85 122.42,177.42 162.27,184.35 " fill="none" id="Admin-AdjustDocument" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[7b90aede77f7d3d0110e4f8b376a985d]
+link Admin to ViewUserReport--><g id="link_Admin_ViewUserReport"><path d="M46.73,190.17 C57.05,204.1 71.02,219.89 87,230 C107.33,242.86 132.1,251.3 154.93,256.82 " fill="none" id="Admin-ViewUserReport" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[fee3716f8ce749d385597adc912a3da2]
+link Doctor to SuperviseImmunizationSchedule--><g id="link_Doctor_SuperviseImmunizationSchedule"><path d="M48.16,492.56 C59.29,485.52 73.56,477.12 87,471 C106.76,462.01 128.85,453.93 149.41,447.19 " fill="none" id="Doctor-SuperviseImmunizationSchedule" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[d1917adc5ce6c6d7bf38ec20bb2338ce]
+link Doctor to SupervisePrescription--><g id="link_Doctor_SupervisePrescription"><path d="M37.01,466.77 C45.42,438.75 60.72,402.23 87,380 C103.15,366.34 123.85,357.56 144.23,351.94 " fill="none" id="Doctor-SupervisePrescription" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[7b650125c3ce8c59ef05db6b6bc7fc3f]
+link Doctor to MonitorChildHealthStatus--><g id="link_Doctor_MonitorChildHealthStatus"><path d="M42.64,545.44 C52.29,566.46 66.9,591.17 87,607 C102.55,619.25 121.72,627.84 140.71,633.87 " fill="none" id="Doctor-MonitorChildHealthStatus" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[d4310c235887f6dbd71e022f0779949a]
+link Doctor to Chat--><g id="link_Doctor_Chat"><path d="M48.04,519.42 C59.14,526.37 73.41,534.52 87,540 C122.33,554.25 165.29,563.76 193.46,569.01 " fill="none" id="Doctor-Chat" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[67196deba0c12afef839faac2294c37e]
+link Doctor to SuperviseChild--><g id="link_Doctor_SuperviseChild"><path d="M48.19,506 C72.18,506 113.59,506 150.14,506 " fill="none" id="Doctor-SuperviseChild" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[138990045b0393a92d9b50f295319e2f]
+link Parent to SuperviseChild--><g id="link_Parent_SuperviseChild"><path d="M31.91,761.8 C39.16,697.12 56.75,572.11 87,541 C103.97,523.55 128.37,514.38 151.86,509.68 " fill="none" id="Parent-SuperviseChild" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[12c69c72f8726200e70a496c8e6a2e98]
+link Parent to Chat--><g id="link_Parent_Chat"><path d="M28.9,761.98 C32.09,718.03 44.11,647.47 87,607 C115.28,580.31 161.31,574.07 191.99,573.16 " fill="none" id="Parent-Chat" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[646861f12d8ad9b2ea44199448fcab55]
+link Parent to MonitorChildHealthStatus--><g id="link_Parent_MonitorChildHealthStatus"><path d="M39.83,761.96 C49.05,737.75 64.18,707.79 87,689 C102.09,676.57 120.87,667.91 139.62,661.88 " fill="none" id="Parent-MonitorChildHealthStatus" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[bb00e664bafd2c476b32cdbad75ab785]
+link Parent to ViewDoctorInstruction--><g id="link_Parent_ViewDoctorInstruction"><path d="M48.05,787.3 C59.15,780.19 73.42,771.8 87,766 C109.4,756.44 134.89,748.59 157.72,742.56 " fill="none" id="Parent-ViewDoctorInstruction" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[ce9ff87bd267b7d8521baf8e99931a26]
+link Parent to ViewDocument--><g id="link_Parent_ViewDocument"><path d="M48.19,801 C72.28,801 113.93,801 150.59,801 " fill="none" id="Parent-ViewDocument" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[6d8c33a7b2bdf7607df64af5f50eae12]
+link Parent to TrackChildEvents--><g id="link_Parent_TrackChildEvents"><path d="M48.08,814.31 C59.2,821.22 73.46,829.38 87,835 C111.26,845.08 139.09,853.2 163.26,859.23 " fill="none" id="Parent-TrackChildEvents" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[2f093347285118d449d4a1803235e8b8]
+link Parent to TrackMealTimes--><g id="link_Parent_TrackMealTimes"><path d="M40.34,840.02 C49.63,863.3 64.65,891.62 87,909 C105.44,923.34 129.12,931.85 151.56,936.89 " fill="none" id="Parent-TrackMealTimes" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[d77abbc685b9bea100de60565dfac1bc]
+link Parent to TrackSleepTimes--><g id="link_Parent_TrackSleepTimes"><path d="M30.33,840.23 C34.86,880.87 48.16,943.44 87,980 C103.51,995.54 125.91,1004.55 147.79,1009.72 " fill="none" id="Parent-TrackSleepTimes" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[9f2b83c84a62e5dbed7c04a41dd0da35]
+link Parent to SignUpForParent--><g id="link_Parent_SignUpForParent"><path d="M32.28,840.09 C39.93,902.86 57.92,1022.13 87,1052 C102.9,1068.33 125.26,1077.55 147.29,1082.67 " fill="none" id="Parent-SignUpForParent" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[c3b979a4c6dbaaa42d8577489fbb4967]
+@startuml SystemUseCase
+
+left to right direction
+
+actor Admin as "Admin"
+actor Doctor as "Doctor"
+actor Parent as "Parent"
+
+rectangle "Child Health Care App" {
+    ' Login
+    usecase "Sign In" as SignIn
+
+    ' Admin 
+    usecase "Adjust Doctor" as AdjustDoctor
+    usecase "Adjust Parent" as AdjustParent
+    usecase "Adjust Document" as AdjustDocument
+    usecase "View User's Report" as ViewUserReport
+
+    ' Doctor
+    usecase "Supervise\nImmunization Schedule" as SuperviseImmunizationSchedule
+    usecase "Supervise Prescription" as SupervisePrescription
+    
+    ' Dùng chung Doctor và Parent
+    usecase "Monitor Child Health Status" as MonitorChildHealthStatus 
+    usecase "Supervise Child" as SuperviseChild
+    usecase "Chat" as Chat
+    
+    ' Parent 
+    usecase "View Document" as ViewDocument
+    usecase "Track Child Events" as TrackChildEvents
+    usecase "Track Meal Times" as TrackMealTimes
+    usecase "Track Sleep Times" as TrackSleepTimes    
+    usecase "Sign Up for Parent" as SignUpForParent
+    usecase "View Doctor Instruction" as ViewDoctorInstruction
+}
+    ' Login 
+    AdjustDoctor ..> SignIn : <<include>>   
+    AdjustParent ..> SignIn : <<include>>   
+    AdjustDocument ..> SignIn : <<include>>   
+    ViewUserReport ..> SignIn : <<include>>  
+ 
+    ' Doctor 
+    SuperviseImmunizationSchedule ..> SignIn : <<include>>   
+    SupervisePrescription ..> SignIn : <<include>>   
+    
+    ' Dùng chung Doctor và Parent
+    Chat ..> SignIn : <<include>>   
+    SuperviseChild ..> SignIn : <<include>>   
+    MonitorChildHealthStatus ..> SignIn : <<include>>      
+
+    ' Parent
+    TrackChildEvents ..> SignIn : <<include>>   
+    TrackMealTimes ..> SignIn : <<include>>   
+    TrackSleepTimes ..> SignIn : <<include>>   
+    ViewDoctorInstruction ..> SignIn : <<include>>   
+    ViewDocument ..> SignIn: <<include>>
+    
+    Admin - - AdjustDoctor
+    Admin - - AdjustParent
+    Admin - - AdjustDocument
+    Admin - - ViewUserReport
+    ' Admin - - SignOut
+
+    Doctor - - SuperviseImmunizationSchedule
+    Doctor - - SupervisePrescription
+    Doctor - - MonitorChildHealthStatus
+    Doctor - - Chat
+    Doctor - - SuperviseChild
+    ' Doctor - - SignOut
+
+    Parent - - SuperviseChild
+    Parent - - Chat 
+    Parent - - MonitorChildHealthStatus
+    Parent - - ViewDoctorInstruction
+    Parent - - ViewDocument
+    Parent - - TrackChildEvents
+    Parent - - TrackMealTimes
+    Parent - - TrackSleepTimes
+    Parent - - SignUpForParent
+    ' Parent - - SignOut
+@enduml
+
+@startuml SystemUseCase
+
+left to right direction
+
+actor Admin as "Admin"
+actor Doctor as "Doctor"
+actor Parent as "Parent"
+
+rectangle "Child Health Care App" {
+    usecase "Sign In" as SignIn
+
+    usecase "Adjust Doctor" as AdjustDoctor
+    usecase "Adjust Parent" as AdjustParent
+    usecase "Adjust Document" as AdjustDocument
+    usecase "View User's Report" as ViewUserReport
+
+    usecase "Supervise\nImmunization Schedule" as SuperviseImmunizationSchedule
+    usecase "Supervise Prescription" as SupervisePrescription
+    
+    usecase "Monitor Child Health Status" as MonitorChildHealthStatus 
+    usecase "Supervise Child" as SuperviseChild
+    usecase "Chat" as Chat
+    
+    usecase "View Document" as ViewDocument
+    usecase "Track Child Events" as TrackChildEvents
+    usecase "Track Meal Times" as TrackMealTimes
+    usecase "Track Sleep Times" as TrackSleepTimes    
+    usecase "Sign Up for Parent" as SignUpForParent
+    usecase "View Doctor Instruction" as ViewDoctorInstruction
+}
+    AdjustDoctor ..> SignIn : <<include>>   
+    AdjustParent ..> SignIn : <<include>>   
+    AdjustDocument ..> SignIn : <<include>>   
+    ViewUserReport ..> SignIn : <<include>>  
+ 
+    SuperviseImmunizationSchedule ..> SignIn : <<include>>   
+    SupervisePrescription ..> SignIn : <<include>>   
+    
+    Chat ..> SignIn : <<include>>   
+    SuperviseChild ..> SignIn : <<include>>   
+    MonitorChildHealthStatus ..> SignIn : <<include>>      
+
+    TrackChildEvents ..> SignIn : <<include>>   
+    TrackMealTimes ..> SignIn : <<include>>   
+    TrackSleepTimes ..> SignIn : <<include>>   
+    ViewDoctorInstruction ..> SignIn : <<include>>   
+    ViewDocument ..> SignIn: <<include>>
+    
+    Admin - - AdjustDoctor
+    Admin - - AdjustParent
+    Admin - - AdjustDocument
+    Admin - - ViewUserReport
+
+    Doctor - - SuperviseImmunizationSchedule
+    Doctor - - SupervisePrescription
+    Doctor - - MonitorChildHealthStatus
+    Doctor - - Chat
+    Doctor - - SuperviseChild
+
+    Parent - - SuperviseChild
+    Parent - - Chat 
+    Parent - - MonitorChildHealthStatus
+    Parent - - ViewDoctorInstruction
+    Parent - - ViewDocument
+    Parent - - TrackChildEvents
+    Parent - - TrackMealTimes
+    Parent - - TrackSleepTimes
+    Parent - - SignUpForParent
+@enduml
+
+PlantUML version 1.2022.7(Tue Aug 23 00:01:30 ICT 2022)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: Cp1252
+Language: en
+Country: US
+--></g></svg>

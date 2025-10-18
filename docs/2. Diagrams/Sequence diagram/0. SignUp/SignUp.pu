@@ -1,0 +1,25 @@
+@startuml SignUp
+actor Student
+boundary RegistrationForm
+control UserController
+entity User
+database UserDatabase
+
+Student -> RegistrationForm : Open registration form
+RegistrationForm -> Student : Display form (email, password)
+
+Student -> RegistrationForm : Fill form and submit
+RegistrationForm -> UserController : Submit registration data (email, password)
+
+UserController -> UserController : Validate input fields
+UserController -> UserController : Hash password
+UserController -> User : Create user entity
+
+User -> UserDatabase : Save user data
+UserDatabase --> User : Confirmation saved
+
+UserController -> UserController : (Optional) Send confirmation email
+UserController -> RegistrationForm : Registration success
+
+RegistrationForm -> Student : Show confirmation / auto-login
+@enduml
