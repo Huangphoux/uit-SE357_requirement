@@ -1,0 +1,26 @@
+@startuml StudentUseCaseDiagram
+
+' Define actor
+actor Student
+
+' Group use cases in a box
+package "Student Use Cases" {
+  usecase "Sign Up" as UC1
+  usecase "Login/Logout" as UC2
+  usecase "View Enrolled Courses" as UC3
+  usecase "Self-Enroll in Courses" as UC4
+  usecase "Access Learning Materials" as UC5
+  usecase "Submit Assignments" as UC6
+  usecase "View Feedback" as UC7
+}
+
+' Relationships for Student
+Student --> UC1
+Student --> UC2
+Student --> UC3
+Student --> UC4
+Student --> UC5
+Student --> UC6
+Student --> UC7
+
+@enduml

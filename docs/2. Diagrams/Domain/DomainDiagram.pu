@@ -1,0 +1,74 @@
+@startuml DomainDiagram
+
+' High-level conceptual entities based on domain.typ
+entity User {
+  +email: string
+  +password: string
+  +name: string
+}
+
+entity Role {
+  <<enumeration>>
+  Student
+  Teacher
+  Admin
+}
+
+entity Course {
+  +title: string
+  +description: string
+  +syllabus: string
+}
+
+entity Class {
+  +schedule: string
+}
+
+entity LearningMaterial {
+  +type: string
+  +url: string
+}
+
+entity Assignment {
+  +title: string
+  +description: string
+  +deadline: datetime
+}
+
+entity Submission {
+  +content: string
+}
+
+entity Feedback {
+  +comment: string
+  +grade: int
+}
+
+entity Notification {
+  +message: string
+}
+
+entity PlatformStatistics {
+  +users: int
+  +submissions: int
+  +activeCourses: int
+}
+
+entity PlatformSettings {
+  +branding: string
+  +terms: string
+  +contactInfo: string
+}
+
+' Conceptual Relationships
+User "1" -- "*" Role : has
+User "*" -- "*" Class : participates in
+Class "1" -- "*" Course : linked to
+Class "1" -- "*" LearningMaterial : uses
+Class "1" -- "*" Assignment : has
+Assignment "1" -- "*" Submission : receives
+Submission "1" -- "1" Feedback : gets
+Notification "*" -- "1" User : sent to
+PlatformStatistics "1" -- "1" PlatformSettings : aggregates
+
+@enduml

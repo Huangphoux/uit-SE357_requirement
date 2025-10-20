@@ -1,0 +1,90 @@
+@startuml ClassDiagram
+
+' Main entities based on us.typ requirements
+class User {
+  +id: int
+  +email: string
+  +passwordHash: string
+  +role: Role
+}
+
+class Student {
+  +studentId: int
+}
+
+class Teacher {
+  +teacherId: int
+}
+
+class Admin {
+  +adminId: int
+}
+
+class Course {
+  +courseId: int
+  +title: string
+  +description: string
+}
+
+class Class {
+  +classId: int
+  +schedule: string
+}
+
+class Enrollment {
+  +enrollmentId: int
+}
+
+class Material {
+  +materialId: int
+  +type: string
+  +url: string
+}
+
+class Assignment {
+  +assignmentId: int
+  +title: string
+  +description: string
+  +deadline: date
+}
+
+class Submission {
+  +submissionId: int
+  +content: string
+  +status: string
+}
+
+class Notification {
+  +notificationId: int
+  +message: string
+}
+
+class Feedback {
+  +feedbackId: int
+  +comment: string
+  +score: int
+}
+
+class Role {
+  <<enum>>
+  Student
+  Teacher
+  Admin
+}
+
+' Relationships
+User <|-- Student
+User <|-- Teacher
+User <|-- Admin
+Student "*" -- "*" Course : enrolled
+Teacher "*" -- "*" Course : teaches
+Class "*" -- "1" Course : belongs to
+Student "*" -- "*" Class : attends
+Teacher "*" -- "*" Class : assigned
+Course "1" -- "*" Material : has
+Course "1" -- "*" Assignment : has
+Assignment "1" -- "*" Submission : receives
+Submission "1" -- "1" Feedback : gets
+User "1" -- "*" Notification : receives
+
+@enduml

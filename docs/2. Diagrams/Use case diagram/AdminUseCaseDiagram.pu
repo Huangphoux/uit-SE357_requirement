@@ -1,0 +1,26 @@
+@startuml AdminUseCaseDiagram
+
+' Define actor
+actor Admin
+
+' Group use cases in a box
+package "Admin Use Cases" {
+  usecase "Manage Courses" as UC12
+  usecase "Manage Classes" as UC13
+  usecase "Manage Student Enrollments" as UC14
+  usecase "Manage Teacher-Class Assignment" as UC15
+  usecase "Manage User Accounts" as UC16
+  usecase "Update System Settings" as UC17
+  usecase "View Platform Stats" as UC18
+}
+
+' Relationships for Admin
+Admin --> UC12
+Admin --> UC13
+Admin --> UC14
+Admin --> UC15
+Admin --> UC16
+Admin --> UC17
+Admin --> UC18
+
+@enduml

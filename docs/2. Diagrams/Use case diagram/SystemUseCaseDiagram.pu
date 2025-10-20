@@ -1,0 +1,16 @@
+@startuml SystemUseCaseDiagram
+
+' Define actor
+actor System
+
+' Group use cases in a box
+package "System Use Cases" {
+  usecase "Notify Users" as UC19
+  usecase "Aggregate Statistics" as UC20
+}
+
+' Relationships for System
+System --> UC19
+System --> UC20
+
+@enduml
