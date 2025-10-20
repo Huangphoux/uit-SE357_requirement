@@ -2,17 +2,17 @@
 title Remove Teacher from Class Sequence Diagram
 
 actor Admin
-boundary "Class Details UI"
-control "TeacherAssignmentController"
-entity "TeacherAssignment Repository"
+boundary ClassDetailsUI
+control TeacherAssignmentController
+entity TeacherAssignmentRepository
 
-Admin -> "Class Details UI" : Open class details
-Admin -> "Class Details UI" : Select assigned teacher
-Admin -> "Class Details UI" : Click 'Remove' button
-"Class Details UI" -> "TeacherAssignmentController" : Remove teacher request
-"TeacherAssignmentController" -> "TeacherAssignment Repository" : Delete teacher-class assignment
-"TeacherAssignment Repository" --> "TeacherAssignmentController" : Confirmation
-"TeacherAssignmentController" --> "Class Details UI" : Success response
-"Class Details UI" -> Admin : Update UI to reflect removal
+Admin -> ClassDetailsUI : Open class details
+Admin -> ClassDetailsUI : Select assigned teacher
+Admin -> ClassDetailsUI : Click 'Remove' button
+ClassDetailsUI -> TeacherAssignmentController : Remove teacher request
+TeacherAssignmentController -> TeacherAssignmentRepository : Delete teacher-class assignment
+TeacherAssignmentRepository --> TeacherAssignmentController : Confirmation
+TeacherAssignmentController --> ClassDetailsUI : Success response
+ClassDetailsUI -> Admin : Update UI to reflect removal
 
 @enduml

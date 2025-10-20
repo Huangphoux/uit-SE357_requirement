@@ -2,17 +2,17 @@
 title Remove from Course Sequence Diagram
 
 actor Student
-boundary "Course Catalog UI"
-control "EnrollmentController"
-entity "Enrollment Repository"
+boundary CourseCatalogUI
+control EnrollmentController
+entity EnrollmentRepository
 
-Student -> "Course Catalog UI" : Access course catalog
-Student -> "Course Catalog UI" : Click 'Unenroll' button on course
-"Course Catalog UI" -> "EnrollmentController" : Send unenroll request
-"EnrollmentController" -> "Enrollment Repository" : Delete enrollment record
-"Enrollment Repository" --> "EnrollmentController" : Confirmation
-"EnrollmentController" --> "Course Catalog UI" : Unenrollment success response
-"Course Catalog UI" -> Student : Update UI with current courses
-Student -> "Dashboard UI" : View dashboard with current enrollments
+Student -> CourseCatalogUI : Access course catalog
+Student -> CourseCatalogUI : Click 'Unenroll' button on course
+CourseCatalogUI -> EnrollmentController : Send unenroll request
+EnrollmentController -> EnrollmentRepository : Delete enrollment record
+EnrollmentRepository --> EnrollmentController : Confirmation
+EnrollmentController --> CourseCatalogUI : Unenrollment success response
+CourseCatalogUI -> Student : Update UI with current courses
+Student -> DashboardUI : View dashboard with current enrollments
 
 @enduml

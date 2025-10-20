@@ -2,14 +2,14 @@
 
 #show: it => basic-report(
   doc-category: "Kỹ thuật phân tích yêu cầu - SE357.Q12
-  
+
 Xây dựng website quản lí trung tâm tiếng Anh",
   doc-title: "Business Requirement Document",
   author: "23521224 Trương Hoàng Phúc
 23520448 Nguyễn Văn Hào",
   language: "vi",
   compact-mode: false,
-  it
+  it,
 )
 
 #set page(margin: 1.75in)

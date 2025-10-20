@@ -1,21 +1,13 @@
 @startuml AccessLearningMaterials
-title Access Learning Materials Sequence Diagram (US3.2 / UC3.2)
-
 actor Student
-boundary "Student Dashboard"
-control "MaterialController"
-entity "Material Repository"
+boundary StudentDashboard
+control MaterialController
+entity Material
 
-Student -> "Student Dashboard" : Open course page
-"Student Dashboard" -> "MaterialController" : Request course materials
-"MaterialController" -> "Material Repository" : Fetch materials for course
-"Material Repository" --> "MaterialController" : Return materials list
-"MaterialController" -> "Student Dashboard" : Provide materials list (filtered by enrollment)
-
-alt Student is enrolled
-    "Student Dashboard" -> Student : Display materials for download/stream
-else Not enrolled
-    "Student Dashboard" -> Student : Restrict access, show message
-end
-
+Student -> StudentDashboard: Open course page
+StudentDashboard -> MaterialController: Request materials
+MaterialController -> Material: Fetch materials
+Material -> MaterialController: Return materials
+MaterialController -> StudentDashboard: Provide materials list
+StudentDashboard -> Student: Show materials (if enrolled)
 @enduml

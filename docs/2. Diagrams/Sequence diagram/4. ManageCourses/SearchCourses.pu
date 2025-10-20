@@ -2,16 +2,16 @@
 title Search Courses Sequence Diagram
 
 actor Admin
-boundary "Course Dashboard"
-control "CourseController"
-entity "Course Repository"
+boundary CourseDashboard
+control CourseController
+entity CourseRepository
 
-Admin -> "Course Dashboard" : Open course dashboard
-Admin -> "Course Dashboard" : Enter search query
-"Course Dashboard" -> "CourseController" : Search courses request
-"CourseController" -> "Course Repository" : Query courses by criteria
-"Course Repository" --> "CourseController" : Return matching courses
-"CourseController" --> "Course Dashboard" : Return search results
-"Course Dashboard" -> Admin : Display filtered course list
+Admin -> CourseDashboard : Open course dashboard
+Admin -> CourseDashboard : Enter search query
+CourseDashboard -> CourseController : Search courses request
+CourseController -> CourseRepository : Query courses by criteria
+CourseRepository --> CourseController : Return matching courses
+CourseController --> CourseDashboard : Return search results
+CourseDashboard -> Admin : Display filtered course list
 
 @enduml

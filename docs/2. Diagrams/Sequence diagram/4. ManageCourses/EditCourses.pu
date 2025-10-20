@@ -2,19 +2,19 @@
 title Edit Course Sequence Diagram
 
 actor Admin
-boundary "Course Dashboard"
-control "CourseController"
-entity "Course Repository"
+boundary CourseDashboard
+control CourseController
+entity CourseRepository
 
-Admin -> "Course Dashboard" : Open course dashboard
-Admin -> "Course Dashboard" : Select course to edit
-"Course Dashboard" -> Admin : Show course edit form (pre-filled)
-Admin -> "Course Dashboard" : Modify course details
-Admin -> "Course Dashboard" : Submit updated form
-"Course Dashboard" -> "CourseController" : Update course request
-"CourseController" -> "Course Repository" : Update course details
-"Course Repository" --> "CourseController" : Confirmation
-"CourseController" --> "Course Dashboard" : Success response
-"Course Dashboard" -> Admin : Show updated course list
+Admin -> CourseDashboard : Open course dashboard
+Admin -> CourseDashboard : Select course to edit
+CourseDashboard -> Admin : Show course edit form (pre-filled)
+Admin -> CourseDashboard : Modify course details
+Admin -> CourseDashboard : Submit updated form
+CourseDashboard -> CourseController : Update course request
+CourseController -> CourseRepository : Update course details
+CourseRepository --> CourseController : Confirmation
+CourseController --> CourseDashboard : Success response
+CourseDashboard -> Admin : Show updated course list
 
 @enduml

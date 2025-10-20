@@ -1,0 +1,13 @@
+@startuml ViewPlatformStats
+actor Admin
+boundary AdminDashboard
+control StatsController
+entity PlatformStats
+
+Admin -> AdminDashboard: Open dashboard
+AdminDashboard -> StatsController: Request stats
+StatsController -> PlatformStats: Aggregate data
+PlatformStats -> StatsController: Return stats
+StatsController -> AdminDashboard: Return stats
+AdminDashboard -> Admin: Show charts
+@enduml

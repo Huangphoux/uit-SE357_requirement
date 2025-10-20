@@ -2,16 +2,16 @@
 title Search Classes Sequence Diagram
 
 actor Admin
-boundary "Class Management UI"
-control "ClassController"
-entity "Class Repository"
+boundary ClassManagementUI
+control ClassController
+entity ClassRepository
 
-Admin -> "Class Management UI" : Open class management UI
-Admin -> "Class Management UI" : Enter search query/filter
-"Class Management UI" -> "ClassController" : Search classes request
-"ClassController" -> "Class Repository" : Query classes by criteria
-"Class Repository" --> "ClassController" : Return matching classes
-"ClassController" --> "Class Management UI" : Return search results
-"Class Management UI" -> Admin : Display filtered class list
+Admin -> ClassManagementUI : Open class management UI
+Admin -> ClassManagementUI : Enter search query/filter
+ClassManagementUI -> ClassController : Search classes request
+ClassController -> ClassRepository : Query classes by criteria
+ClassRepository --> ClassController : Return matching classes
+ClassController --> ClassManagementUI : Return search results
+ClassManagementUI -> Admin : Display filtered class list
 
 @enduml

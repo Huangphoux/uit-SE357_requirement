@@ -2,21 +2,21 @@
 title Manage Classes Sequence Diagram (US2.2 / UC2.2)
 
 actor Admin
-boundary "Class Management UI"
-control "ClassController"
+boundary ClassManagementUI
+control ClassController
 
-Admin -> "Class Management UI" : Access class management UI
-"Class Management UI" -> Admin : Display class list and options
+Admin -> ClassManagementUI : Access class management UI
+ClassManagementUI -> Admin : Display class list and options
 
-Admin -> "Class Management UI" : Create/Edit/Delete classes
-Admin -> "Class Management UI" : Link class to course + schedule
-Admin -> "Class Management UI" : Submit changes
+Admin -> ClassManagementUI : Create/Edit/Delete classes
+Admin -> ClassManagementUI : Link class to course + schedule
+Admin -> ClassManagementUI : Submit changes
 
-"Class Management UI" -> "ClassController" : Process class data
-"ClassController" -> "ClassController" : Store updates in backend
-"ClassController" --> "Class Management UI" : Confirm operation success
+ClassManagementUI -> ClassController : Process class data
+ClassController -> ClassController : Store updates in backend
+ClassController --> ClassManagementUI : Confirm operation success
 
-"Class Management UI" -> Admin : Display updated class list
-"Class Management UI" -> "Course Dashboard" : Update class display in course view
+ClassManagementUI -> Admin : Display updated class list
+ClassManagementUI -> CourseDashboard : Update class display in course view
 
 @enduml

@@ -1,0 +1,13 @@
+@startuml ViewOwnSubmissions
+actor Student
+boundary MySubmissionsPage
+control ProgressController
+entity Submission
+
+Student -> MySubmissionsPage: Open page
+MySubmissionsPage -> ProgressController: Fetch submissions
+ProgressController -> Submission: Get student submissions
+Submission -> ProgressController: Return submissions
+ProgressController -> MySubmissionsPage: Return list
+MySubmissionsPage -> Student: Show status and feedback
+@enduml

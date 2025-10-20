@@ -2,23 +2,23 @@
 title Create Teacher Account Sequence Diagram (US1.4 / UC1.4)
 
 actor Admin
-boundary "Admin Panel"
-control "AdminController"
-control "Email Service"
+boundary AdminPanel
+control AdminController
+control EmailService
 
-Admin -> "Admin Panel" : Open create user form
-"Admin Panel" -> Admin : Display create user form
+Admin -> AdminPanel : Open create user form
+AdminPanel -> Admin : Display create user form
 
-Admin -> "Admin Panel" : Fill in teacher info
-Admin -> "Admin Panel" : Select "Teacher" role
-Admin -> "Admin Panel" : Submit form
+Admin -> AdminPanel : Fill in teacher info
+Admin -> AdminPanel : Select "Teacher" role
+Admin -> AdminPanel : Submit form
 
-"Admin Panel" -> "AdminController" : Create teacher account
-"AdminController" -> "AdminController" : Save user with Teacher role
-"AdminController" -> "Email Service" : Send activation or temp password email
-"Email Service" --> "AdminController" : Confirmation of email sent
+AdminPanel -> AdminController : Create teacher account
+AdminController -> AdminController : Save user with Teacher role
+AdminController -> EmailService : Send activation or temp password email
+EmailService --> AdminController : Confirmation of email sent
 
-"AdminController" --> "Admin Panel" : Return success message
-"Admin Panel" -> Admin : Display account created confirmation
+AdminController --> AdminPanel : Return success message
+AdminPanel -> Admin : Display account created confirmation
 
 @enduml

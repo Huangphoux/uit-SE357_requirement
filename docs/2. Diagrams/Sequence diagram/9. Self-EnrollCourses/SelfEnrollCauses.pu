@@ -2,19 +2,19 @@
 title Self-Enroll in Courses Sequence Diagram (US2.6 / UC2.6)
 
 actor Student
-boundary "Course Catalog"
-control "EnrollmentController"
-boundary "Student Dashboard"
+boundary CourseCatalog
+control EnrollmentController
+boundary StudentDashboard
 
-Student -> "Course Catalog" : Access course catalog
-"Course Catalog" -> Student : Display available courses
+Student -> CourseCatalog : Access course catalog
+CourseCatalog -> Student : Display available courses
 
-Student -> "Course Catalog" : Click Enroll/Unenroll
-"Course Catalog" -> "EnrollmentController" : Update enrollment status
-"EnrollmentController" -> "EnrollmentController" : Save enrollment changes in backend
-"EnrollmentController" --> "Course Catalog" : Confirm update success
+Student -> CourseCatalog : Click Enroll/Unenroll
+CourseCatalog -> EnrollmentController : Update enrollment status
+EnrollmentController -> EnrollmentController : Save enrollment changes in backend
+EnrollmentController --> CourseCatalog : Confirm update success
 
-"Course Catalog" -> "Student Dashboard" : Refresh current enrollments
-"Student Dashboard" -> Student : Show updated enrolled courses
+CourseCatalog -> StudentDashboard : Refresh current enrollments
+StudentDashboard -> Student : Show updated enrolled courses
 
 @enduml

@@ -1,0 +1,15 @@
+@startuml SubmitAssignments
+actor Student
+boundary SubmissionUI
+control SubmissionController
+entity Submission
+
+Student -> SubmissionUI: Open assignment page
+SubmissionUI -> Student: Show submission form
+Student -> SubmissionUI: Upload file or write text
+SubmissionUI -> SubmissionController: Submit assignment
+SubmissionController -> Submission: Store submission
+Submission -> SubmissionController: Confirm stored
+SubmissionController -> SubmissionUI: Confirm submission
+SubmissionUI -> Student: Show status
+@enduml

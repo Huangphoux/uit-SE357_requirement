@@ -1,0 +1,13 @@
+@startuml ReceiveNotifications
+actor Student
+boundary StudentDashboard
+control NotificationController
+entity Notification
+
+Student -> StudentDashboard: View notifications
+StudentDashboard -> NotificationController: Fetch notifications
+NotificationController -> Notification: Get notifications
+Notification -> NotificationController: Return notifications
+NotificationController -> StudentDashboard: Return notifications
+StudentDashboard -> Student: Show notifications
+@enduml

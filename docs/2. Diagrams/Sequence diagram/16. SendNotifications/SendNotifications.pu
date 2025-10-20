@@ -1,0 +1,16 @@
+@startuml SendNotifications
+actor Teacher
+boundary NotificationPanel
+control NotificationController
+entity Notification
+actor Student
+
+Teacher -> NotificationPanel: Open notification panel
+NotificationPanel -> Teacher: Show compose UI
+Teacher -> NotificationPanel: Compose message, select recipients
+NotificationPanel -> NotificationController: Send notification data
+NotificationController -> Notification: Store notification
+NotificationController -> Student: Deliver notification
+NotificationController -> NotificationPanel: Confirm sent
+NotificationPanel -> Teacher: Show success
+@enduml

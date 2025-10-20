@@ -2,17 +2,17 @@
 title Delete Class Sequence Diagram
 
 actor Admin
-boundary "Class Management UI"
-control "ClassController"
-entity "Class Repository"
+boundary ClassManagementUI
+control ClassController
+entity ClassRepository
 
-Admin -> "Class Management UI" : Open class management UI
-Admin -> "Class Management UI" : Select class to delete
-Admin -> "Class Management UI" : Confirm delete action
-"Class Management UI" -> "ClassController" : Delete class request
-"ClassController" -> "Class Repository" : Remove class
-"Class Repository" --> "ClassController" : Confirmation
-"ClassController" --> "Class Management UI" : Success response
-"Class Management UI" -> Admin : Show updated class list
+Admin -> ClassManagementUI : Open class management UI
+Admin -> ClassManagementUI : Select class to delete
+Admin -> ClassManagementUI : Confirm delete action
+ClassManagementUI -> ClassController : Delete class request
+ClassController -> ClassRepository : Remove class
+ClassRepository --> ClassController : Confirmation
+ClassController --> ClassManagementUI : Success response
+ClassManagementUI -> Admin : Show updated class list
 
 @enduml

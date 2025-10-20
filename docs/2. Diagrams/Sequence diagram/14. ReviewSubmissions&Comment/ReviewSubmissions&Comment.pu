@@ -1,0 +1,21 @@
+@startuml ReviewSubmissionsComment
+actor Teacher
+boundary SubmissionUI
+control SubmissionController
+entity Submission
+entity Feedback
+
+Teacher -> SubmissionUI: View submissions list
+SubmissionUI -> Teacher: Show list
+Teacher -> SubmissionUI: Open student submission
+SubmissionUI -> SubmissionController: Fetch submission
+SubmissionController -> Submission: Get submission details
+Submission -> SubmissionController: Return details
+SubmissionController -> SubmissionUI: Return details
+Teacher -> SubmissionUI: Add comments/annotations
+SubmissionUI -> SubmissionController: Save feedback
+SubmissionController -> Feedback: Store feedback
+Feedback -> SubmissionController: Confirm stored
+SubmissionController -> SubmissionUI: Confirm feedback
+SubmissionUI -> Teacher: Show feedback saved
+@enduml

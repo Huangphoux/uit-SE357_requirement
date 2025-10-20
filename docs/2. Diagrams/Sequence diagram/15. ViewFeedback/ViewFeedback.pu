@@ -1,0 +1,13 @@
+@startuml ViewFeedback
+actor Student
+boundary SubmissionUI
+control SubmissionController
+entity Feedback
+
+Student -> SubmissionUI: Open submitted assignment
+SubmissionUI -> SubmissionController: Fetch feedback
+SubmissionController -> Feedback: Get feedback
+Feedback -> SubmissionController: Return feedback
+SubmissionController -> SubmissionUI: Return feedback
+SubmissionUI -> Student: Show feedback/comments
+@enduml

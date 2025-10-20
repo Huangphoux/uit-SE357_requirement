@@ -2,17 +2,17 @@
 title Manage Student Enrollments Sequence Diagram (US2.3 / UC2.3)
 
 actor Admin
-boundary "Admin Panel"
-control "EnrollmentController"
+boundary AdminPanel
+control EnrollmentController
 
-Admin -> "Admin Panel" : Open class or student profile
-"Admin Panel" -> Admin : Display profile and enrollment options
+Admin -> AdminPanel : Open class or student profile
+AdminPanel -> Admin : Display profile and enrollment options
 
-Admin -> "Admin Panel" : Click enroll/remove student
-"Admin Panel" -> "EnrollmentController" : Update enrollment records
-"EnrollmentController" -> "EnrollmentController" : Save changes in backend
-"EnrollmentController" --> "Admin Panel" : Confirm update success
+Admin -> AdminPanel : Click enroll/remove student
+AdminPanel -> EnrollmentController : Update enrollment records
+EnrollmentController -> EnrollmentController : Save changes in backend
+EnrollmentController --> AdminPanel : Confirm update success
 
-"Admin Panel" -> Admin : Reflect updated enrollment status
+AdminPanel -> Admin : Reflect updated enrollment status
 
 @enduml

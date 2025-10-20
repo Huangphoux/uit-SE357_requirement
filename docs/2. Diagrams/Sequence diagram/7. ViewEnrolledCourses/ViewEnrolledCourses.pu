@@ -2,13 +2,13 @@
 title View Enrolled Courses Sequence Diagram (US2.4 / UC2.4)
 
 actor Student
-boundary "Student Dashboard"
-control "EnrollmentController"
+boundary StudentDashboard
+control EnrollmentController
 
-Student -> "Student Dashboard" : Logs in
-"Student Dashboard" -> "EnrollmentController" : Request enrolled courses
-"EnrollmentController" -> "EnrollmentController" : Fetch enrolled courses from backend
-"EnrollmentController" --> "Student Dashboard" : Return enrolled courses list
-"Student Dashboard" -> Student : Display enrolled courses
+Student -> StudentDashboard : Logs in
+StudentDashboard -> EnrollmentController : Request enrolled courses
+EnrollmentController -> EnrollmentController : Fetch enrolled courses from backend
+EnrollmentController --> StudentDashboard : Return enrolled courses list
+StudentDashboard -> Student : Display enrolled courses
 
 @enduml

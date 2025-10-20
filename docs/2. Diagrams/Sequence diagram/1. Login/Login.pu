@@ -1,27 +1,16 @@
-@startuml Login/Logout
-title Login/Logout Sequence Diagram (US1.2 / UC1.2)
-
+@startuml LoginLogout
 actor User
-boundary "Login Form"
-control "UserController"
+boundary LoginForm
+control UserController
 
-User -> "Login Form" : Opens login form
-"Login Form" -> User : Display login form
-
-User -> "Login Form" : Submit credentials
-"Login Form" -> "UserController" : Validate credentials
-"UserController" -> "UserController" : Check credentials in database
-alt Credentials valid
-    "UserController" -> "Login Form" : Return session/JWT token
-    "Login Form" -> User : Store token (cookie/localStorage)
-    "Login Form" -> User : Redirect to dashboard
-else Credentials invalid
-    "UserController" -> "Login Form" : Return error
-    "Login Form" -> User : Display error message
-end
-
-User -> "Login Form" : Requests logout
-"Login Form" -> User : Clear token (cookie/localStorage)
-"Login Form" -> User : Redirect to login page
-
+User -> LoginForm: Open login form
+LoginForm -> User: Display login form
+User -> LoginForm: Submit credentials
+LoginForm -> UserController: Validate credentials
+UserController -> LoginForm: Auth result (token or error)
+LoginForm -> User: Show result (dashboard or error)
+User -> LoginForm: Logout
+LoginForm -> UserController: Logout request
+UserController -> LoginForm: Logout success
+LoginForm -> User: Redirect to login page
 @enduml

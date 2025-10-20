@@ -2,17 +2,17 @@
 title Assign Teacher to Class Sequence Diagram
 
 actor Admin
-boundary "Class Details UI"
-control "TeacherAssignmentController"
-entity "TeacherAssignment Repository"
+boundary ClassDetailsUI
+control TeacherAssignmentController
+entity TeacherAssignmentRepository
 
-Admin -> "Class Details UI" : Open class details
-Admin -> "Class Details UI" : Select teacher from dropdown
-Admin -> "Class Details UI" : Click 'Assign' button
-"Class Details UI" -> "TeacherAssignmentController" : Assign teacher request
-"TeacherAssignmentController" -> "TeacherAssignment Repository" : Create teacher-class assignment
-"TeacherAssignment Repository" --> "TeacherAssignmentController" : Confirmation
-"TeacherAssignmentController" --> "Class Details UI" : Success response
-"Class Details UI" -> Admin : Update UI to reflect assignment
+Admin -> ClassDetailsUI : Open class details
+Admin -> ClassDetailsUI : Select teacher from dropdown
+Admin -> ClassDetailsUI : Click 'Assign' button
+ClassDetailsUI -> TeacherAssignmentController : Assign teacher request
+TeacherAssignmentController -> TeacherAssignmentRepository : Create teacher-class assignment
+TeacherAssignmentRepository --> TeacherAssignmentController : Confirmation
+TeacherAssignmentController --> ClassDetailsUI : Success response
+ClassDetailsUI -> Admin : Update UI to reflect assignment
 
 @enduml

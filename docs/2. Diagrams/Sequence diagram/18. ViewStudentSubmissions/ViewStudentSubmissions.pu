@@ -1,0 +1,13 @@
+@startuml ViewStudentSubmissions
+actor Teacher
+boundary AssignmentDashboard
+control ProgressController
+entity Submission
+
+Teacher -> AssignmentDashboard: Access assignment dashboard
+AssignmentDashboard -> ProgressController: Request submissions
+ProgressController -> Submission: Get submissions
+Submission -> ProgressController: Return submissions
+ProgressController -> AssignmentDashboard: Return submissions
+AssignmentDashboard -> Teacher: Show submission status
+@enduml

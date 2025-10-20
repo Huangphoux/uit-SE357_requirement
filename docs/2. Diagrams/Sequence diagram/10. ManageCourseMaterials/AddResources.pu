@@ -1,0 +1,15 @@
+@startuml AddResources
+actor Teacher
+boundary MaterialManagementUI
+control MaterialController
+entity Material
+
+Teacher -> MaterialManagementUI: Open add resource form
+MaterialManagementUI -> Teacher: Show add resource UI
+Teacher -> MaterialManagementUI: Fill resource info, upload file
+MaterialManagementUI -> MaterialController: Submit resource data
+MaterialController -> Material: Store new resource
+Material -> MaterialController: Confirm stored
+MaterialController -> MaterialManagementUI: Confirm add
+MaterialManagementUI -> Teacher: Show success
+@enduml

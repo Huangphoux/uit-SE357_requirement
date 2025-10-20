@@ -1,0 +1,15 @@
+@startuml ManageUserAccounts
+actor Admin
+boundary AdminPanel
+control AdminController
+entity User
+
+Admin -> AdminPanel: Open user management
+AdminPanel -> Admin: Show user table
+Admin -> AdminPanel: Search/edit/deactivate user
+AdminPanel -> AdminController: Update user
+AdminController -> User: Update record
+User -> AdminController: Confirm update
+AdminController -> AdminPanel: Confirm update
+AdminPanel -> Admin: Show result
+@enduml

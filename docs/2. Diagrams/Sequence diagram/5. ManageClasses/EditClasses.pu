@@ -2,19 +2,19 @@
 title Edit Class Sequence Diagram
 
 actor Admin
-boundary "Class Management UI"
-control "ClassController"
-entity "Class Repository"
+boundary ClassManagementUI
+control ClassController
+entity ClassRepository
 
-Admin -> "Class Management UI" : Open class management UI
-Admin -> "Class Management UI" : Select class to edit
-"Class Management UI" -> Admin : Show class edit form (pre-filled)
-Admin -> "Class Management UI" : Modify class details (course link, schedule)
-Admin -> "Class Management UI" : Submit updated form
-"Class Management UI" -> "ClassController" : Update class request
-"ClassController" -> "Class Repository" : Update class details
-"Class Repository" --> "ClassController" : Confirmation
-"ClassController" --> "Class Management UI" : Success response
-"Class Management UI" -> Admin : Show updated class list
+Admin -> ClassManagementUI : Open class management UI
+Admin -> ClassManagementUI : Select class to edit
+ClassManagementUI -> Admin : Show class edit form (pre-filled)
+Admin -> ClassManagementUI : Modify class details (course link, schedule)
+Admin -> ClassManagementUI : Submit updated form
+ClassManagementUI -> ClassController : Update class request
+ClassController -> ClassRepository : Update class details
+ClassRepository --> ClassController : Confirmation
+ClassController --> ClassManagementUI : Success response
+ClassManagementUI -> Admin : Show updated class list
 
 @enduml

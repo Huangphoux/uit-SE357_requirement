@@ -1,0 +1,16 @@
+@startuml UpdateSystemSettings
+actor Admin
+boundary SettingsPage
+control SettingsController
+entity PlatformSettings
+
+Admin -> SettingsPage: Open settings
+SettingsPage -> Admin: Show settings form
+Admin -> SettingsPage: Edit info
+Admin -> SettingsPage: Save changes
+SettingsPage -> SettingsController: Submit changes
+SettingsController -> PlatformSettings: Update settings
+PlatformSettings -> SettingsController: Confirm update
+SettingsController -> SettingsPage: Confirm update
+SettingsPage -> Admin: Show result
+@enduml
