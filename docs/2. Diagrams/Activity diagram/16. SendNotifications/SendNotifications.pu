@@ -1,0 +1,20 @@
+@startuml SendNotifications
+|Teacher|
+start
+:Open notification panel;
+|NotificationPanel|
+:Show compose UI;
+|Teacher|
+:Compose message, select recipients;
+|NotificationPanel|
+:Send notification data;
+|NotificationController|
+:Store notification;
+|NotificationController|
+:Deliver notification;
+|NotificationController|
+:Confirm sent;
+|NotificationPanel|
+:Show success;
+stop
+@enduml

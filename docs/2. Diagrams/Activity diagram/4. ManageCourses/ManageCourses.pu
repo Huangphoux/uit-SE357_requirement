@@ -1,0 +1,16 @@
+@startuml ManageCourses
+|Admin|
+start
+:Open course dashboard;
+:Create/Edit/Delete course;
+:Fill in course form (title, description, etc.);
+:Submit course form;
+|CourseDashboard|
+:Process course data;
+|CourseController|
+:Create/Edit/Delete course in backend;
+:Confirm operation success;
+|CourseDashboard|
+:Display updated course list;
+stop
+@enduml

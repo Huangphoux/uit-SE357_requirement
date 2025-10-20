@@ -1,0 +1,16 @@
+@startuml AssignRoles
+|Admin|
+start
+:Open user management panel;
+:Select user;
+:Choose role (Student/Teacher/Admin);
+:Submit role change;
+|AdminPanel|
+:Update user role;
+|AdminController|
+:Update permissions in backend;
+|AdminPanel|
+:Confirm update success;
+:Display confirmation / updated user info;
+stop
+@enduml

@@ -1,0 +1,16 @@
+@startuml ViewFeedback
+|Student|
+start
+:Open submitted assignment;
+|SubmissionUI|
+:Fetch feedback;
+|SubmissionController|
+:Get feedback;
+|Feedback|
+:Return feedback;
+|SubmissionController|
+:Return feedback;
+|SubmissionUI|
+:Show feedback/comments;
+stop
+@enduml

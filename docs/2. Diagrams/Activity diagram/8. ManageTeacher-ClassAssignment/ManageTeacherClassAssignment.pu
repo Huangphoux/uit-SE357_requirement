@@ -1,0 +1,18 @@
+@startuml ManageTeacherClassAssignment
+|Admin|
+start
+:Open class details;
+|ClassManagementUI|
+:Display class info and teacher options;
+|Admin|
+:Choose teacher from dropdown;
+:Assign/remove teacher;
+|ClassManagementUI|
+:Update teacher-class assignment;
+|TeacherAssignmentController|
+:Save changes in backend;
+:Confirm update success;
+|ClassManagementUI|
+:Reflect updated assignment in views;
+stop
+@enduml

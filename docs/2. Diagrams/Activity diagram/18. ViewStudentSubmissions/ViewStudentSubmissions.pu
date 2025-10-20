@@ -1,0 +1,16 @@
+@startuml ViewStudentSubmissions
+|Teacher|
+start
+:Access assignment dashboard;
+|AssignmentDashboard|
+:Request submissions;
+|ProgressController|
+:Get submissions;
+|Submission|
+:Return submissions;
+|ProgressController|
+:Return submissions;
+|AssignmentDashboard|
+:Show submission status;
+stop
+@enduml

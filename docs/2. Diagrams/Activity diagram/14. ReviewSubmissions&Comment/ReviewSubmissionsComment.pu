@@ -1,0 +1,30 @@
+@startuml ReviewSubmissionsComment
+|Teacher|
+start
+:View submissions list;
+|SubmissionUI|
+:Show list;
+|Teacher|
+:Open student submission;
+|SubmissionUI|
+:Fetch submission;
+|SubmissionController|
+:Get submission details;
+|Submission|
+:Return details;
+|SubmissionController|
+:Return details;
+|Teacher|
+:Add comments/annotations;
+|SubmissionUI|
+:Save feedback;
+|SubmissionController|
+:Store feedback;
+|Feedback|
+:Confirm stored;
+|SubmissionController|
+:Confirm feedback;
+|SubmissionUI|
+:Show feedback saved;
+stop
+@enduml

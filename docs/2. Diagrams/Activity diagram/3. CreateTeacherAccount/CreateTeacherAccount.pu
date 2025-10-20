@@ -1,0 +1,20 @@
+@startuml CreateTeacherAccount
+|Admin|
+start
+:Open create user form;
+:Fill in teacher info;
+:Select "Teacher" role;
+:Submit form;
+|AdminPanel|
+:Create teacher account;
+|AdminController|
+:Save user with Teacher role;
+:Send activation or temp password email;
+|EmailService|
+:Confirmation of email sent;
+|AdminController|
+:Return success message;
+|AdminPanel|
+:Display account created confirmation;
+stop
+@enduml

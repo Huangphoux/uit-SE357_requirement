@@ -1,0 +1,18 @@
+@startuml Login
+|User|
+start
+:Open login form;
+:Submit credentials;
+|LoginForm|
+:Validate credentials;
+|UserController|
+:Auth result (token or error);
+|LoginForm|
+:Show result (dashboard or error);
+:Logout;
+|UserController|
+:Logout success;
+|LoginForm|
+:Redirect to login page;
+stop
+@enduml

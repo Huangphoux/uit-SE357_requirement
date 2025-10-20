@@ -1,0 +1,19 @@
+@startuml SelfEnrollCourses
+|Student|
+start
+:Access course catalog;
+|CourseCatalog|
+:Display available courses;
+|Student|
+:Click Enroll/Unenroll;
+|CourseCatalog|
+:Update enrollment status;
+|EnrollmentController|
+:Save enrollment changes in backend;
+:Confirm update success;
+|CourseCatalog|
+:Refresh current enrollments;
+|StudentDashboard|
+:Show updated enrolled courses;
+stop
+@enduml

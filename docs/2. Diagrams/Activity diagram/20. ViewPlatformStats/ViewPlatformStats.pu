@@ -1,0 +1,16 @@
+@startuml ViewPlatformStats
+|Admin|
+start
+:Open dashboard;
+|AdminDashboard|
+:Request stats;
+|StatsController|
+:Aggregate data;
+|PlatformStats|
+:Return stats;
+|StatsController|
+:Return stats;
+|AdminDashboard|
+:Show charts;
+stop
+@enduml
