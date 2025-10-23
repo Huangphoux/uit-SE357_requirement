@@ -16,22 +16,36 @@ Xây dựng website quản lí trung tâm tiếng Anh",
 #set par(leading: 0.55em, spacing: 0.55em, first-line-indent: 1.8em, justify: true)
 #show heading: set block(above: 1.4em, below: 1em)
 
-= Actors
+#set heading(numbering: "1.1.a")
 
-#include "actor.typ"
+= Objective and Scope
+#include "objective_scope.typ"
 
-= Epics
+= Business Requirement
 
-#include "epic.typ"
+== Application Overview
+#include "app_overview.typ"
 
-= User stories & Use cases
+== Domain objects
 
-#include "us.typ"
+=== Diagram
+#image("/out/docs/2. Diagrams/Domain/DomainDiagram.svg")
 
-= Domain objects
-
+=== Domain Objects Description
 #include "domain.typ"
 
-= Components
+== Use Cases and Actors
+=== Diagram
+#include "us_diagram.typ"
 
-#include "component.typ"
+=== Description of Actors
+#include "actor.typ"
+
+=== Description of Use Cases
+#include "us.typ"
+
+== Security Matrix
+
+= Epics
+#include "epic.typ"
+

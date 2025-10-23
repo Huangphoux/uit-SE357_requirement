@@ -1,5 +1,3 @@
-#set heading(offset: 1)
-
 = Entities
 
 - User: Represents a user of the platform (student, teacher, admin)

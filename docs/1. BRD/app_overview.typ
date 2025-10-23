@@ -1,0 +1,1 @@
+The Child HealthCare App aims to provide a comprehensive and user-friendly platform for parents and caregivers to monitor, manage, and track the health and well-being of their children. The app will facilitate the input of health-related information, allow for error reporting, and enable seamless communication between parents and healthcare professionals.

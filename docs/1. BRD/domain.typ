@@ -1,4 +1,4 @@
-#set heading(offset: 1)
+#set heading(offset: 3)
 
 = User
 
@@ -54,7 +54,7 @@
 
 = Feedback / Comment
 
-- Teacher’s feedback on a submission; may include text, grade, or annotations.
+- Teacher's feedback on a submission; may include text, grade, or annotations.
 
 = StudentProgress
 
