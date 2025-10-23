@@ -17,6 +17,15 @@ Xây dựng website quản lí trung tâm tiếng Anh",
 #show heading: set block(above: 1.4em, below: 1em)
 
 = Introduction
+
+#include "intro.typ"
+
 = Functional Requirements
+
+
+
 = Non-Functional Requirements
+
+
+
 = Other Requirements

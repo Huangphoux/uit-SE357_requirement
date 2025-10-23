@@ -1,10 +1,12 @@
 @startuml StudentUseCaseDiagram
 
+left to right direction
+
 ' Define actor
 actor Student
 
 ' Group use cases in a box
-package "Student Use Cases" {
+rectangle "Student Use Cases" {
   usecase "Sign Up" as UC1
   usecase "Login/Logout" as UC2
   usecase "View Enrolled Courses" as UC3

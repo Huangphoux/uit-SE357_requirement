@@ -1,10 +1,12 @@
 @startuml TeacherUseCaseDiagram
 
+left to right direction
+
 ' Define actor
 actor Teacher
 
 ' Group use cases in a box
-package "Teacher Use Cases" {
+rectangle "Teacher Use Cases" {
   usecase "Manage Course Materials" as UC8
   usecase "Manage Assignments" as UC9
   usecase "Review Submissions & Comment" as UC10

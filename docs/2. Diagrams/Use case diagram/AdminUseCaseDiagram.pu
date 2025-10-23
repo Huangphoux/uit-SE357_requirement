@@ -1,10 +1,12 @@
 @startuml AdminUseCaseDiagram
 
+left to right direction
+
 ' Define actor
 actor Admin
 
 ' Group use cases in a box
-package "Admin Use Cases" {
+rectangle "Admin Use Cases" {
   usecase "Manage Courses" as UC12
   usecase "Manage Classes" as UC13
   usecase "Manage Student Enrollments" as UC14
