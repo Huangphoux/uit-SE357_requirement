@@ -1,4 +1,4 @@
-#set heading(offset: 1)
+
 
 = Self-Enroll in Courses
 

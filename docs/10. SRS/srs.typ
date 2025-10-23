@@ -22,10 +22,20 @@ Xây dựng website quản lí trung tâm tiếng Anh",
 
 = Functional Requirements
 
+== Use Case Description
 
+#include "us_srs.typ"
+
+== List Description
+== View Description
 
 = Non-Functional Requirements
 
+== User Access and Security
+
+== Performance Requirements
+
+== Implementation Requirements
 
 
 = Other Requirements
