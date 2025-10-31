@@ -1,4 +1,5 @@
 #set heading(offset: 2)
+
 #include "../1. BRD/us/1.1_Sign_up.typ"
 #image("/out/docs/2. Diagrams/Sequence diagram/0. SignUp/SignUp.svg")
 #image("/out/docs/2. Diagrams/Activity diagram/0. SignUp/SignUp.svg")
