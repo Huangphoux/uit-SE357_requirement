@@ -1,0 +1,71 @@
+@startuml create_account
+title <font size=24>Edit Assignment Sequence</font>
+skinparam sequenceMessageAlign center
+autonumber
+
+actor Teacher as act
+boundary TeacherPage as page
+participant ":AssignmentRouter" as router
+control AssignmentController as controler
+participant ":Assignment" as context
+database Database as db
+
+loop Input invalid
+    act -> page: Enter new information of Assignment and click "Lưu" button
+    activate page
+    page -> page: Validation input
+    activate page
+
+    deactivate page
+    autonumber 3
+    page --> act: Display invalid input
+end
+
+autonumber 4
+page -> router: endpoint /api/assignment/edit_assignment
+activate router
+router -> controler: Call EditAssignment(assignmentData) method
+activate controler
+controler -> context: Call FindOne(assignmentData.name) method
+activate context
+context -> db: Query database
+activate db
+db --> context: Return Assignment
+deactivate db
+context --> controler: Return Assignment
+deactivate context
+controler -> controler: Check null Assignment
+activate controler
+deactivate controler
+opt Assignment not null
+    autonumber 10.1
+    controler --> router: Return "Assignment not existed"
+    router --> page: Return "Assignment not existed"
+    page --> act: Return "Assignment not existed"
+end
+autonumber 11
+controler -> context: Call newInforAssignment.save(assignmentData) method
+activate context
+context -> db: Update database
+activate db
+db --> context: Return number
+deactivate db
+context --> controler: Return number
+deactivate context
+alt number < 0
+    autonumber 14.1
+    controler --> router: Return message error
+    autonumber 14.1.1
+    router --> page: Return message error
+    page --> act: Show message error
+else number > 0
+    autonumber 14.2
+    controler --> router: Return message error
+    autonumber 14.2.1
+    deactivate controler
+    router --> page: Return message successful
+    deactivate router
+    page --> act: Show message successful and redirect to list Assignment
+    deactivate page
+end
+@enduml

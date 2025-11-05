@@ -1,5 +1,3 @@
-
-
 = Manage Teacher-Class Assignment
 
 - Epic: Course & Class Management
@@ -10,9 +8,19 @@
 - As a: Admin
 - I want to: Assign/remove teachers to classes
 - So that: I can manage who teaches what class
+- Trigger: The administrator needs to assign or reassign teachers to specific classes.
+- Pre-condition:
+    - The administrator has successfully logged into the system.
+    - Teacher accounts and classes exist in the system.
+- Post-condition:
+    - Teachers are correctly assigned to or removed from classes.
+    - The assignments are reflected in the system's class and teacher views.
 - Solution (Step-by-Step):
-  - Open class details
-  - Choose teacher from dropdown
-  - Assign/remove teacher
-  - Backend updates assignment
-  - Reflect in views
+    - The administrator accesses the teacher-class assignment management interface.
+    - The system displays a list of classes and currently assigned teachers.
+    - The administrator can:
+        - Select a class and assign an available teacher from a list.
+        - Select a teacher and assign them to one or more classes.
+        - Remove a teacher's assignment from a specific class.
+    - The system updates the teacher-class assignment records in the database.
+    - A confirmation or error message is displayed to the administrator.

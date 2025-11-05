@@ -1,0 +1,22 @@
+= Create Course
+
+- Epic: Course Management
+- Actor: Admin
+- MVP: Yes
+- BR: BR-CRS-1
+- Description / Notes: Create a new course in the admin panel.
+- As a: Admin
+- I want to: Create a new course
+- So that: I can define a new course offering.
+- Trigger: The admin needs to add a new course.
+- Pre-condition:
+    - The admin must be logged into the system.
+    - The admin must have course management permissions.
+- Post-condition:
+    - A new course is created.
+- Solution (Step-by-Step):
+  - Open course management panel.
+  - Click "Create New Course".
+  - Fill in course details (e.g., course name, description).
+  - Submit the form.
+  - Backend creates the new course.

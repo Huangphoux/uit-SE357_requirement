@@ -1,0 +1,24 @@
+= Delete Account
+
+- Epic: User Management
+- Actor: Admin
+- MVP: Yes
+- BR: BR-SYS-2
+- Description / Notes: Delete a user account in the admin panel.
+- As a: Admin
+- I want to: Delete a user account
+- So that: The user can no longer access the system.
+- Trigger: The admin needs to remove a user from the platform.
+- Pre-condition:
+    - The admin must be logged into the system.
+    - The admin must have user management permissions.
+    - The user account to be deleted must exist.
+- Post-condition:
+    - The user account is removed from the system.
+    - The user can no longer log in.
+- Solution (Step-by-Step):
+  - Open user management panel.
+  - Find the user to delete.
+  - Click the "Delete" button for that user.
+  - Confirm the deletion.
+  - Backend removes the user account.

@@ -1,0 +1,70 @@
+@startuml create_account
+title <font size=24>Create Account Sequence</font>
+skinparam sequenceMessageAlign center
+autonumber
+
+actor Admin as act
+boundary AdminPage as page
+participant ":CourseRouter" as router
+control CourseController as controler
+participant ":Course" as context
+database Database as db
+
+loop Input invalid
+    act -> page: Enter new information of Course and click "Lưu" button
+    activate page
+    page -> page: Validation input
+    activate page
+    deactivate page
+    autonumber 3
+    page --> act: Display invalid input
+end
+
+autonumber 4
+page -> router: endpoint /api/course/create_course
+activate router
+router -> controler: Call CreateNewCourse(courseData) method
+activate controler
+controler -> context: Call FindOne(courseData.name) method
+activate context
+context -> db: Query database
+activate db
+db --> context: Return Course
+deactivate db
+context --> controler: Return Course
+deactivate context
+controler -> controler: Check null Course
+activate controler
+deactivate controler
+opt Course not null
+    autonumber 10.1
+    controler --> router: Return "Course had existed"
+    router --> page: Return "Course had existed"
+    page --> act: Return "Course had existed"
+end
+autonumber 11
+controler -> context: Call newCourse.save(courseData) method
+activate context
+context -> db: Insert database
+activate db
+db --> context: Return number
+deactivate db
+context --> controler: Return number
+deactivate context
+alt number < 0
+    autonumber 14.1
+    controler --> router: Return message error
+    autonumber 14.1.1
+    router --> page: Return message error
+    page --> act: Show message error
+else number > 0
+    autonumber 14.2
+    controler --> router: Return message error
+    autonumber 14.2.1
+    deactivate controler
+    router --> page: Return message successful
+    deactivate router
+    page --> act: Show message successful and redirect to list Course
+    deactivate page
+end
+@enduml

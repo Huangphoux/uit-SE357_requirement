@@ -1,90 +1,136 @@
 @startuml ClassDiagram
 
-' Main entities based on us.typ requirements
-class User {
-  +id: int
-  +email: string
+
+
+' Abstract User Class
+abstract class User {
+  +userId: int
+  +username: string
   +passwordHash: string
-  +role: Role
+  +email: string
+  +fullName: string
+  +role: UserRole
+  +login()
+  +logout()
+  +updateProfile()
 }
 
-class Student {
-  +studentId: int
+' User Roles Enum
+enum UserRole {
+  ADMIN
+  TEACHER
+  STUDENT
 }
 
-class Teacher {
+' Concrete User Roles
+class Admin extends User {
+  +manageUsers()
+  +manageCourses()
+  +manageClasses()
+  +viewSystemStats()
+}
+
+class Teacher extends User {
   +teacherId: int
+  +manageCourseMaterials()
+  +createAssignment()
+  +gradeSubmission()
+  +sendNotification()
 }
 
-class Admin {
-  +adminId: int
+class Student extends User {
+  +studentId: int
+  +viewEnrolledCourses()
+  +submitAssignment()
+  +viewGrades()
 }
 
+' Course and Class Structure
 class Course {
   +courseId: int
-  +title: string
+  +courseName: string
   +description: string
+  +addMaterial()
+  +removeMaterial()
 }
 
 class Class {
   +classId: int
+  +className: string
   +schedule: string
+  +addStudent()
+  -removeStudent()
+  +createAssignment()
 }
 
-class Enrollment {
-  +enrollmentId: int
-}
-
-class Material {
+class CourseMaterial {
   +materialId: int
-  +type: string
+  +title: string
+  +type: MaterialType
   +url: string
 }
 
+enum MaterialType {
+  PDF
+  VIDEO
+  LINK
+}
+
+' Assignment and Submission
 class Assignment {
   +assignmentId: int
   +title: string
   +description: string
-  +deadline: date
+  +dueDate: date
 }
 
 class Submission {
   +submissionId: int
+  +submissionDate: date
   +content: string
-  +status: string
+  +grade: float
 }
 
+class FeedBack {
+  +FeedBackId: int
+  +text: string
+  +timestamp: date
+}
+
+' Notifications
 class Notification {
   +notificationId: int
-  +message: string
-}
-
-class Feedback {
-  +feedbackId: int
-  +comment: string
-  +score: int
-}
-
-class Role {
-  <<enum>>
-  Student
-  Teacher
-  Admin
+  +content: string
+  +timestamp: date
+  +isRead: boolean
 }
 
 ' Relationships
-User <|-- Student
-User <|-- Teacher
-User <|-- Admin
-Student "*" -- "*" Course : enrolled
-Teacher "*" -- "*" Course : teaches
-Class "*" -- "1" Course : belongs to
-Student "*" -- "*" Class : attends
-Teacher "*" -- "*" Class : assigned
-Course "1" -- "*" Material : has
-Course "1" -- "*" Assignment : has
-Assignment "1" -- "*" Submission : receives
-Submission "1" -- "1" Feedback : gets
-User "1" -- "*" Notification : receives
+User --> UserRole
+
+' Course and Class Relationships
+Course "1" o-- "1..*" Class : contains >
+Course "1" *-- "0..*" CourseMaterial : has >
+
+' Class, Teacher, and Student Relationships
+Teacher "1" -- "0..*" Class : teaches
+(Student, Class) .. Enrollment
+Class "1" o-- "0..*" Student : has enrolled
+Class "1" *-- "0..*" Assignment : gives >
+
+' Assignment and Submission Relationships
+Student "1" -- "0..*" Submission : makes >
+Assignment "1" -- "0..*" Submission : receives <
+Submission "1" o-- "0..*" FeedBack : has
+Teacher "1" -- "0..*" FeedBack : writes
+
+' Notification Relationship
+User "1" -- "0..*" Notification : receives
+
+' Enrollment Association Class
+class Enrollment {
+  +enrollmentDate: date
+  +finalGrade: float
+}
 
 @enduml

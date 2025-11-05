@@ -1,0 +1,21 @@
+= Self-Enroll in Courses
+
+- Epic: Course & Class Management
+- Actor: Student
+- MVP: Yes
+- BR: BR10
+- Description / Notes: Enroll or leave courses
+- As a: Student
+- I want to: Enroll / Remove from courses
+- So that: I can attend courses
+- Trigger: The student wants to join a new course or leave a current one.
+- Pre-condition:
+    - The student is logged in.
+    - The course exists and is available for self-enrollment.
+- Post-condition:
+    - The student's enrollment status for the course is updated.
+- Solution (Step-by-Step):
+  - Access course catalog
+  - Click Enroll/Unenroll
+  - Backend updates enrollment
+  - Dashboard shows current enrollments

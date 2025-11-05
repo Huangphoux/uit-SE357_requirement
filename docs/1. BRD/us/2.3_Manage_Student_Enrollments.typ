@@ -1,5 +1,3 @@
-
-
 = Manage Student Enrollments
 
 - Epic: Course & Class Management
@@ -10,8 +8,19 @@
 - As a: Admin
 - I want to: Enroll/remove students from courses
 - So that: I can manage who attends
+- Trigger: The administrator needs to manually enroll or unenroll students from courses.
+- Pre-condition:
+    - The administrator has successfully logged into the system.
+    - Student accounts and courses/classes exist in the system.
+- Post-condition:
+    - Students are correctly enrolled in or removed from the specified courses/classes.
+    - Enrollment records are updated in the database.
 - Solution (Step-by-Step):
-  - Open class or student profile
-  - Click enroll/remove buttons
-  - Backend updates records
-  - UI reflects enrollment status
+    - The administrator accesses the student enrollment management interface.
+    - The system displays options to view students and courses/classes.
+    - The administrator can:
+        - Select a student and enroll them in an available course/class.
+        - Select a course/class and enroll multiple students.
+        - Select a student or course/class and remove existing enrollments.
+    - The system processes the enrollment/unenrollment request and updates the database.
+    - A confirmation message is displayed upon successful operation, or an error message if the operation fails.

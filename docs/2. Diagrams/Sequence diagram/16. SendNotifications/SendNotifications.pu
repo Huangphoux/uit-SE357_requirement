@@ -1,16 +1,39 @@
-@startuml SendNotifications
-actor Teacher
-boundary NotificationPanel
-control NotificationController
-entity Notification
-actor Student
+@startuml SendNotification
+title <font size=24>Send Notification Sequence</font>
+skinparam sequenceMessageAlign center
+autonumber
 
-Teacher -> NotificationPanel: Open notification panel
-NotificationPanel -> Teacher: Show compose UI
-Teacher -> NotificationPanel: Compose message, select recipients
-NotificationPanel -> NotificationController: Send notification data
-NotificationController -> Notification: Store notification
-NotificationController -> Student: Deliver notification
-NotificationController -> NotificationPanel: Confirm sent
-NotificationPanel -> Teacher: Show success
+actor Teacher as act
+boundary NotificationPage as page
+participant ":NotificationRouter" as router
+control NotificationController as controller
+participant ":Notification" as context
+database Database as db
+
+act -> page: Enter notification title and content, then click "Send"
+activate page
+
+page -> page: Validate input
+activate page
+deactivate page
+
+page -> router: call endpoint /api/notification/send
+activate router
+router -> controller: Call SendNotification(title, content) method
+activate controller
+controller -> context: Call Create(title, content) method
+activate context
+context -> db: Insert notification into database
+activate db
+db --> context: Return success
+deactivate db
+context --> controller: Return success
+deactivate context
+controller --> router: Return success message
+deactivate controller
+router --> page: Return success message
+deactivate router
+page --> act: Show success message
+deactivate page
+
 @enduml

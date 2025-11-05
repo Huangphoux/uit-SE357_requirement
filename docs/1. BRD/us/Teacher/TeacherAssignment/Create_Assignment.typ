@@ -1,0 +1,21 @@
+= Create Assignment
+
+- Epic: Assignment Management
+- Actor: Teacher
+- MVP: Yes
+- BR: BR-ASM-1
+- Description / Notes: Create a new assignment for a course.
+- As a: Teacher
+- I want to: CRUD written assignments
+- So that: Students can practice and be assessed.
+- Trigger: The teacher wants to create a new assignment.
+- Pre-condition:
+    - The teacher is logged in and assigned to the course.
+- Post-condition:
+    - The new assignment is created and available to students.
+- Solution (Step-by-Step):
+  - Go to the course page.
+  - Click "Create Assignment".
+  - Fill in assignment details (title, description, due date, points).
+  - Attach any necessary files.
+  - Save the assignment.

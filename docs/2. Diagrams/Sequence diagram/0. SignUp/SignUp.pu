@@ -1,17 +1,71 @@
-@startuml SignUp
-actor Student
-boundary RegistrationForm
-control UserController
-entity User
+@startuml create_account
+title <font size=24>Sign Up Sequence</font>
+skinparam sequenceMessageAlign center
+autonumber
 
-Student -> RegistrationForm: Open registration form
-RegistrationForm -> Student: Display form (email, password)
-Student -> RegistrationForm: Fill form and submit
-RegistrationForm -> UserController: Submit registration data
-UserController -> UserController: Validate input fields
-UserController -> UserController: Hash password
-UserController -> User: Create user
-User -> UserController: Confirm created
-UserController -> RegistrationForm: Registration success
-RegistrationForm -> Student: Show confirmation / auto-login
+actor User as act
+boundary SignUp_Page as page
+participant ":AuthRouter" as router
+control AuthController as controler
+participant ":User" as context
+database Database as db
+
+loop Input invalid
+    act -> page: Enter new information of User and click "Lưu" button
+    activate page
+    page -> page: Validation input
+    activate page
+
+    deactivate page
+    autonumber 3
+    page --> act: Display invalid input
+end
+
+autonumber 4
+page -> router: endpoint /api/auth/register
+activate router
+router -> controler: Call CreateNewUser(userData) method
+activate controler
+controler -> context: Call FindOne(userData.email) method
+activate context
+context -> db: Query database
+activate db
+db --> context: Return user
+deactivate db
+context --> controler: Return User
+deactivate context
+controler -> controler: Check null User
+activate controler
+deactivate controler
+opt User not null
+    autonumber 10.1
+    controler --> router: Return "User had existed"
+    router --> page: Return "User had existed"
+    page --> act: Return "User had existed"
+end
+autonumber 11
+controler -> context: Call newUser.save(userData) method
+activate context
+context -> db: Insert database
+activate db
+db --> context: Return number
+deactivate db
+context --> controler: Return number
+deactivate context
+alt number < 0
+    autonumber 14.1
+    controler --> router: Return message error
+    autonumber 14.1.1
+    router --> page: Return message error
+    page --> act: Show message error
+else number > 0
+    autonumber 14.2
+    controler --> router: Return message error
+    autonumber 14.2.1
+    deactivate controler
+    router --> page: Return message successful
+    deactivate router
+    page --> act: Show message successful and redirect to login page
+    deactivate page
+end
 @enduml

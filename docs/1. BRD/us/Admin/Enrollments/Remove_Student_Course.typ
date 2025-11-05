@@ -1,0 +1,23 @@
+= Remove Student from Course
+
+- Epic: Enrollment Management
+- Actor: Admin
+- MVP: Yes
+- BR: BR-ENR-2
+- Description / Notes: Remove a student from a course in the admin panel.
+- As a: Admin
+- I want to: Remove a student from a course
+- So that: The student is no longer enrolled in that course.
+- Trigger: The admin needs to unenroll a student from a course.
+- Pre-condition:
+    - The admin must be logged into the system.
+    - The admin must have enrollment management permissions.
+    - The student must be enrolled in the course.
+- Post-condition:
+    - The student is no longer enrolled in the course.
+- Solution (Step-by-Step):
+  - Open enrollment management panel.
+  - Find the student's enrollment in the course.
+  - Click "Remove".
+  - Confirm the removal.
+  - Backend deletes the enrollment record.

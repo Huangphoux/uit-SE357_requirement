@@ -1,0 +1,61 @@
+@startuml create_account
+title <font size=24>Assign Teacher Class Sequence</font>
+skinparam sequenceMessageAlign center
+autonumber
+
+actor Admin as act
+boundary AdminPage as page
+participant ":ClassRouter" as router
+control ClassController as controler
+participant ":Class" as context
+database Database as db
+
+act -> page: Choose Class and choose Teacher info click "Assign Teacher" button
+activate page
+page -> router: endpoint /api/class/assign_teacher
+activate router
+router -> controler: Call AssignTeacher(classData) method
+activate controler
+controler -> context: Call FindOne(classData.name) method
+activate context
+context -> db: Query database
+activate db
+db --> context: Return Class
+deactivate db
+context --> controler: Return Class
+deactivate context
+controler -> controler: Check null Class
+activate controler
+deactivate controler
+opt Class not null
+    autonumber 8.1
+    controler --> router: Return "Class not existed"
+    router --> page: Return "Class not existed"
+    page --> act: Return "Class not existed"
+end
+autonumber 9
+controler -> context: Call newInforClass.save(classData.teacher) method
+activate context
+context -> db: Update database
+activate db
+db --> context: Return number
+deactivate db
+context --> controler: Return number
+deactivate context
+alt number < 0
+    autonumber 12.1
+    controler --> router: Return message error
+    autonumber 12.1.1
+    router --> page: Return message error
+    page --> act: Show message error
+else number > 0
+    autonumber 12.2
+    controler --> router: Return message error
+    autonumber 12.2.1
+    deactivate controler
+    router --> page: Return message successful
+    deactivate router
+    page --> act: Show message successful and redirect to list Class
+    deactivate page
+end
+@enduml

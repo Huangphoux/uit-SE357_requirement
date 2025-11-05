@@ -1,0 +1,22 @@
+= Review Submissions & Comment
+
+- Epic: Assignment Management
+- Actor: Teacher
+- MVP: Yes
+- BR: BR15
+- Description / Notes: Review student submissions, add comments, and grade.
+- As a: Teacher
+- I want to: Review student submissions, view submission details, add comments or feedback, and annotate or grade
+- So that: I can help students improve.
+- Trigger: The teacher opens an assignment to grade student work.
+- Pre-condition:
+    - The teacher is logged in.
+    - Students have submitted work for an assignment.
+- Post-condition:
+    - The student's submission is graded and feedback is provided.
+    - The student is notified of the grade and feedback.
+- Solution (Step-by-Step):
+  - Open the assignment's submission list.
+  - Select a student's submission to view.
+  - Add comments, annotations, and a grade.
+  - Save the feedback and grade.
