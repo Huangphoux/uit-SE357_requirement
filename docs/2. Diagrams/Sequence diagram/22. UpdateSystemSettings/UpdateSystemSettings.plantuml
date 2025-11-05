@@ -1,0 +1,29 @@
+@startuml UpdateSystemSettings
+title <font size=24>Update System Settings Sequence </font>
+skinparam sequenceMessageAlign center
+autonumber
+
+actor Admin as admin
+boundary SettingsPage as page
+
+admin -> page: Navigate to settings page
+activate page
+
+admin -> page: Modify settings on the page
+
+loop Input invalid
+    admin -> page: Click "Save" button
+    page -> page: Validate input
+    activate page
+    deactivate page
+    page --> admin: Display validation errors
+end
+
+autonumber 5
+page -> page: Apply settings changes
+activate page
+deactivate page
+page --> admin: Show success message
+deactivate page
+
+@enduml

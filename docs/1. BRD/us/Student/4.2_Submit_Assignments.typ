@@ -1,0 +1,22 @@
+= Submit Assignments
+
+- Epic: Assignment Management
+- Actor: Student
+- MVP: Yes
+- BR: BR14
+- Description / Notes: Upload or write submissions. This includes creating, updating, and deleting submissions before the deadline.
+- As a: Student
+- I want to: CRUD submissions with file or text
+- So that: My teacher can review it
+- Trigger: The student wants to submit, edit, or delete an assignment submission.
+- Pre-condition:
+    - The student is logged in and enrolled in the course.
+    - The assignment is open for submissions.
+- Post-condition:
+    - The submission is created, updated, or deleted.
+- Solution (Step-by-Step):
+  - Open assignment page
+  - Upload file or write in editor
+  - Submit to backend
+  - Status shown (submitted/resubmitted)
+  - Allow editing/deleting before the deadline.

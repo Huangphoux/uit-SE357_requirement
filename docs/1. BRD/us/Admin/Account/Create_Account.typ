@@ -1,0 +1,23 @@
+= Create Account
+
+- Epic: User Management
+- Actor: Admin
+- MVP: Yes
+- BR: BR-SYS-1
+- Description / Notes: Create a new user account in the admin panel.
+- As a: Admin
+- I want to: Create a new user account (student, teacher, or admin)
+- So that: A new user can access the system with the appropriate permissions.
+- Trigger: The admin needs to add a new user to the platform.
+- Pre-condition: 
+    - The admin must be logged into the system.
+    - The admin must have user management permissions.
+- Post-condition: 
+    - A new user account is created with the specified role.
+    - The new user can log in with their credentials.
+- Solution (Step-by-Step):
+  - Open user management panel.
+  - Click "Create New User".
+  - Fill in user details (username, email, password, role).
+  - Submit the form.
+  - Backend creates the new user account.
