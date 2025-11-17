@@ -1,21 +1,71 @@
-@startuml ReviewSubmissionsComment
-actor Teacher
-boundary SubmissionUI
-control SubmissionController
-entity Submission
-entity Feedback
+@startuml create_account
+title <font size=24>Edit Submission Sequence</font>
+skinparam sequenceMessageAlign center
+autonumber
 
-Teacher -> SubmissionUI: View submissions list
-SubmissionUI -> Teacher: Show list
-Teacher -> SubmissionUI: Open student submission
-SubmissionUI -> SubmissionController: Fetch submission
-SubmissionController -> Submission: Get submission details
-Submission -> SubmissionController: Return details
-SubmissionController -> SubmissionUI: Return details
-Teacher -> SubmissionUI: Add comments/annotations
-SubmissionUI -> SubmissionController: Save feedback
-SubmissionController -> Feedback: Store feedback
-Feedback -> SubmissionController: Confirm stored
-SubmissionController -> SubmissionUI: Confirm feedback
-SubmissionUI -> Teacher: Show feedback saved
+actor Teacher as act
+boundary TeacherPage as page
+participant ":SubmissionRouter" as router
+control SubmissionController as controler
+participant ":Submission" as context
+database Database as db
+
+loop Input invalid
+    act -> page: Enter comment of Submission and click "Lưu" button
+    activate page
+    page -> page: Validation input
+    activate page
+
+    deactivate page
+    autonumber 3
+    page --> act: Display invalid input
+end
+
+autonumber 4
+page -> router: endpoint /api/submission/review_submission
+activate router
+router -> controler: Call ReviewSubmission(SubmissionData) method
+activate controler
+controler -> context: Call FindOne(SubmissionData.assignmentName) method
+activate context
+context -> db: Query database
+activate db
+db --> context: Return Submission
+deactivate db
+context --> controler: Return Submission
+deactivate context
+controler -> controler: Check null Submission
+activate controler
+deactivate controler
+opt Submission not null
+    autonumber 10.1
+    controler --> router: Return "Submission not existed"
+    router --> page: Return "Submission not existed"
+    page --> act: Return "Submission not existed"
+end
+autonumber 11
+controler -> context: Call newInforSubmission.save(SubmissionData) method
+activate context
+context -> db: Update database
+activate db
+db --> context: Return number
+deactivate db
+context --> controler: Return number
+deactivate context
+alt number < 0
+    autonumber 14.1
+    controler --> router: Return message error
+    autonumber 14.1.1
+    router --> page: Return message error
+    page --> act: Show message error
+else number > 0
+    autonumber 14.2
+    controler --> router: Return message error
+    autonumber 14.2.1
+    deactivate controler
+    router --> page: Return message successful
+    deactivate router
+    page --> act: Show message successful and redirect to list Submission
+    deactivate page
+end
 @enduml

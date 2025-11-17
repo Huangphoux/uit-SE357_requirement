@@ -1,0 +1,22 @@
+= Edit Course Materials
+
+- Epic: Material Management
+- Actor: Teacher
+- MVP: Yes
+- BR: BR-MAT-2
+- Description / Notes: Edit existing materials in a course.
+- As a: Teacher
+- I want to: CRUD materials (PDFs, videos, links)
+- So that: Students can study relevant content.
+- Trigger: The teacher needs to update a learning resource.
+- Pre-condition:
+    - The teacher is logged in and assigned to the course.
+    - The material exists.
+- Post-condition:
+    - The material is updated.
+- Solution (Step-by-Step):
+  - Go to the course page.
+  - Find the material to edit.
+  - Click "Edit".
+  - Modify the material's details.
+  - Save the changes.
