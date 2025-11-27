@@ -1,0 +1,61 @@
+@startuml create_account
+title <font size=24>Delete Account Sequence</font>
+skinparam sequenceMessageAlign center
+autonumber
+
+actor Admin as act
+boundary AdminPage as page
+participant ":UsernRouter" as router
+control UserController as controler
+participant ":User" as context
+database Database as db
+
+act -> page: View List User Page and click "Delete" button
+activate page
+page -> router: endpoint /api/user/delete_account
+activate router
+router -> controler: Call DeleteAccount(userData) method
+activate controler
+controler -> context: Call FindOne(userData.email) method
+activate context
+context -> db: Query database
+activate db
+db --> context: Return user
+deactivate db
+context --> controler: Return User
+deactivate context
+controler -> controler: Check null User
+activate controler
+deactivate controler
+opt User not null
+    autonumber 8.1
+    controler --> router: Return "User not existed"
+    router --> page: Return "User not existed"
+    page --> act: Return "User not existed"
+end
+autonumber 9
+controler -> context: Call remove(userData) method
+activate context
+context -> db: Delete database
+activate db
+db --> context: Return number
+deactivate db
+context --> controler: Return number
+deactivate context
+alt number < 0
+    autonumber 12.1
+    controler --> router: Return message error
+    autonumber 12.1.1
+    router --> page: Return message error
+    page --> act: Show message error
+else number > 0
+    autonumber 12.2
+    controler --> router: Return message error
+    autonumber 12.2.1
+    deactivate controler
+    router --> page: Return message successful
+    deactivate router
+    page --> act: Show message successful and redirect to list User
+    deactivate page
+end
+@enduml

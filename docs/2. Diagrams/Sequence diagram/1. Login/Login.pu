@@ -1,16 +1,54 @@
-@startuml LoginLogout
-actor User
-boundary LoginForm
-control UserController
+@startuml create_account
+title <font size=24>Login Sequence</font>
+skinparam sequenceMessageAlign center
+autonumber
 
-User -> LoginForm: Open login form
-LoginForm -> User: Display login form
-User -> LoginForm: Submit credentials
-LoginForm -> UserController: Validate credentials
-UserController -> LoginForm: Auth result (token or error)
-LoginForm -> User: Show result (dashboard or error)
-User -> LoginForm: Logout
-LoginForm -> UserController: Logout request
-UserController -> LoginForm: Logout success
-LoginForm -> User: Redirect to login page
+actor User as act
+boundary LoginPage as page
+participant ":AuthRouter" as router
+control AuthController as controler1
+participant ":User" as context
+database Database as db
+
+loop Input invalid
+    act -> page: Enter email and password and click "Lưu" button
+    activate page
+    page -> page: Validation input
+    activate page
+    deactivate page
+    autonumber 3
+    page --> act: Display invalid input
+end
+
+autonumber 4
+page -> router: call endpoint /api/auth/login
+activate router
+router -> controler1: Call Login(email, password) method
+activate controler1
+controler1 -> context: Call FindOne(email, password) method
+activate context
+context -> db: Query database
+activate db
+db --> context: Return user
+deactivate db
+context --> controler1: Return user
+deactivate context
+alt user is null
+    autonumber 9.1
+    controler1 --> router: Return message error
+    autonumber 9.1.1
+    router -->  page: Return message error
+    page --> act: Show message error
+else user is not null
+    autonumber 9.2
+    controler1 --> router: Return message successful
+    deactivate controler1
+    autonumber 9.2.1
+    router --> page: Return message successful
+    deactivate router
+    page --> act: Show message successful
+    deactivate page
+end
+
+
 @enduml
