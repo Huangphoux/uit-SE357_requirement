@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "CommonJS",
-    "strict": false,
+    "target": "ES2023",
+    "module": "ESNext",
+    "strict": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
@@ -12,10 +12,11 @@
     "allowJs": true,
     "types": ["node"],
     "noEmit": true,
+    "ignoreDeprecations": "5.0",
     "lib": ["es6"],
     "outDir": "./dist",
     "rootDir": "./src",
-    "baseUrl": "./src"
+    "baseUrl": "./src",
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
