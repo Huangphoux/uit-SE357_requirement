@@ -1,0 +1,21 @@
+@startuml DeleteClass
+|Admin|
+start
+:1. Open class list;
+:2. Select class to delete;
+:3. Confirm deletion;
+|ClassManagementUI|
+:4. Send delete request;
+|ClassController|
+:5. Verify class exists;
+:6. Check for enrolled students;
+:7. Delete class from backend;
+|Database|
+:8. Remove class record;
+|ClassController|
+:9. Return success;
+|ClassManagementUI|
+:10. Display confirmation;
+:11. Refresh class list;
+stop
+@enduml

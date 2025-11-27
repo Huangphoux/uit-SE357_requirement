@@ -1,0 +1,18 @@
+@startuml ListClass
+|Admin|
+start
+:1. Navigate to class management;
+|ClassManagementUI|
+:2. Request all classes;
+|ClassController|
+:3. Query classes from backend;
+|Database|
+:4. Return class list;
+|ClassController|
+:5. Process class data;
+|ClassManagementUI|
+:6. Display class list with details;
+:7. Show course and schedule info;
+:8. Show actions (edit, delete, assign teacher);
+stop
+@enduml

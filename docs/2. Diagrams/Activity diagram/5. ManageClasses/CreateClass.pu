@@ -1,0 +1,22 @@
+@startuml CreateClass
+|Admin|
+start
+:1. Open class creation form;
+:2. Fill in class details (name, course, schedule);
+:3. Link to course;
+:4. Set schedule/time;
+:5. Submit form;
+|ClassManagementUI|
+:6. Validate class data;
+|ClassController|
+:7. Check if class already exists;
+:8. Create new class in backend;
+|Database|
+:9. Save class record;
+|ClassController|
+:10. Return success;
+|ClassManagementUI|
+:11. Display confirmation;
+:12. Update class list;
+stop
+@enduml

@@ -1,0 +1,19 @@
+@startuml ListAssignment
+|Student|
+start
+:1. Navigate to my submissions;
+|SubmissionUI|
+:2. Request student submissions;
+|SubmissionController|
+:3. Query submissions;
+|Database|
+:4. Return submissions;
+|SubmissionController|
+:5. Process data;
+|SubmissionUI|
+:6. Display submissions list;
+:7. Show status and grades;
+:8. Show feedback if available;
+:9. Allow resubmit if pending;
+stop
+@enduml

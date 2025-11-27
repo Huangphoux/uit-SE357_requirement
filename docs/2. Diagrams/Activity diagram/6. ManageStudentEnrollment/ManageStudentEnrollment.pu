@@ -1,14 +1,19 @@
 @startuml ManageStudentEnrollment
 |Admin|
 start
-:Open class or student profile;
-:Click enroll/remove student;
+:1. Open class or student profile;
+:2. View enrollment status;
+:3. Manage enrollments (add/remove);
 |AdminPanel|
-:Update enrollment records;
+:4. Process changes;
 |EnrollmentController|
-:Save changes in backend;
-:Confirm update success;
+:5. Update enrollment records;
+|Database|
+:6. Save changes;
+|EnrollmentController|
+:7. Return updated data;
 |AdminPanel|
-:Reflect updated enrollment status;
+:8. Display updated enrollment;
+:9. Show enrollment count;
 stop
 @enduml

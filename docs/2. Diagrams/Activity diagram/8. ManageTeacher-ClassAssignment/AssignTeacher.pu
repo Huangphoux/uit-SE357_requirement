@@ -1,0 +1,23 @@
+@startuml AssignTeacher
+|Admin|
+start
+:1. Open class list;
+:2. Select class;
+:3. Click assign teacher;
+:4. Search for available teachers;
+:5. Select teacher;
+:6. Confirm assignment;
+|ClassManagementUI|
+:7. Validate assignment;
+|TeacherAssignmentController|
+:8. Check teacher availability;
+:9. Assign teacher to class;
+|Database|
+:10. Save assignment;
+|TeacherAssignmentController|
+:11. Return success;
+|ClassManagementUI|
+:12. Display confirmation;
+:13. Update class info;
+stop
+@enduml

@@ -1,0 +1,21 @@
+@startuml RemoveTeacherAssignment
+|Admin|
+start
+:1. Open assignments list;
+:2. Select assignment to remove;
+:3. Confirm removal;
+|AdminPanel|
+:4. Send removal request;
+|TeacherAssignmentController|
+:5. Verify assignment exists;
+:6. Check for dependencies;
+:7. Delete assignment;
+|Database|
+:8. Remove record;
+|TeacherAssignmentController|
+:9. Return success;
+|AdminPanel|
+:10. Display confirmation;
+:11. Refresh assignments;
+stop
+@enduml

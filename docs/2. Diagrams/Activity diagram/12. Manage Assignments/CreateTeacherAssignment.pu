@@ -1,0 +1,22 @@
+@startuml CreateTeacherAssignment
+|Teacher|
+start
+:1. Navigate to assignments;
+:2. Click create new assignment;
+:3. Fill assignment details (title, deadline);
+:4. Set rubric/grading criteria;
+:5. Attach resources;
+:6. Submit;
+|AssignmentUI|
+:7. Validate assignment data;
+|AssignmentController|
+:8. Create assignment;
+|Database|
+:9. Save assignment record;
+|AssignmentController|
+:10. Return success;
+|AssignmentUI|
+:11. Display confirmation;
+:12. Update assignments list;
+stop
+@enduml

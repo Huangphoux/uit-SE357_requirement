@@ -1,0 +1,21 @@
+@startuml DeleteTeacherAssignment
+|Teacher|
+start
+:1. Open assignments list;
+:2. Select assignment to delete;
+:3. Confirm deletion;
+|AssignmentUI|
+:4. Send delete request;
+|AssignmentController|
+:5. Verify assignment exists;
+:6. Check for submissions;
+:7. Delete assignment;
+|Database|
+:8. Remove record;
+|AssignmentController|
+:9. Return success;
+|AssignmentUI|
+:10. Display confirmation;
+:11. Refresh assignments list;
+stop
+@enduml

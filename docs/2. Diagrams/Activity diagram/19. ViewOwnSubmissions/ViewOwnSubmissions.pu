@@ -1,16 +1,16 @@
 @startuml ViewOwnSubmissions
 |Student|
 start
-:Open page;
+:1. Open page;
 |MySubmissionsPage|
-:Fetch submissions;
+:2. Fetch submissions;
 |ProgressController|
-:Get student submissions;
+:3. Get student submissions;
 |Submission|
-:Return submissions;
+:4. Return submissions;
 |ProgressController|
-:Return list;
+:5. Return list;
 |MySubmissionsPage|
-:Show status and feedback;
+:6. Show status and feedback;
 stop
 @enduml

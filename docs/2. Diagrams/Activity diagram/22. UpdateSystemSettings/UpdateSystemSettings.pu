@@ -1,21 +1,21 @@
 @startuml UpdateSystemSettings
 |Admin|
 start
-:Open settings;
+:1. Open settings;
 |SettingsPage|
-:Show settings form;
+:2. Show settings form;
 |Admin|
-:Edit info;
-:Save changes;
+:3. Edit info;
+:4. Save changes;
 |SettingsPage|
-:Submit changes;
+:5. Submit changes;
 |SettingsController|
-:Update settings;
+:6. Update settings;
 |PlatformSettings|
-:Confirm update;
+:7. Confirm update;
 |SettingsController|
-:Confirm update;
+:8. Confirm update;
 |SettingsPage|
-:Show result;
+:9. Show result;
 stop
 @enduml

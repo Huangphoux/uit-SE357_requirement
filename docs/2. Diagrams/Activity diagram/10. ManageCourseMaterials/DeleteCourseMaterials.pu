@@ -1,0 +1,21 @@
+@startuml DeleteCourseMaterials
+|Teacher|
+start
+:1. Open materials list;
+:2. Select material to delete;
+:3. Confirm deletion;
+|MaterialManagementUI|
+:4. Send delete request;
+|MaterialController|
+:5. Verify material exists;
+:6. Delete file;
+:7. Remove record;
+|Database|
+:8. Delete metadata;
+|MaterialController|
+:9. Return success;
+|MaterialManagementUI|
+:10. Display confirmation;
+:11. Refresh materials list;
+stop
+@enduml

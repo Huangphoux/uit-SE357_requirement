@@ -1,0 +1,21 @@
+@startuml EditCourseMaterials
+|Teacher|
+start
+:1. Open materials list;
+:2. Select material to edit;
+:3. Edit title/description;
+:4. Update file if needed;
+:5. Submit changes;
+|MaterialManagementUI|
+:6. Validate changes;
+|MaterialController|
+:7. Update file/metadata;
+|Database|
+:8. Save changes;
+|MaterialController|
+:9. Return success;
+|MaterialManagementUI|
+:10. Display confirmation;
+:11. Update materials list;
+stop
+@enduml

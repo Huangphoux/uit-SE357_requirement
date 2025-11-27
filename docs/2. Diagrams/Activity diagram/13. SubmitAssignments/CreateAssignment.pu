@@ -1,0 +1,22 @@
+@startuml CreateAssignment
+|Student|
+start
+:1. Navigate to assignment;
+:2. Click submit;
+:3. Write/upload submission;
+:4. Add notes;
+:5. Submit;
+|SubmissionUI|
+:6. Validate submission;
+|SubmissionController|
+:7. Check submission deadline;
+:8. Create submission record;
+|Database|
+:9. Save submission;
+|SubmissionController|
+:10. Return confirmation;
+|SubmissionUI|
+:11. Display confirmation;
+:12. Show submission status;
+stop
+@enduml

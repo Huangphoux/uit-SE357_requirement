@@ -1,0 +1,17 @@
+@startuml ListCourses
+|Admin|
+start
+:1. Navigate to course management;
+|CourseDashboard|
+:2. Request all courses;
+|CourseController|
+:3. Query courses from backend;
+|Database|
+:4. Return course list;
+|CourseController|
+:5. Process course data;
+|CourseDashboard|
+:6. Display course list with pagination;
+:7. Show actions (edit, delete);
+stop
+@enduml

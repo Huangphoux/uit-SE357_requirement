@@ -1,16 +1,16 @@
 @startuml ViewStudentSubmissions
 |Teacher|
 start
-:Access assignment dashboard;
+:1. Access assignment dashboard;
 |AssignmentDashboard|
-:Request submissions;
+:2. Request submissions;
 |ProgressController|
-:Get submissions;
+:3. Get submissions;
 |Submission|
-:Return submissions;
+:4. Return submissions;
 |ProgressController|
-:Return submissions;
+:5. Return submissions;
 |AssignmentDashboard|
-:Show submission status;
+:6. Show submission status;
 stop
 @enduml

@@ -1,0 +1,21 @@
+@startuml EditCourses
+|Admin|
+start
+:1. Open course list;
+:2. Select course to edit;
+:3. Open edit form with current data;
+:4. Modify course details;
+:5. Submit changes;
+|CourseDashboard|
+:6. Validate new data;
+|CourseController|
+:7. Update course in backend;
+|Database|
+:8. Save updated record;
+|CourseController|
+:9. Return success;
+|CourseDashboard|
+:10. Display confirmation;
+:11. Refresh course list;
+stop
+@enduml

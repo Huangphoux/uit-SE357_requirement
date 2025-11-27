@@ -1,0 +1,21 @@
+@startuml EditAssignment
+|Student|
+start
+:1. Open submitted assignment;
+:2. Check if can edit (before deadline);
+:3. Edit submission;
+:4. Re-submit changes;
+|SubmissionUI|
+:5. Validate new submission;
+|SubmissionController|
+:6. Check deadline;
+:7. Update submission;
+|Database|
+:8. Save changes;
+|SubmissionController|
+:9. Return success;
+|SubmissionUI|
+:10. Display confirmation;
+:11. Update submission timestamp;
+stop
+@enduml

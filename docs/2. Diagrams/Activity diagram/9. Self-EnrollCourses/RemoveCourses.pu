@@ -1,0 +1,20 @@
+@startuml RemoveCourses
+|Student|
+start
+:1. Open enrolled courses;
+:2. Select course to drop;
+:3. Confirm removal;
+|StudentDashboard|
+:4. Send drop request;
+|EnrollmentController|
+:5. Verify enrollment;
+:6. Remove from courses;
+|Database|
+:7. Delete enrollment;
+|EnrollmentController|
+:8. Return success;
+|StudentDashboard|
+:9. Display confirmation;
+:10. Update course list;
+stop
+@enduml

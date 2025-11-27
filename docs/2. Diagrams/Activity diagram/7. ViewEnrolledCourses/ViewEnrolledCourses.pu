@@ -1,13 +1,13 @@
 @startuml ViewEnrolledCourses
 |Student|
 start
-:Logs in;
+:1. Logs in;
 |StudentDashboard|
-:Request enrolled courses;
+:2. Request enrolled courses;
 |EnrollmentController|
-:Fetch enrolled courses from backend;
-:Return enrolled courses list;
+:3. Fetch enrolled courses from backend;
+:4. Return enrolled courses list;
 |StudentDashboard|
-:Display enrolled courses;
+:5. Display enrolled courses;
 stop
 @enduml

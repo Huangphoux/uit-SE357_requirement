@@ -1,0 +1,18 @@
+@startuml ListStudentjoinCourses
+|Student|
+start
+:1. Navigate to my courses;
+|StudentDashboard|
+:2. Request enrolled courses;
+|EnrollmentController|
+:3. Query student enrollments;
+|Database|
+:4. Return courses list;
+|EnrollmentController|
+:5. Process course data;
+|StudentDashboard|
+:6. Display enrolled courses;
+:7. Show course details;
+:8. Allow actions (view, drop);
+stop
+@enduml

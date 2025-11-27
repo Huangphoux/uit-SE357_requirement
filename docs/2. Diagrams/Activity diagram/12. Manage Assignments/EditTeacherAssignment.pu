@@ -1,0 +1,21 @@
+@startuml EditTeacherAssignment
+|Teacher|
+start
+:1. Open assignments list;
+:2. Select assignment to edit;
+:3. Edit title/deadline/rubric;
+:4. Update resources;
+:5. Submit changes;
+|AssignmentUI|
+:6. Validate changes;
+|AssignmentController|
+:7. Update assignment;
+|Database|
+:8. Save changes;
+|AssignmentController|
+:9. Return success;
+|AssignmentUI|
+:10. Display confirmation;
+:11. Update assignments list;
+stop
+@enduml

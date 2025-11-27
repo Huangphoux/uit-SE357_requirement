@@ -1,18 +1,18 @@
 @startuml Login
 |User|
 start
-:Open login form;
-:Submit credentials;
+:1. Open login form;
+:2. Submit credentials;
 |LoginForm|
-:Validate credentials;
+:3. Validate credentials;
 |UserController|
-:Auth result (token or error);
+:4. Auth result (token or error);
 |LoginForm|
-:Show result (dashboard or error);
-:Logout;
+:5. Show result (dashboard or error);
+:6. Logout;
 |UserController|
-:Logout success;
+:7. Logout success;
 |LoginForm|
-:Redirect to login page;
+:8. Redirect to login page;
 stop
 @enduml

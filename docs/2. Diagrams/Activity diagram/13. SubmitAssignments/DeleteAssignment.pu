@@ -1,0 +1,21 @@
+@startuml DeleteAssignment
+|Student|
+start
+:1. Open submitted assignments;
+:2. Select submission to delete;
+:3. Confirm deletion;
+|SubmissionUI|
+:4. Send delete request;
+|SubmissionController|
+:5. Verify submission exists;
+:6. Check if graded;
+:7. Delete submission;
+|Database|
+:8. Remove record;
+|SubmissionController|
+:9. Return success;
+|SubmissionUI|
+:10. Display confirmation;
+:11. Refresh submissions;
+stop
+@enduml

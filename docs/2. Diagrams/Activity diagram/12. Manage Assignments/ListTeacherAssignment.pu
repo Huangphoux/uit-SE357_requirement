@@ -1,0 +1,19 @@
+@startuml ListTeacherAssignment
+|Teacher|
+start
+:1. Navigate to assignments tab;
+|AssignmentUI|
+:2. Request all assignments;
+|AssignmentController|
+:3. Query assignments;
+|Database|
+:4. Return assignments;
+|AssignmentController|
+:5. Process data;
+|AssignmentUI|
+:6. Display assignments list;
+:7. Show deadline and status;
+:8. Show submission count;
+:9. Allow actions (edit, delete, grade);
+stop
+@enduml

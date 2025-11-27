@@ -1,19 +1,21 @@
 @startuml SelfEnrollCourses
 |Student|
 start
-:Access course catalog;
+:1. Access course catalog;
+:2. Browse available courses;
+:3. Filter/search by interest;
+:4. Select course;
+:5. Self-enroll;
 |CourseCatalog|
-:Display available courses;
-|Student|
-:Click Enroll/Unenroll;
-|CourseCatalog|
-:Update enrollment status;
+:6. Validate enrollment eligibility;
 |EnrollmentController|
-:Save enrollment changes in backend;
-:Confirm update success;
-|CourseCatalog|
-:Refresh current enrollments;
+:7. Check capacity and prerequisites;
+:8. Create enrollment;
+|Database|
+:9. Save record;
+|EnrollmentController|
+:10. Return confirmation;
 |StudentDashboard|
-:Show updated enrolled courses;
+:11. Update my courses;
 stop
 @enduml

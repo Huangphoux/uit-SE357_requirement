@@ -1,0 +1,21 @@
+@startuml RemoveTeacher
+|Admin|
+start
+:1. Open class details;
+:2. View assigned teacher;
+:3. Click remove teacher;
+:4. Confirm removal;
+|ClassManagementUI|
+:5. Send removal request;
+|TeacherAssignmentController|
+:6. Verify teacher assignment;
+:7. Remove teacher from class;
+|Database|
+:8. Delete assignment;
+|TeacherAssignmentController|
+:9. Return success;
+|ClassManagementUI|
+:10. Display confirmation;
+:11. Update class info;
+stop
+@enduml

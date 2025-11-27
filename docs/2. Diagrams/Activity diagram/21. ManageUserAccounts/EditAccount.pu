@@ -1,0 +1,22 @@
+@startuml EditAccount
+|Admin|
+start
+:1. Open user list;
+:2. Select user to edit;
+:3. Edit user details;
+:4. Change role if needed;
+:5. Update status;
+:6. Submit changes;
+|AdminPanel|
+:7. Validate changes;
+|AdminController|
+:8. Update user record;
+|Database|
+:9. Save changes;
+|AdminController|
+:10. Return success;
+|AdminPanel|
+:11. Display confirmation;
+:12. Update user list;
+stop
+@enduml

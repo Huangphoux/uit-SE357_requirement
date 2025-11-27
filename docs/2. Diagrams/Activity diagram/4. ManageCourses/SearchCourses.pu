@@ -1,0 +1,19 @@
+@startuml SearchCourses
+|Admin|
+start
+:1. Open course list;
+:2. Enter search criteria (name/code);
+:3. Click search;
+|CourseDashboard|
+:4. Send search request;
+|CourseController|
+:5. Query matching courses;
+|Database|
+:6. Return filtered results;
+|CourseController|
+:7. Process results;
+|CourseDashboard|
+:8. Display search results;
+:9. Allow filtering/sorting;
+stop
+@enduml

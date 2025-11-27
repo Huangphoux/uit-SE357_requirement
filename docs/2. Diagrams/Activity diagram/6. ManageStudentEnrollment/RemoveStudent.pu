@@ -1,0 +1,22 @@
+@startuml RemoveStudent
+|Admin|
+start
+:1. Open enrollment list;
+:2. Select class;
+:3. View enrolled students;
+:4. Select student to remove;
+:5. Confirm removal;
+|EnrollmentUI|
+:6. Send removal request;
+|EnrollmentController|
+:7. Verify student enrollment;
+:8. Remove student from class;
+|Database|
+:9. Delete enrollment record;
+|EnrollmentController|
+:10. Return success;
+|EnrollmentUI|
+:11. Display confirmation;
+:12. Refresh enrollment list;
+stop
+@enduml

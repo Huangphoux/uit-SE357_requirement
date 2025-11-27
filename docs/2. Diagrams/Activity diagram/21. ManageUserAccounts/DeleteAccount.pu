@@ -1,0 +1,21 @@
+@startuml DeleteAccount
+|Admin|
+start
+:1. Open user list;
+:2. Select user to delete;
+:3. Confirm deletion;
+|AdminPanel|
+:4. Send delete request;
+|AdminController|
+:5. Verify user exists;
+:6. Archive user data;
+:7. Delete account;
+|Database|
+:8. Remove user record;
+|AdminController|
+:9. Return success;
+|AdminPanel|
+:10. Display confirmation;
+:11. Refresh user list;
+stop
+@enduml

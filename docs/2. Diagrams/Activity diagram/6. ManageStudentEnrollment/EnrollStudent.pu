@@ -1,0 +1,22 @@
+@startuml EnrollStudent
+|Admin|
+start
+:1. Open class or enrollment list;
+:2. Select class to enroll students;
+:3. Search for students to add;
+:4. Select students;
+:5. Confirm enrollment;
+|EnrollmentUI|
+:6. Validate enrollment data;
+|EnrollmentController|
+:7. Check student prerequisites;
+:8. Add students to class;
+|Database|
+:9. Save enrollment records;
+|EnrollmentController|
+:10. Return success;
+|EnrollmentUI|
+:11. Display confirmation;
+:12. Update enrollment list;
+stop
+@enduml

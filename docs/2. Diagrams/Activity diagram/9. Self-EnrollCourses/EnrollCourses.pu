@@ -1,0 +1,22 @@
+@startuml EnrollCourses
+|Student|
+start
+:1. Access course catalog;
+:2. Browse available courses;
+:3. Select course;
+:4. Click enroll;
+:5. Confirm enrollment;
+|CourseCatalog|
+:6. Validate enrollment;
+|EnrollmentController|
+:7. Check prerequisites;
+:8. Add to student enrollments;
+|Database|
+:9. Save enrollment;
+|EnrollmentController|
+:10. Return success;
+|CourseCatalog|
+:11. Display confirmation;
+:12. Update enrolled courses;
+stop
+@enduml

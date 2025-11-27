@@ -1,0 +1,20 @@
+@startuml CreateCourses
+|Admin|
+start
+:1. Open course creation form;
+:2. Fill in course details (title, description, code);
+:3. Submit form;
+|CourseDashboard|
+:4. Validate course data;
+|CourseController|
+:5. Check if course already exists;
+:6. Create new course in backend;
+|Database|
+:7. Save course record;
+|CourseController|
+:8. Return success;
+|CourseDashboard|
+:9. Display confirmation;
+:10. Update course list;
+stop
+@enduml

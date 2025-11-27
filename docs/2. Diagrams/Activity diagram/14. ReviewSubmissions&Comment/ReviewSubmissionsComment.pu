@@ -1,30 +1,30 @@
 @startuml ReviewSubmissionsComment
 |Teacher|
 start
-:View submissions list;
+:1. View submissions list;
 |SubmissionUI|
-:Show list;
+:2. Show list;
 |Teacher|
-:Open student submission;
+:3. Open student submission;
 |SubmissionUI|
-:Fetch submission;
+:4. Fetch submission;
 |SubmissionController|
-:Get submission details;
+:5. Get submission details;
 |Submission|
-:Return details;
+:6. Return details;
 |SubmissionController|
-:Return details;
+:7. Return details;
 |Teacher|
-:Add comments/annotations;
+:8. Add comments/annotations;
 |SubmissionUI|
-:Save feedback;
+:9. Save feedback;
 |SubmissionController|
-:Store feedback;
+:10. Store feedback;
 |Feedback|
-:Confirm stored;
+:11. Confirm stored;
 |SubmissionController|
-:Confirm feedback;
+:12. Confirm feedback;
 |SubmissionUI|
-:Show feedback saved;
+:13. Show feedback saved;
 stop
 @enduml

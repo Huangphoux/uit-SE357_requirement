@@ -1,16 +1,16 @@
 @startuml AccessLearningMaterials
 |Student|
 start
-:Open course page;
+:1. Open course page;
 |StudentDashboard|
-:Request materials;
+:2. Request materials;
 |MaterialController|
-:Fetch materials;
+:3. Fetch materials;
 |Material|
-:Return materials;
+:4. Return materials;
 |MaterialController|
-:Provide materials list;
+:5. Provide materials list;
 |StudentDashboard|
-:Show materials (if enrolled);
+:6. Show materials (if enrolled);
 stop
 @enduml

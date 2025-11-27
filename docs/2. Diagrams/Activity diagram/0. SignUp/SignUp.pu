@@ -1,16 +1,16 @@
 @startuml SignUp
 |Student|
 start
-:Open registration form;
-:Fill form and submit;
+:1. Open registration form;
+:2. Fill form and submit;
 |RegistrationForm|
-:Validate input fields;
-:Hash password;
+:3. Validate input fields;
+:4. Hash password;
 |UserController|
-:Create user;
+:5. Create user;
 |User|
-:Confirm created;
+:6. Confirm created;
 |RegistrationForm|
-:Show confirmation / auto-login;
+:7. Show confirmation / auto-login;
 stop
 @enduml

@@ -1,0 +1,23 @@
+@startuml AssignStudent
+|Admin|
+start
+:1. Open student profile or management panel;
+:2. Select student;
+:3. Click assign to class;
+:4. Search available classes;
+:5. Select class;
+:6. Confirm assignment;
+|AdminPanel|
+:7. Validate assignment;
+|EnrollmentController|
+:8. Check class capacity;
+:9. Assign student to class;
+|Database|
+:10. Update enrollment;
+|EnrollmentController|
+:11. Return success;
+|AdminPanel|
+:12. Display confirmation;
+:13. Update student profile;
+stop
+@enduml

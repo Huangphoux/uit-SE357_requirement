@@ -1,0 +1,19 @@
+@startuml ListCourseMaterials
+|Teacher|
+start
+:1. Open course materials tab;
+|MaterialManagementUI|
+:2. Request all materials;
+:3. Show upload options;
+|MaterialController|
+:4. Query materials;
+|Database|
+:5. Return materials;
+|MaterialController|
+:6. Process data;
+|MaterialManagementUI|
+:7. Display materials list;
+:8. Show file info and size;
+:9. Allow download/preview;
+stop
+@enduml

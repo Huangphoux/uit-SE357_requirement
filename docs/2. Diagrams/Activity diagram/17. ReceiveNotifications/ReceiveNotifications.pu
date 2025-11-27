@@ -1,16 +1,16 @@
 @startuml ReceiveNotifications
 |Student|
 start
-:View notifications;
+:1. View notifications;
 |StudentDashboard|
-:Fetch notifications;
+:2. Fetch notifications;
 |NotificationController|
-:Get notifications;
+:3. Get notifications;
 |Notification|
-:Return notifications;
+:4. Return notifications;
 |NotificationController|
-:Return notifications;
+:5. Return notifications;
 |StudentDashboard|
-:Show notifications;
+:6. Show notifications;
 stop
 @enduml

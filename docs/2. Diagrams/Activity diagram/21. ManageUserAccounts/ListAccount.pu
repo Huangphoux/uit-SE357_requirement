@@ -1,0 +1,19 @@
+@startuml ListAccount
+|Admin|
+start
+:1. Navigate to user management;
+|AdminPanel|
+:2. Request all users;
+|AdminController|
+:3. Query users;
+|Database|
+:4. Return users;
+|AdminController|
+:5. Process data;
+|AdminPanel|
+:6. Display users list;
+:7. Show role and status;
+:8. Show last login;
+:9. Allow actions (edit, delete, deactivate);
+stop
+@enduml

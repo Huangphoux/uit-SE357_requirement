@@ -1,0 +1,22 @@
+@startuml AssignTeachertoClass
+|Admin|
+start
+:1. Open teacher assignment form;
+:2. Select class;
+:3. Select teacher;
+:4. Set role/responsibilities;
+:5. Submit assignment;
+|AdminPanel|
+:6. Validate form data;
+|TeacherAssignmentController|
+:7. Check for conflicts;
+:8. Create assignment;
+|Database|
+:9. Save assignment record;
+|TeacherAssignmentController|
+:10. Return success;
+|AdminPanel|
+:11. Display confirmation;
+:12. Update assignment list;
+stop
+@enduml

@@ -1,0 +1,23 @@
+@startuml CreateCourseMaterials
+|Teacher|
+start
+:1. Open course materials tab;
+:2. Click add new material;
+:3. Fill material details (title, type);
+:4. Upload file;
+:5. Add description;
+:6. Submit;
+|MaterialManagementUI|
+:7. Validate material data;
+|MaterialController|
+:8. Store material file;
+:9. Create material record;
+|Database|
+:10. Save metadata;
+|MaterialController|
+:11. Return success;
+|MaterialManagementUI|
+:12. Display confirmation;
+:13. Update materials list;
+stop
+@enduml

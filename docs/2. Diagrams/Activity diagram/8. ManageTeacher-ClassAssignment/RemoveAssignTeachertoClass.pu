@@ -1,0 +1,24 @@
+@startuml RemoveAssignTeachertoClass
+|Admin|
+start
+:1. Open class details;
+:2. View assigned teacher;
+|ClassManagementUI|
+:3. Select option to remove teacher;
+:4. Confirm removal;
+|Admin|
+:5. Verify action;
+|ClassManagementUI|
+:6. Send removal request;
+|TeacherAssignmentController|
+:7. Check assignment exists;
+:8. Remove teacher from class;
+|Database|
+:9. Delete assignment;
+|TeacherAssignmentController|
+:10. Return success;
+|ClassManagementUI|
+:11. Display confirmation;
+:12. Update class info;
+stop
+@enduml

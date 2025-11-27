@@ -1,0 +1,23 @@
+@startuml CreateAccount
+|Admin|
+start
+:1. Navigate to user management;
+:2. Click create new account;
+:3. Fill user details (email, role);
+:4. Set initial password;
+:5. Select role (Student/Teacher/Admin);
+:6. Submit;
+|AdminPanel|
+:7. Validate user data;
+|AdminController|
+:8. Check email not duplicate;
+:9. Create user account;
+|Database|
+:10. Save user record;
+|AdminController|
+:11. Send welcome email;
+|AdminPanel|
+:12. Display confirmation;
+:13. Update user list;
+stop
+@enduml
