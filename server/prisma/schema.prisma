@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = env("DATABASE_URL")
+}
+
+// User model - base for all users
+model User {
+    id        String   @id @default(cuid())
+    email     String   @unique
+    password  String
+    name      String
+    role      String // "STUDENT", "TEACHER", "ADMIN"
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    enrollments Enrollment[]
+    submissions Submission[]
+}
+
+// Course model
+model Course {
+    id          String   @id @default(cuid())
+    title       String
+    description String?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    // Relations
+    classes Class[]
+}
+
+// Class model - session linked to a course
+model Class {
+    id        String   @id @default(cuid())
+    courseId  String
+    course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+    title     String
+    teacherId String? // Assigned teacher
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Relations
+    enrollments Enrollment[]
+    assignments Assignment[]
+
+    @@index([teacherId])
+}
+
+// Enrollment - student enrollment in a class
+model Enrollment {
+    id        String   @id @default(cuid())
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    classId   String
+    class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+    status    String   @default("ACTIVE") // "ACTIVE", "COMPLETED", "DROPPED"
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@unique([userId, classId])
+}
+
+// Assignment - tasks given by teachers
+model Assignment {
+    id          String   @id @default(cuid())
+    title       String
+    description String?
+    classId     String
+    class       Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+    createdBy   String // Teacher ID (from User)
+    dueDate     DateTime
+    maxScore    Float    @default(100)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    // Relations
+    submissions Submission[]
+
+    @@index([createdBy])
+}
+
+// Submission - student's answer to an assignment
+model Submission {
+    id           String     @id @default(cuid())
+    assignmentId String
+    assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+    userId       String
+    user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    content      String? // Text content
+    fileUrl      String? // Uploaded file
+    status       String     @default("PENDING") // "PENDING", "SUBMITTED", "GRADED"
+    submittedAt  DateTime?
+    createdAt    DateTime   @default(now())
+    updatedAt    DateTime   @updatedAt
+
+    // Relations
+    feedback Feedback[]
+
+    @@unique([assignmentId, userId])
+}
+
+// Feedback / Comment - teacher's feedback on submission
+model Feedback {
+    id           String     @id @default(cuid())
+    submissionId String
+    submission   Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+    createdBy    String // Teacher ID (from User)
+    comment      String?
+    score        Float?
+    createdAt    DateTime   @default(now())
+    updatedAt    DateTime   @updatedAt
+
+    @@index([createdBy])
+}

@@ -15,6 +15,8 @@ import appConfig from "config/app.config";
 import authRoute from "auth/auth.route";
 import userRoute from "user/user.route";
 import healthRoute from "health/health.route";
+import courseRoute from "courses/courses.route";
+import classRoute from "classes/classes.route";
 
 import { logger } from "util/logger";
 import productRoute from "products/product.route";
@@ -44,7 +46,7 @@ export default class App {
           "http://localhost:3000", // frontend url
           "https://mywebsite.com", // production url optional
         ],
-        methods: ["GET", "POST", "DELETE"],
+        methods: ["GET", "POST", "PUT", "DELETE"],
         credentials: true,
       })
     );
@@ -59,6 +61,8 @@ export default class App {
   private initRoutes() {
     this.app.use("/api/auth", authRoute); // /api/auth/*
     this.app.use("/api/user", userRoute); // /api/user/*
+    this.app.use("/api/courses", courseRoute); // /api/courses/*
+    this.app.use("/api/classes", classRoute); // /api/classes/*
     this.app.use("/api/products", productRoute); // /api/products/*
     this.app.use("/api/users", usersRoute); // /api/user/*
     this.app.use("/api/coupons", couponsRoute); // /api/coupons/*

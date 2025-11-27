@@ -1,10 +1,5 @@
 # MVP Tasks - Today
 
-## 1. Authentication
-
-- [ ] 1.1 Sign up - User registration functionality
-- [ ] 1.2 Login/Logout - User authentication and session management
-
 ## 2. Course Management
 
 - [ ] 2.1 Manage Courses - Course creation, editing, deletion functionality
