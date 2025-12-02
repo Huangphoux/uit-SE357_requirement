@@ -1,12 +1,12 @@
-@startuml SignUp
-title <font size=24>Sign Up Sequence</font>
+@startuml CreateUserAccount
+title <font size=24>Create Account Sequence</font>
 skinparam sequenceMessageAlign center
 autonumber
 
-actor User as act
-boundary SignUp_Page as page
-participant ":AuthRouter" as router
-control AuthController as controler
+actor Admin as act
+boundary AdminPage as page
+participant ":UsernRouter" as router
+control UserController as controler
 participant ":User" as context
 database Database as db
 
@@ -22,7 +22,7 @@ loop Input invalid
 end
 
 autonumber 4
-page -> router: endpoint /api/auth/register
+page -> router: endpoint /api/user/create_account
 activate router
 router -> controler: Call CreateNewUser(userData) method
 activate controler
@@ -65,7 +65,7 @@ else number > 0
     deactivate controler
     router --> page: Return message successful
     deactivate router
-    page --> act: Show message successful and redirect to login page
+    page --> act: Show message successful and redirect to list User
     deactivate page
 end
 @enduml

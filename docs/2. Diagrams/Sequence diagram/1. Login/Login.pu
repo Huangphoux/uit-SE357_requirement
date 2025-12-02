@@ -1,4 +1,4 @@
-@startuml create_account
+@startuml Login
 title <font size=24>Login Sequence</font>
 skinparam sequenceMessageAlign center
 autonumber

@@ -1,28 +1,28 @@
-@startuml ViewFeedback
-title <font size=24>List Feedback Student Sequence</font>
+@startuml ListStudentjoinCourses
+title <font size=24>List Course Join Student Sequence</font>
 skinparam sequenceMessageAlign center
 autonumber
 
 actor Student as act
 boundary StudentPage as page
-participant ":FeedbackRouter" as router
-control FeedbackController as controler
-participant ":Feedback" as context
+participant ":CourseRouter" as router
+control CourseController as controler
+participant ":Course" as context
 database Database as db
 
-act -> page: View List Feedback Student Page
+act -> page: View List Course Page
 activate page
-page -> router: endpoint /api/feedback/list_feedback_student
+page -> router: endpoint /api/course/list_course_student
 activate router
-router -> controler: Call ListFeedbackOfAssignemt(assignmentName,emailStudent) method
+router -> controler: Call ListCourse(studentEmail) method
 activate controler
-controler -> context: Call FindMany(assignmentName,emailStudent) method
+controler -> context: Call FindMany(studentEmail) method
 activate context
 context -> db: Query database
 activate db
-db --> context: Return Feedback
+db --> context: Return Course
 deactivate db
-context --> controler: Return Feedback
+context --> controler: Return Course
 deactivate context
 alt number < 0
     autonumber 7.1
@@ -37,7 +37,7 @@ else number > 0
     deactivate controler
     router --> page: Return message successful
     deactivate router
-    page --> act: Show message successful and redirect to list Feedback
+    page --> act: Show message successful and redirect to list Course
     deactivate page
 end
 @enduml

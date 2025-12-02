@@ -1,12 +1,12 @@
-@startuml SignUp
-title <font size=24>Sign Up Sequence</font>
+@startuml EditUserAccount
+title <font size=24>Edit Account Sequence</font>
 skinparam sequenceMessageAlign center
 autonumber
 
-actor User as act
-boundary SignUp_Page as page
-participant ":AuthRouter" as router
-control AuthController as controler
+actor Admin as act
+boundary AdminPage as page
+participant ":UsernRouter" as router
+control UserController as controler
 participant ":User" as context
 database Database as db
 
@@ -22,9 +22,9 @@ loop Input invalid
 end
 
 autonumber 4
-page -> router: endpoint /api/auth/register
+page -> router: endpoint /api/user/edit_account
 activate router
-router -> controler: Call CreateNewUser(userData) method
+router -> controler: Call EditUser(userData) method
 activate controler
 controler -> context: Call FindOne(userData.email) method
 activate context
@@ -39,14 +39,14 @@ activate controler
 deactivate controler
 opt User not null
     autonumber 10.1
-    controler --> router: Return "User had existed"
-    router --> page: Return "User had existed"
-    page --> act: Return "User had existed"
+    controler --> router: Return "User not existed"
+    router --> page: Return "User not existed"
+    page --> act: Return "User not existed"
 end
 autonumber 11
-controler -> context: Call newUser.save(userData) method
+controler -> context: Call newInforUser.save(userData) method
 activate context
-context -> db: Insert database
+context -> db: Update database
 activate db
 db --> context: Return number
 deactivate db
@@ -65,7 +65,7 @@ else number > 0
     deactivate controler
     router --> page: Return message successful
     deactivate router
-    page --> act: Show message successful and redirect to login page
+    page --> act: Show message successful and redirect to list User
     deactivate page
 end
 @enduml

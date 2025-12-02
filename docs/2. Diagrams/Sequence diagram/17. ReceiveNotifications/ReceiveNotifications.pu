@@ -1,4 +1,4 @@
-@startuml create_account
+@startuml ReceiveNotifications
 title <font size=24>Receive Notifications Student Sequence</font>
 skinparam sequenceMessageAlign center
 autonumber

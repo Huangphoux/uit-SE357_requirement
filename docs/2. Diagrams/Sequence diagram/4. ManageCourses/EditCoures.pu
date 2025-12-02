@@ -1,17 +1,17 @@
-@startuml SignUp
-title <font size=24>Sign Up Sequence</font>
+@startuml EditCourse
+title <font size=24>Edit Course Sequence</font>
 skinparam sequenceMessageAlign center
 autonumber
 
-actor User as act
-boundary SignUp_Page as page
-participant ":AuthRouter" as router
-control AuthController as controler
-participant ":User" as context
+actor Admin as act
+boundary AdminPage as page
+participant ":CourseRouter" as router
+control CourseController as controler
+participant ":Course" as context
 database Database as db
 
 loop Input invalid
-    act -> page: Enter new information of User and click "Lưu" button
+    act -> page: Enter new information of Course and click "Lưu" button
     activate page
     page -> page: Validation input
     activate page
@@ -22,31 +22,31 @@ loop Input invalid
 end
 
 autonumber 4
-page -> router: endpoint /api/auth/register
+page -> router: endpoint /api/course/edit_course
 activate router
-router -> controler: Call CreateNewUser(userData) method
+router -> controler: Call EditCourse(courseData) method
 activate controler
-controler -> context: Call FindOne(userData.email) method
+controler -> context: Call FindOne(courseData.name) method
 activate context
 context -> db: Query database
 activate db
-db --> context: Return user
+db --> context: Return Course
 deactivate db
-context --> controler: Return User
+context --> controler: Return Course
 deactivate context
-controler -> controler: Check null User
+controler -> controler: Check null Course
 activate controler
 deactivate controler
-opt User not null
+opt Course not null
     autonumber 10.1
-    controler --> router: Return "User had existed"
-    router --> page: Return "User had existed"
-    page --> act: Return "User had existed"
+    controler --> router: Return "Course not existed"
+    router --> page: Return "Course not existed"
+    page --> act: Return "Course not existed"
 end
 autonumber 11
-controler -> context: Call newUser.save(userData) method
+controler -> context: Call newInforCourse.save(courseData) method
 activate context
-context -> db: Insert database
+context -> db: Update database
 activate db
 db --> context: Return number
 deactivate db
@@ -65,7 +65,7 @@ else number > 0
     deactivate controler
     router --> page: Return message successful
     deactivate router
-    page --> act: Show message successful and redirect to login page
+    page --> act: Show message successful and redirect to list Course
     deactivate page
 end
 @enduml

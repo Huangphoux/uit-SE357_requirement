@@ -1,50 +1,49 @@
-@startuml SignUp
-title <font size=24>Sign Up Sequence</font>
+@startuml CreateSubmitAssignment
+title <font size=24>Create Submission Student Sequence</font>
 skinparam sequenceMessageAlign center
 autonumber
 
-actor User as act
-boundary SignUp_Page as page
-participant ":AuthRouter" as router
-control AuthController as controler
-participant ":User" as context
+actor Student as act
+boundary StudentPage as page
+participant ":SubmissionRouter" as router
+control SubmissionController as controler
+participant ":Submission" as context
 database Database as db
 
 loop Input invalid
-    act -> page: Enter new information of User and click "Lưu" button
+    act -> page: Enter new information submit and click "Lưu" button
     activate page
     page -> page: Validation input
     activate page
-
     deactivate page
     autonumber 3
     page --> act: Display invalid input
 end
 
 autonumber 4
-page -> router: endpoint /api/auth/register
+page -> router: endpoint /api/submission/create_submit_student
 activate router
-router -> controler: Call CreateNewUser(userData) method
+router -> controler: Call CreateNewSubmit(assignmentName, submitData) method
 activate controler
-controler -> context: Call FindOne(userData.email) method
+controler -> context: Call FindOne(assignmentName) method
 activate context
 context -> db: Query database
 activate db
-db --> context: Return user
+db --> context: Return Submission
 deactivate db
-context --> controler: Return User
+context --> controler: Return Submission
 deactivate context
-controler -> controler: Check null User
+controler -> controler: Check null Submission
 activate controler
 deactivate controler
-opt User not null
+opt Submission not null
     autonumber 10.1
-    controler --> router: Return "User had existed"
-    router --> page: Return "User had existed"
-    page --> act: Return "User had existed"
+    controler --> router: Return "Assignment no existed"
+    router --> page: Return "Assignment no existed"
+    page --> act: Return "Assignment no existed"
 end
 autonumber 11
-controler -> context: Call newUser.save(userData) method
+controler -> context: Call newSubmission.save(submitData) method
 activate context
 context -> db: Insert database
 activate db
@@ -65,7 +64,7 @@ else number > 0
     deactivate controler
     router --> page: Return message successful
     deactivate router
-    page --> act: Show message successful and redirect to login page
+    page --> act: Show message successful and redirect to list Submission
     deactivate page
 end
 @enduml

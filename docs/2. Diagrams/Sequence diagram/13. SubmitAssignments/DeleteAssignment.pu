@@ -1,32 +1,22 @@
-@startuml ReviewSubmissionsComment
-title <font size=24>Edit Submission Sequence</font>
+@startuml DeleteSubmitAssignment
+title <font size=24>Delete Submission Student Sequence</font>
 skinparam sequenceMessageAlign center
 autonumber
 
-actor Teacher as act
-boundary TeacherPage as page
+actor Student as act
+boundary StudentPage as page
 participant ":SubmissionRouter" as router
 control SubmissionController as controler
 participant ":Submission" as context
 database Database as db
 
-loop Input invalid
-    act -> page: Enter comment of Submission and click "Lưu" button
-    activate page
-    page -> page: Validation input
-    activate page
-
-    deactivate page
-    autonumber 3
-    page --> act: Display invalid input
-end
-
-autonumber 4
-page -> router: endpoint /api/submission/review_submission
+act -> page: Enter new information submit and click "Lưu" button
+activate page
+page -> router: endpoint /api/submission/delete_submit_student
 activate router
-router -> controler: Call ReviewSubmission(SubmissionData) method
+router -> controler: Call DeleteNewSubmit(assignmentName) method
 activate controler
-controler -> context: Call FindOne(SubmissionData.assignmentName) method
+controler -> context: Call FindOne(assignmentName) method
 activate context
 context -> db: Query database
 activate db
@@ -39,14 +29,14 @@ activate controler
 deactivate controler
 opt Submission not null
     autonumber 10.1
-    controler --> router: Return "Submission not existed"
-    router --> page: Return "Submission not existed"
-    page --> act: Return "Submission not existed"
+    controler --> router: Return "Assignment no existed"
+    router --> page: Return "Assignment no existed"
+    page --> act: Return "Assignment no existed"
 end
 autonumber 11
-controler -> context: Call newInforSubmission.save(SubmissionData) method
+controler -> context: Call remove() method
 activate context
-context -> db: Update database
+context -> db: Insert database
 activate db
 db --> context: Return number
 deactivate db

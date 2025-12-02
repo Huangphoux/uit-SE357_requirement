@@ -1,17 +1,17 @@
-@startuml SignUp
-title <font size=24>Sign Up Sequence</font>
+@startuml CreateClass
+title <font size=24>Create Account Sequence</font>
 skinparam sequenceMessageAlign center
 autonumber
 
-actor User as act
-boundary SignUp_Page as page
-participant ":AuthRouter" as router
-control AuthController as controler
-participant ":User" as context
+actor Admin as act
+boundary AdminPage as page
+participant ":ClassRouter" as router
+control ClassController as controler
+participant ":Class" as context
 database Database as db
 
 loop Input invalid
-    act -> page: Enter new information of User and click "Lưu" button
+    act -> page: Enter new information of Class and click "Lưu" button
     activate page
     page -> page: Validation input
     activate page
@@ -22,29 +22,29 @@ loop Input invalid
 end
 
 autonumber 4
-page -> router: endpoint /api/auth/register
+page -> router: endpoint /api/class/create_class
 activate router
-router -> controler: Call CreateNewUser(userData) method
+router -> controler: Call CreateNewClass(classData) method
 activate controler
-controler -> context: Call FindOne(userData.email) method
+controler -> context: Call FindOne(classData.name) method
 activate context
 context -> db: Query database
 activate db
-db --> context: Return user
+db --> context: Return Class
 deactivate db
-context --> controler: Return User
+context --> controler: Return Class
 deactivate context
-controler -> controler: Check null User
+controler -> controler: Check null Class
 activate controler
 deactivate controler
-opt User not null
+opt Class not null
     autonumber 10.1
-    controler --> router: Return "User had existed"
-    router --> page: Return "User had existed"
-    page --> act: Return "User had existed"
+    controler --> router: Return "Class had existed"
+    router --> page: Return "Class had existed"
+    page --> act: Return "Class had existed"
 end
 autonumber 11
-controler -> context: Call newUser.save(userData) method
+controler -> context: Call newClass.save(classData) method
 activate context
 context -> db: Insert database
 activate db
@@ -65,7 +65,7 @@ else number > 0
     deactivate controler
     router --> page: Return message successful
     deactivate router
-    page --> act: Show message successful and redirect to login page
+    page --> act: Show message successful and redirect to list Class
     deactivate page
 end
 @enduml
