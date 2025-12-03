@@ -23,10 +23,6 @@ import submissionRoute from "submissions/submissions.route";
 import feedbackRoute from "feedback/feedback.route";
 
 import { logger } from "util/logger";
-import productRoute from "products/product.route";
-import usersRoute from "users/users.route";
-import couponsRoute from "coupons/coupons.route";
-import eventsRoute from "events/events.route";
 
 export default class App {
   private app: Express;
@@ -71,10 +67,6 @@ export default class App {
     this.app.use("/api/assignments", assignmentRoute); // /api/assignments/*
     this.app.use("/api/submissions", submissionRoute); // /api/submissions/*
     this.app.use("/api/feedback", feedbackRoute); // /api/feedback/*
-    this.app.use("/api/products", productRoute); // /api/products/*
-    this.app.use("/api/users", usersRoute); // /api/user/*
-    this.app.use("/api/coupons", couponsRoute); // /api/coupons/*
-    this.app.use("/api/events", eventsRoute); // /api/events/*
 
     this.app.use("/api", healthRoute); // /api/healthcheck
 
