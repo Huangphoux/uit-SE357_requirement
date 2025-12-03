@@ -74,4 +74,52 @@ export default class AuthMiddleware {
       return Send.error(res, {}, "Internal server error");
     }
   };
+
+  static requireTeacher = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = (req as any).userId;
+
+      if (!userId) {
+        return Send.unauthorized(res, null);
+      }
+
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { role: true },
+      });
+
+      if (!user || (user.role !== "TEACHER" && user.role !== UserRole.ADMIN)) {
+        return Send.forbidden(res, { message: "Teacher access required" });
+      }
+
+      next();
+    } catch (error) {
+      logger.error({ error }, "Teacher check failed");
+      return Send.error(res, {}, "Internal server error");
+    }
+  };
+
+  static requireStudent = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const userId = (req as any).userId;
+
+      if (!userId) {
+        return Send.unauthorized(res, null);
+      }
+
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { role: true },
+      });
+
+      if (!user || (user.role !== "STUDENT" && user.role !== UserRole.ADMIN)) {
+        return Send.forbidden(res, { message: "Student access required" });
+      }
+
+      next();
+    } catch (error) {
+      logger.error({ error }, "Student check failed");
+      return Send.error(res, {}, "Internal server error");
+    }
+  };
 }

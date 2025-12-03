@@ -17,6 +17,10 @@ import userRoute from "user/user.route";
 import healthRoute from "health/health.route";
 import courseRoute from "courses/courses.route";
 import classRoute from "classes/classes.route";
+import materialRoute from "materials/materials.route";
+import assignmentRoute from "assignments/assignments.route";
+import submissionRoute from "submissions/submissions.route";
+import feedbackRoute from "feedback/feedback.route";
 
 import { logger } from "util/logger";
 import productRoute from "products/product.route";
@@ -63,6 +67,10 @@ export default class App {
     this.app.use("/api/user", userRoute); // /api/user/*
     this.app.use("/api/courses", courseRoute); // /api/courses/*
     this.app.use("/api/classes", classRoute); // /api/classes/*
+    this.app.use("/api/materials", materialRoute); // /api/materials/*
+    this.app.use("/api/assignments", assignmentRoute); // /api/assignments/*
+    this.app.use("/api/submissions", submissionRoute); // /api/submissions/*
+    this.app.use("/api/feedback", feedbackRoute); // /api/feedback/*
     this.app.use("/api/products", productRoute); // /api/products/*
     this.app.use("/api/users", usersRoute); // /api/user/*
     this.app.use("/api/coupons", couponsRoute); // /api/coupons/*

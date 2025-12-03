@@ -68,5 +68,66 @@ export default class CoursesController {
       return Send.error(res, {}, error.message || "Internal server error");
     }
   }
+
+  static async getEnrolledCourses(req: Request, res: Response) {
+    try {
+      const userId = (req as any).userId;
+
+      if (!userId) {
+        return Send.unauthorized(res, {}, "User not authenticated");
+      }
+
+      const courses = await CoursesService.getEnrolledCourses(userId);
+
+      return Send.success(res, { courses });
+    } catch (error) {
+      logger.error({ error }, "Error fetching enrolled courses");
+      return Send.error(res, {}, "Internal server error");
+    }
+  }
+
+  static async enrollInClass(req: Request, res: Response) {
+    try {
+      const userId = (req as any).userId;
+      const { classId } = req.body;
+
+      if (!userId) {
+        return Send.unauthorized(res, {}, "User not authenticated");
+      }
+
+      if (!classId) {
+        return Send.badRequest(res, {}, "Class ID is required");
+      }
+
+      const enrollment = await CoursesService.enrollInClass(userId, classId);
+
+      return Send.success(res, { enrollment }, "Enrolled successfully");
+    } catch (error: any) {
+      logger.error({ error }, "Error enrolling in class");
+      return Send.error(res, {}, error.message || "Internal server error");
+    }
+  }
+
+  static async unenrollFromClass(req: Request, res: Response) {
+    try {
+      const userId = (req as any).userId;
+      const { classId } = req.body;
+
+      if (!userId) {
+        return Send.unauthorized(res, {}, "User not authenticated");
+      }
+
+      if (!classId) {
+        return Send.badRequest(res, {}, "Class ID is required");
+      }
+
+      const enrollment = await CoursesService.unenrollFromClass(userId, classId);
+
+      return Send.success(res, { enrollment }, "Unenrolled successfully");
+    } catch (error: any) {
+      logger.error({ error }, "Error unenrolling from class");
+      return Send.error(res, {}, error.message || "Internal server error");
+    }
+  }
 }
 

@@ -50,6 +50,7 @@ model Class {
     // Relations
     enrollments Enrollment[]
     assignments Assignment[]
+    materials   Material[]
 
     @@index([teacherId])
 }
@@ -119,4 +120,21 @@ model Feedback {
     updatedAt    DateTime   @updatedAt
 
     @@index([createdBy])
+}
+
+// Material - course learning materials
+model Material {
+    id          String   @id @default(cuid())
+    title       String
+    description String?
+    type        String // "PDF", "VIDEO", "LINK", "DOC"
+    url         String // File URL or external link
+    classId     String
+    class       Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+    createdBy   String // Teacher ID (from User)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@index([createdBy])
+    @@index([classId])
 }
