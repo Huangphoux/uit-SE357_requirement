@@ -20,7 +20,33 @@ import BaseRouter, { RouteConfig } from "util/router";
  *     tags: [Auth]
  *     requestBody:
  *       required: true
- *       content:\n *         application/json:\n *           schema:\n *             type: object\n *             required:\n *               - name\n *               - email\n *               - password\n *               - password_confirmation\n *             properties:\n *               name:\n *                 type: string\n *                 minLength: 1\n *                 maxLength: 100\n *                 example: John Doe\n *               email:\n *                 type: string\n *                 format: email\n *                 example: john@example.com
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *               - password_confirmation
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 minLength: 1
+ *                 maxLength: 100
+ *                 example: John Doe
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: john@example.com
+ *               password:
+ *                 type: string
+ *                 minLength: 8
+ *                 pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]'
+ *                 example: Password123!
+ *               password_confirmation:
+ *                 type: string
+ *                 example: Password123!
  *     responses:
  *       200:
  *         description: User registered successfully
@@ -31,7 +57,7 @@ import BaseRouter, { RouteConfig } from "util/router";
  *               properties:
  *                 id:
  *                   type: string
- *                 username:
+ *                 name:
  *                   type: string
  *                 email:
  *                   type: string
@@ -71,7 +97,20 @@ import BaseRouter, { RouteConfig } from "util/router";
  *               example: accessToken=xxx; HttpOnly; Secure; SameSite=Strict
  *         content:
  *           application/json:
- *             schema:\n *               type: object\n *               properties:\n *                 id:\n *                   type: string\n *                 name:\n *                   type: string\n *                 email:\n *                   type: string\n *                 role:\n *                   type: string\n *                   enum: [STUDENT, TEACHER, ADMIN]\n *       400:\n *         description: Invalid credentials
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 role:
+ *                   type: string
+ *                   enum: [STUDENT, TEACHER, ADMIN]
+ *       400:
+ *         description: Invalid credentials
  *       500:
  *         description: Login failed
  *
