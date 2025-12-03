@@ -1,6 +1,6 @@
 import Send from "util/response";
 import { Request, Response } from "express";
-import AuthSchema from "./auth.schema";
+import { loginSchema, registerSchema } from "./auth.schema";
 import { z } from "zod";
 import AuthService from "./auth.service";
 import { logger } from "util/logger";
@@ -9,14 +9,14 @@ const ONE_MINUTE: number = 60 * 1000; // one minute in milliseconds
 
 export default class AuthController {
   static async register(req: Request, res: Response) {
-    const { username, email, password } = req.body as z.infer<typeof AuthSchema.register>;
+    const { name, email, password } = req.body as z.infer<typeof registerSchema>;
 
     try {
-      const newUser = await AuthService.register(username, email, password);
+      const newUser = await AuthService.register(name, email, password);
 
       return Send.success(
         res,
-        { id: newUser.id, username: newUser.username, email: newUser.email },
+        { id: newUser.id, name: newUser.name, email: newUser.email },
         "User successfully registered."
       );
     } catch (error: any) {
@@ -31,7 +31,7 @@ export default class AuthController {
   }
 
   static async login(req: Request, res: Response) {
-    const { email, password } = req.body as z.infer<typeof AuthSchema.login>; // request body → fields
+    const { email, password } = req.body as z.infer<typeof loginSchema>; // request body → fields
 
     try {
       const { user, accessToken, refreshToken } = await AuthService.login(email, password);
@@ -50,7 +50,7 @@ export default class AuthController {
         sameSite: "strict",
       });
 
-      return Send.success(res, { id: user.id, username: user.username, email: user.email });
+      return Send.success(res, { id: user.id, name: user.name, email: user.email, role: user.role });
     } catch (error) {
       logger.error({ error }, "Login Failed");
       return Send.error(res, null, "Login failed.");

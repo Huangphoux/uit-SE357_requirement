@@ -14,40 +14,13 @@ import BaseRouter, { RouteConfig } from "util/router";
  *       in: cookie
  *       name: accessToken
  *
- * /auth/register:
+ * /api/auth/register:
  *   post:
  *     summary: Register a new user
  *     tags: [Auth]
  *     requestBody:
  *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - username
- *               - email
- *               - password
- *               - password_confirmation
- *             properties:
- *               username:
- *                 type: string
- *                 minLength: 6
- *                 maxLength: 20
- *                 pattern: '^[a-zA-Z0-9_-]+$'
- *                 example: john_doe
- *               email:
- *                 type: string
- *                 format: email
- *                 example: john@example.com
- *               password:
- *                 type: string
- *                 minLength: 8
- *                 pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]'
- *                 example: Password123!
- *               password_confirmation:
- *                 type: string
- *                 example: Password123!
+ *       content:\n *         application/json:\n *           schema:\n *             type: object\n *             required:\n *               - name\n *               - email\n *               - password\n *               - password_confirmation\n *             properties:\n *               name:\n *                 type: string\n *                 minLength: 1\n *                 maxLength: 100\n *                 example: John Doe\n *               email:\n *                 type: string\n *                 format: email\n *                 example: john@example.com
  *     responses:
  *       200:
  *         description: User registered successfully
@@ -67,7 +40,7 @@ import BaseRouter, { RouteConfig } from "util/router";
  *       500:
  *         description: Registration failed
  *
- * /auth/login:
+ * /api/auth/login:
  *   post:
  *     summary: Login a user
  *     tags: [Auth]
@@ -98,21 +71,11 @@ import BaseRouter, { RouteConfig } from "util/router";
  *               example: accessToken=xxx; HttpOnly; Secure; SameSite=Strict
  *         content:
  *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: string
- *                 username:
- *                   type: string
- *                 email:
- *                   type: string
- *       400:
- *         description: Invalid credentials
+ *             schema:\n *               type: object\n *               properties:\n *                 id:\n *                   type: string\n *                 name:\n *                   type: string\n *                 email:\n *                   type: string\n *                 role:\n *                   type: string\n *                   enum: [STUDENT, TEACHER, ADMIN]\n *       400:\n *         description: Invalid credentials
  *       500:
  *         description: Login failed
  *
- * /auth/logout:
+ * /api/auth/logout:
  *   post:
  *     summary: Logout a user
  *     tags: [Auth]
@@ -126,7 +89,7 @@ import BaseRouter, { RouteConfig } from "util/router";
  *       500:
  *         description: Logout failed
  *
- * /auth/refresh-token:
+ * /api/auth/refresh-token:
  *   post:
  *     summary: Refresh access token
  *     tags: [Auth]

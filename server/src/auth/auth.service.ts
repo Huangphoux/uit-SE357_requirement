@@ -8,21 +8,13 @@ import { comparePassword, hashPassword } from "util/hash";
 // const ONE_MINUTE: number = 60 * 1000; // one minute in milliseconds
 
 export default class AuthService {
-  static async register(username: string, email: string, password: string) {
+  static async register(name: string, email: string, password: string) {
     if (await prisma.user.findUnique({ where: { email } })) {
       throw new Error("Email is already in use");
     }
 
-    const user = await prisma.$transaction(async (prisma) => {
-      const createdUser = await prisma.user.create({
-        data: { username, email, password: await hashPassword(password) },
-      });
-
-      await prisma.customer.create({
-        data: { userId: createdUser.id },
-      });
-
-      return createdUser;
+    const user = await prisma.user.create({
+      data: { name, email, password: await hashPassword(password) },
     });
 
     return user;

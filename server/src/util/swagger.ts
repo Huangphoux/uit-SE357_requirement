@@ -6,7 +6,7 @@ const options = {
     openapi: "3.0.0",
     servers: [
       {
-        url: "/api",
+        url: "/",
         description: "API server",
       },
     ],

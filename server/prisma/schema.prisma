@@ -10,15 +10,22 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+    STUDENT
+    TEACHER
+    ADMIN
+}
+
 // User model - base for all users
 model User {
-    id        String   @id @default(cuid())
-    email     String   @unique
-    password  String
-    name      String
-    role      String // "STUDENT", "TEACHER", "ADMIN"
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id           String   @id @default(cuid())
+    email        String   @unique
+    password     String
+    name         String
+    role         UserRole @default(STUDENT)
+    refreshToken String?
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
 
     // Relations
     enrollments Enrollment[]

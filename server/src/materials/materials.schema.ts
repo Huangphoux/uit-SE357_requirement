@@ -4,7 +4,7 @@ export const materialCreateSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
   type: z.enum(["PDF", "VIDEO", "LINK", "DOC"], {
-    errorMap: () => ({ message: "Type must be PDF, VIDEO, LINK, or DOC" }),
+    error: "Type must be PDF, VIDEO, LINK, or DOC",
   }),
   url: z.string().url("Invalid URL format"),
   classId: z.string().min(1, "Class ID is required"),

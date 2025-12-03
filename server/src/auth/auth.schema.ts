@@ -22,7 +22,7 @@ const usernameSchema = z
 
 const register = z
   .object({
-    username: usernameSchema,
+    name: z.string().min(1, "Name is required").max(100, "Name must not exceed 100 characters"),
     email: z.email("Invalid email format"),
     password: passwordSchema,
     password_confirmation: z.string().min(1, "Password confirmation is required"),

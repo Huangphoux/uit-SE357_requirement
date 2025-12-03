@@ -14,10 +14,7 @@ export default class CoursesService {
     return await prisma.course.findMany({
       where: q
         ? {
-            OR: [
-              { title: { contains: q, mode: "insensitive" } },
-              { description: { contains: q, mode: "insensitive" } },
-            ],
+            OR: [{ title: { contains: q } }, { description: { contains: q } }],
           }
         : undefined,
       include: {
@@ -44,10 +41,7 @@ export default class CoursesService {
     return course;
   }
 
-  static async update(
-    id: string,
-    data: { title?: string; description?: string }
-  ) {
+  static async update(id: string, data: { title?: string; description?: string }) {
     const course = await prisma.course.findUnique({ where: { id } });
     if (!course) {
       throw new Error("Course not found");

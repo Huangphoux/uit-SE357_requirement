@@ -10,7 +10,7 @@ import UsersSchema from "./users.schema";
  *   name: Users
  *   description: User management endpoints (Admin only)
  *
- * /users:
+ * /api/users:
  *   get:
  *     summary: Get all users or search users (Admin only)
  *     tags: [Users]
@@ -101,7 +101,7 @@ import UsersSchema from "./users.schema";
  *       500:
  *         description: Internal server error
  *
- * /users/{id}:
+ * /api/users/{id}:
  *   get:
  *     summary: Get user by ID (Admin only)
  *     tags: [Users]
