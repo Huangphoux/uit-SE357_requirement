@@ -4,7 +4,8 @@ import { ConfirmDialog } from '../components/ConfirmDialog';
 import DarkModeToggle from '@/pages/DarkModeToggle';
 import SearchBar from '../components/SearchBar';
 import EmptyState from '../components/EmptyState';
-import StatsCard from '../components/StatsCard';
+// StatsCard không còn dùng ở đây nữa vì đã custom lại theo ảnh, nhưng giữ lại import nếu bạn muốn dùng chỗ khác
+import StatsCard from '../components/StatsCard'; 
 import LoadingButton from '@/pages/LoadingButton';
 import ValidatedInput from '@/pages/ValidatedInput';
 import FileUpload from '@/pages/FileUpload';
@@ -24,6 +25,7 @@ import {
   GraduationCap,
   School,
   Bell,
+  TrendingUp, // Đã thêm icon này
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { mockCourses, mockClasses, Course, Class } from '@/data/mockData';
@@ -152,29 +154,63 @@ export default function AdminDashboard() {
 }
 
 function DashboardOverview({ onQuickAction }: { onQuickAction: (action: 'create-course' | 'create-class' | 'manage-users') => void }) {
+  // Cấu hình data cho giống ảnh
+  const stats = [
+    {
+      title: "Total Courses",
+      value: mockCourses.length,
+      trend: "+3 new",
+      icon: BookOpen,
+      iconColor: "#0056b3", // Xanh dương
+      iconBg: "#e6f0ff",    // Nền xanh nhạt
+    },
+    {
+      title: "Total Classes",
+      value: mockClasses.length,
+      trend: "+5 active",
+      icon: School,
+      iconColor: "#e0a800", // Vàng đậm
+      iconBg: "#fff9db",    // Nền vàng nhạt
+    },
+    {
+      title: "Total Students",
+      value: 125,
+      trend: "+12 this week",
+      icon: Users,
+      iconColor: "#28a745", // Xanh lá
+      iconBg: "#e6fffa",    // Nền xanh lá nhạt
+    }
+  ];
+
   return (
     <div className="p-8">
       <h1 className="mb-8">Admin Dashboard</h1>
       
+      {/* Phần thống kê mới: Icon tròn bên phải */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <StatsCard
-          title="Total Courses"
-          value={mockCourses.length}
-          icon={BookOpen}
-          trend={{ value: 3, isPositive: true }}
-        />
-        <StatsCard
-          title="Total Classes"
-          value={mockClasses.length}
-          icon={School}
-          trend={{ value: 5, isPositive: false }}
-        />
-        <StatsCard
-          title="Total Students"
-          value={125}
-          icon={Users}
-          trend={{ value: 12, isPositive: true }}
-        />
+        {stats.map((stat, index) => (
+          <div 
+            key={index} 
+            className="bg-card p-6 rounded-lg border border-border shadow-sm flex items-center justify-between animate-fade-in-up"
+            style={{ animationDelay: `${index * 100}ms` }}
+          >
+            <div>
+              <p className="text-muted-foreground text-sm font-medium mb-1">{stat.title}</p>
+              <h3 className="text-2xl font-bold text-foreground mb-2">{stat.value}</h3>
+              <div className="flex items-center gap-1 text-sm font-medium" style={{ color: '#28a745' }}>
+                <TrendingUp className="w-4 h-4" />
+                <span>{stat.trend}</span>
+              </div>
+            </div>
+            
+            <div 
+              className="w-12 h-12 rounded-full flex items-center justify-center"
+              style={{ backgroundColor: stat.iconBg }}
+            >
+              <stat.icon className="w-6 h-6" style={{ color: stat.iconColor }} />
+            </div>
+          </div>
+        ))}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
