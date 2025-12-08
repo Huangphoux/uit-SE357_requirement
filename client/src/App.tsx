@@ -34,11 +34,11 @@ export default function App() {
   // Route to appropriate dashboard based on role
   const renderDashboard = () => {
     switch (user?.role) {
-      case 'admin':
+      case 'ADMIN':
         return <AdminDashboard />;
-      case 'teacher':
+      case 'TEACHER':
         return <TeacherDashboard />;
-      case 'student':
+      case 'STUDENT':
         return <StudentDashboard />;
       default:
         return <Login onShowRegister={() => setShowRegister(true)} />;

@@ -43,7 +43,7 @@ export default class App {
     this.app.use(
       cors({
         origin: [
-          "http://localhost:3000", // frontend url
+          "http://localhost:5173", // frontend url
           "https://mywebsite.com", // production url optional
         ],
         methods: ["GET", "POST", "PUT", "DELETE"],
@@ -80,11 +80,12 @@ export default class App {
 
   public start() {
     const { port, host } = appConfig;
-
-    this.app.listen(port, host, (error: any) => {
+    const portNumber = Number(port) || 3000;
+    const hostName = host || "localhost";
+    this.app.listen(portNumber, hostName, (error: any) => {
       if (error) throw error;
 
-      logger.info(`server is running on http://${host}:${port}`);
+      logger.info(`server is running on http://${hostName}:${portNumber}`);
     });
   }
 }

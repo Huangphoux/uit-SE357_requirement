@@ -1,37 +1,40 @@
-import React, { useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import ValidatedInput from '@/pages/ValidatedInput';
-import LoadingButton from '@/pages/LoadingButton';
-import { commonRules } from '@/utils/validation';
-import { GraduationCap } from 'lucide-react';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { useAuth, User } from "@/contexts/AuthContext";
+import ValidatedInput from "@/pages/ValidatedInput";
+import LoadingButton from "@/pages/LoadingButton";
+import { commonRules } from "@/utils/validation";
+import { GraduationCap } from "lucide-react";
+import { toast } from "sonner";
+import auth from "@/service/auth";
 
 interface LoginProps {
   onShowRegister: () => void;
 }
 
 export default function Login({ onShowRegister }: LoginProps) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
+      setLoading(true);
+      const success = await auth.LoginAPI({ email, password });
+      if (success.ok) {
+        toast.success("Login successful!");
+        console.log("User logged in:", success.data);
 
-    setLoading(true);
-
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-
-    const success = await login(email, password);
-    
-    setLoading(false);
-
-    if (!success) {
-      toast.error('Invalid email or password');
-    } else {
-      toast.success('Login successful!');
+        await login(success.data as any);
+        setLoading(false);
+      } else {
+        toast.error("Invalid email or password");
+        setLoading(false);
+      }
+    } catch (err) {
+      toast.error("An error occurred during login. Please try again.");
+      setLoading(false);
     }
   };
 
@@ -49,7 +52,7 @@ export default function Login({ onShowRegister }: LoginProps) {
         {/* Login Form */}
         <div className="bg-card rounded-lg shadow-lg p-8 border border-border">
           <h2 className="text-center mb-6">Sign In</h2>
-          
+
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email Field with Live Validation */}
             <ValidatedInput
@@ -80,21 +83,25 @@ export default function Login({ onShowRegister }: LoginProps) {
               onClick={handleSubmit}
               type="submit"
               className="w-full px-4 py-2.5 rounded-md text-white hover:opacity-90 transition-opacity"
-              style={{ backgroundColor: '#0056b3' }}
+              style={{ backgroundColor: "#0056b3" }}
             >
               Sign In
             </LoadingButton>
 
             {/* Links */}
             <div className="space-y-2 text-center">
-              <a href="#" className="block text-[#0056b3] hover:underline" style={{ fontSize: '0.875rem' }}>
+              <a
+                href="#"
+                className="block text-[#0056b3] hover:underline"
+                style={{ fontSize: "0.875rem" }}
+              >
                 Forgot Password?
               </a>
               <button
                 type="button"
                 onClick={onShowRegister}
                 className="block w-full text-[#0056b3] hover:underline"
-                style={{ fontSize: '0.875rem' }}
+                style={{ fontSize: "0.875rem" }}
               >
                 Don't have an account? Sign Up
               </button>
@@ -103,13 +110,17 @@ export default function Login({ onShowRegister }: LoginProps) {
 
           {/* Demo Credentials */}
           <div className="mt-6 pt-6 border-t border-border">
-            <p className="text-muted-foreground text-center mb-2" style={{ fontSize: '0.75rem' }}>
+            <p className="text-muted-foreground text-center mb-2" style={{ fontSize: "0.75rem" }}>
               Demo Credentials:
             </p>
-            <div className="space-y-1 text-center" style={{ fontSize: '0.75rem' }}>
+            <div className="space-y-1 text-center" style={{ fontSize: "0.75rem" }}>
               <p className="text-muted-foreground">Admin: admin@englishcenter.com / admin123</p>
-              <p className="text-muted-foreground">Teacher: teacher@englishcenter.com / teacher123</p>
-              <p className="text-muted-foreground">Student: student@englishcenter.com / student123</p>
+              <p className="text-muted-foreground">
+                Teacher: teacher@englishcenter.com / teacher123
+              </p>
+              <p className="text-muted-foreground">
+                Student: student@englishcenter.com / student123
+              </p>
             </div>
           </div>
         </div>

@@ -1,29 +1,51 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from "react";
 
-export type UserRole = 'student' | 'teacher' | 'admin';
+export type UserRole = "STUDENT" | "TEACHER" | "ADMIN";
 
 export interface User {
   id: string;
   email: string;
   name: string;
   role: UserRole;
-  phone?: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (data : any) => Promise<boolean>;
   logout: () => void;
-  register: (data: { name: string; email: string; phone: string; password: string }) => Promise<boolean>;
+  register: (data: {
+    name: string;
+    email: string;
+    phone: string;
+    password: string;
+  }) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Mock users for demonstration
 const mockUsers: (User & { password: string })[] = [
-  { id: '1', email: 'admin@englishcenter.com', password: 'admin123', name: 'Admin User', role: 'admin' },
-  { id: '2', email: 'teacher@englishcenter.com', password: 'teacher123', name: 'Sarah Wilson', role: 'teacher', phone: '0123456789' },
-  { id: '3', email: 'student@englishcenter.com', password: 'student123', name: 'Jane Doe', role: 'student', phone: '0987654321' },
+  {
+    id: "1",
+    email: "admin@englishcenter.com",
+    password: "admin123",
+    name: "Admin User",
+    role: "ADMIN",
+  },
+  {
+    id: "2",
+    email: "teacher@englishcenter.com",
+    password: "teacher123",
+    name: "Sarah Wilson",
+    role: "TEACHER",
+  },
+  {
+    id: "3",
+    email: "student@englishcenter.com",
+    password: "student123",
+    name: "Jane Doe",
+    role: "STUDENT",
+  },
 ];
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -31,31 +53,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Check for stored user session
-    const storedUser = localStorage.getItem('englishcenter_user');
+    const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
-    const foundUser = mockUsers.find(u => u.email === email && u.password === password);
-    if (foundUser) {
-      const { password: _, ...userWithoutPassword } = foundUser;
-      setUser(userWithoutPassword);
-      localStorage.setItem('englishcenter_user', JSON.stringify(userWithoutPassword));
-      return true;
-    }
-    return false;
+  const login = async (userData: User): Promise<boolean> => {
+    setUser(userData);
+    console.log("User logged in:", userData);
+    
+    localStorage.setItem("user", JSON.stringify(userData));
+    return true;
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('englishcenter_user');
+    localStorage.removeItem("user");
   };
 
-  const register = async (data: { name: string; email: string; phone: string; password: string }): Promise<boolean> => {
+  const register = async (data: {
+    name: string;
+    email: string;
+    phone: string;
+    password: string;
+  }): Promise<boolean> => {
     // Check if email already exists
-    if (mockUsers.some(u => u.email === data.email)) {
+    if (mockUsers.some((u) => u.email === data.email)) {
       return false;
     }
 
@@ -64,13 +88,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       id: String(mockUsers.length + 1),
       email: data.email,
       name: data.name,
-      role: 'student',
-      phone: data.phone,
+      role: "STUDENT",
     };
 
     mockUsers.push({ ...newUser, password: data.password });
     setUser(newUser);
-    localStorage.setItem('englishcenter_user', JSON.stringify(newUser));
+    localStorage.setItem("user", JSON.stringify(newUser));
     return true;
   };
 
@@ -84,7 +107,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }
