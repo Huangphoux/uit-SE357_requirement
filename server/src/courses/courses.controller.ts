@@ -25,6 +25,8 @@ export default class CoursesController {
 
   static async createCourse(req: Request, res: Response) {
     try {
+      console.log(req.body);
+      
       const { title, description } = req.body;
 
       const course = await CoursesService.create({

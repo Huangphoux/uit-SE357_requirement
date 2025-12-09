@@ -1,0 +1,53 @@
+import apiClient from "@/api/axios";
+
+const getCouresEnrollments = async (studentId: string) => {
+  try {
+    const response = await apiClient.get(`/courses/enrolled`);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch course enrollments:", error);
+    throw error;
+  }
+};
+
+const createCourse = async (courseData: any) => {
+  try {
+    const response = await apiClient.post(`/courses`, courseData);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to create course:", error);
+    throw error;
+  }
+};
+
+const listCourse = async () => {
+  try {
+    const response = await apiClient.get(`/courses`);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to list courses:", error);
+    throw error;
+  }
+};
+
+const deleteCourse = async (id: string) => {
+  try {
+    const response = await apiClient.delete(`/courses/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to delete course:", error);
+    throw error;
+  }
+};
+
+const updateCourse = async (id: string, courseData: any) => {
+  try {
+    const response = await apiClient.put(`/courses/${id}`, courseData);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to update course:", error);
+    throw error;
+  }
+};
+
+export default { getCouresEnrollments, createCourse, listCourse, deleteCourse, updateCourse };

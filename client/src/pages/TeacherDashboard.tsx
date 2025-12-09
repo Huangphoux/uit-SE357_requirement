@@ -26,7 +26,7 @@ import {
   BookOpen
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { mockCourses, mockMaterials, mockAssignments, mockSubmissions } from '../data/mockData';
+import { mocurses, mockMaterials, mockAssignments, mockSubmissions } from '../data/mockData';
 import NotificationManagement from './NotificationManagement';
 
 export default function TeacherDashboard() {

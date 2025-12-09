@@ -17,7 +17,7 @@ export default class UserController {
         where: { id: userId },
         select: {
           id: true,
-          username: true,
+          name: true,
           email: true,
           createdAt: true,
           updatedAt: true,
