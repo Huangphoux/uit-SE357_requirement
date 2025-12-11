@@ -3,6 +3,7 @@ import SubmissionsController from "./submissions.controller";
 import { validateBody } from "util/validation";
 import { submissionCreateSchema, submissionUpdateSchema } from "./submissions.schema";
 import AuthMiddleware from "auth/auth.middleware";
+import { z } from "zod";
 
 /**
  * @swagger
@@ -107,20 +108,49 @@ class SubmissionsRoutes extends BaseRouter {
       },
       {
         method: "get",
+        path: "/student",
+        middlewares: [AuthMiddleware.authenticateUser],
+        controller: SubmissionsController.getSubmissionsbyStudent,
+      },
+      {
+        method: "post",
+        path: "/",
+        middlewares: [
+          AuthMiddleware.authenticateUser,
+          AuthMiddleware.requireStudent,
+          validateBody(submissionCreateSchema),
+        ],
+        controller: SubmissionsController.createSubmission,
+      },
+      {
+        method: "put",
+        path: "/:id/grade",
+        middlewares: [
+          AuthMiddleware.authenticateUser,
+          AuthMiddleware.requireTeacher,
+          validateBody(
+            z.object({
+              grade: z.number().min(0, "Grade must be at least 0"),
+              feedback: z.string().optional(),
+            })
+          ),
+        ],
+        controller: SubmissionsController.gradeSubmission,
+      },
+      {
+        method: "get",
         path: "/:id",
         middlewares: [AuthMiddleware.authenticateUser],
         controller: SubmissionsController.getSubmissions,
       },
       {
-        method: "post",
-        path: "/",
-        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireStudent, validateBody(submissionCreateSchema)],
-        controller: SubmissionsController.createSubmission,
-      },
-      {
         method: "put",
         path: "/:id",
-        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireStudent, validateBody(submissionUpdateSchema)],
+        middlewares: [
+          AuthMiddleware.authenticateUser,
+          AuthMiddleware.requireStudent,
+          validateBody(submissionUpdateSchema),
+        ],
         controller: SubmissionsController.updateSubmission,
       },
       {

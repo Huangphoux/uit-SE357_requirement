@@ -61,6 +61,35 @@ export default class MaterialsService {
     });
   }
 
+  static async findEnrollments(userId?: string) {
+    const enrollment = await prisma.enrollment.findMany({
+      where: { userId: userId },
+    });
+    console.log(enrollment);
+    return enrollment;
+  }
+
+  static async findEnrollmentsByAdmin() {
+    const enrollment = await prisma.enrollment.findMany({
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        class: {
+          include: {
+            course: true,
+          },
+        },
+      },
+    });
+    console.log(enrollment);
+    return enrollment;
+  }
+
   static async checkEnrollment(userId: string, classId: string): Promise<boolean> {
     const enrollment = await prisma.enrollment.findUnique({
       where: {

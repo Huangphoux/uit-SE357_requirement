@@ -118,6 +118,20 @@ class MaterialsRoutes extends BaseRouter {
         middlewares: [AuthMiddleware.authenticateUser],
         controller: MaterialsController.getMaterials,
       },
+
+      {
+        method: "get",
+        path: "/enrollments",
+        middlewares: [AuthMiddleware.authenticateUser],
+        controller: MaterialsController.getEnrollments,
+      },
+
+          {
+        method: "get",
+        path: "/enrollmentsByAdmin",
+        middlewares: [AuthMiddleware.authenticateUser],
+        controller: MaterialsController.getEnrollmentsByAdmin,
+      },
       {
         method: "get",
         path: "/:id",
@@ -127,13 +141,21 @@ class MaterialsRoutes extends BaseRouter {
       {
         method: "post",
         path: "/",
-        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireTeacher, validateBody(materialCreateSchema)],
+        middlewares: [
+          AuthMiddleware.authenticateUser,
+          AuthMiddleware.requireTeacher,
+          validateBody(materialCreateSchema),
+        ],
         controller: MaterialsController.createMaterial,
       },
       {
         method: "put",
         path: "/:id",
-        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireTeacher, validateBody(materialUpdateSchema)],
+        middlewares: [
+          AuthMiddleware.authenticateUser,
+          AuthMiddleware.requireTeacher,
+          validateBody(materialUpdateSchema),
+        ],
         controller: MaterialsController.updateMaterial,
       },
       {

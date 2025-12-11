@@ -81,66 +81,65 @@ export interface Notification {
 export const mockCourses: Course[] = [
   {
     id: "1",
-    name: "IELTS Preparation Course",
+    title: "IELTS Preparation Course",
     description:
       "Comprehensive IELTS training for band 7.0+. Covers all 4 skills: Listening, Reading, Writing, Speaking with mock tests and personalized feedback.",
-    teacherId: "2",
-    teacherName: "Sarah Wilson",
-    schedule: "Mon, Wed, Fri - 6:00 PM",
-    capacity: 20,
-    enrolled: 18,
-    imageUrl: "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=400&h=250&fit=crop",
+    classes: {
+      id: "class-1",
+      courseId: "1",
+      title: "Lớp IELTS 7.0+ (Sarah Wilson)", // Lấy thông tin lớp học/giáo viên
+      teacherId: "2",
+    },
   },
   {
     id: "2",
-    name: "TOEIC 750+ Intensive",
+    title: "TOEIC 750+ Intensive",
     description:
       "Intensive TOEIC preparation focusing on Listening and Reading strategies to achieve 750+ score for career advancement.",
-    teacherId: "2",
-    teacherName: "Sarah Wilson",
-    schedule: "Tue, Thu - 7:00 PM",
-    capacity: 25,
-    enrolled: 22,
-    imageUrl: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=250&fit=crop",
+    classes: {
+      id: "class-2",
+      courseId: "2",
+      title: "Lớp TOEIC 750+ (Sarah Wilson)",
+      teacherId: "2",
+    },
   },
   {
     id: "3",
-    name: "Business English Communication",
+    title: "Business English Communication",
     description:
       "Professional English for the workplace. Master presentations, emails, meetings, and negotiations in international business environments.",
-    teacherId: "2",
-    teacherName: "Sarah Wilson",
-    schedule: "Sat - 9:00 AM",
-    capacity: 15,
-    enrolled: 12,
-    imageUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=250&fit=crop",
+    classes: {
+      id: "class-3",
+      courseId: "3",
+      title: "Lớp Business English (Sarah Wilson)",
+      teacherId: "2",
+    },
   },
   {
     id: "4",
-    name: "English for Beginners (A1-A2)",
+    title: "English for Beginners (A1-A2)",
     description:
       "Foundation English course for absolute beginners. Build basic vocabulary, grammar, and confidence in everyday conversations.",
-    teacherId: "2",
-    teacherName: "Sarah Wilson",
-    schedule: "Mon, Wed - 5:00 PM",
-    capacity: 25,
-    enrolled: 20,
-    imageUrl: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=250&fit=crop",
+    classes: {
+      id: "class-4",
+      courseId: "4",
+      title: "Lớp English Beginners (Sarah Wilson)",
+      teacherId: "2",
+    },
   },
   {
     id: "5",
-    name: "Advanced Conversation & Pronunciation",
+    title: "Advanced Conversation & Pronunciation",
     description:
       "Fluency-focused course for advanced learners. Improve natural speaking, pronunciation, idioms, and cultural understanding.",
-    teacherId: "2",
-    teacherName: "Sarah Wilson",
-    schedule: "Sat - 2:00 PM",
-    capacity: 12,
-    enrolled: 8,
-    imageUrl: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=400&h=250&fit=crop",
+    classes: {
+      id: "class-5",
+      courseId: "5",
+      title: "Lớp Advanced Conversation (Sarah Wilson)",
+      teacherId: "2",
+    },
   },
 ];
-
 export const mockClasses: Class[] = [
   {
     id: "1",

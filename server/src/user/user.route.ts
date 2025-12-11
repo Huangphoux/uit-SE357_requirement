@@ -11,6 +11,12 @@ class UserRoutes extends BaseRouter {
         middlewares: [AuthMiddleware.authenticateUser],
         controller: UserController.getUser,
       },
+      {
+        method: "get",
+        path: "/listTeachers", // api/user/listTeachers
+        middlewares: [AuthMiddleware.authenticateUser],
+        controller: UserController.listTeachers,
+      },
     ];
   }
 }

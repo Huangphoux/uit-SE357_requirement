@@ -180,6 +180,13 @@ class CoursesRoutes extends BaseRouter {
         middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireStudent, validateBody(unenrollSchema)],
         controller: CoursesController.unenrollFromClass,
       },
+
+       {
+        method: "post",
+        path: "/removeEnroll",
+        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireStudent, validateBody(unenrollSchema)],
+        controller: CoursesController.unenrollFromClassStudent,
+      },
       {
         method: "get",
         path: "/:id",

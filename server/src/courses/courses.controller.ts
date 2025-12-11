@@ -26,7 +26,7 @@ export default class CoursesController {
   static async createCourse(req: Request, res: Response) {
     try {
       console.log(req.body);
-      
+
       const { title, description } = req.body;
 
       const course = await CoursesService.create({
@@ -131,5 +131,25 @@ export default class CoursesController {
       return Send.error(res, {}, error.message || "Internal server error");
     }
   }
-}
 
+  static async unenrollFromClassStudent(req: Request, res: Response) {
+    try {
+      const { classId, userId } = req.body;
+
+      if (!userId) {
+        return Send.unauthorized(res, {}, "User not join class");
+      }
+
+      if (!classId) {
+        return Send.badRequest(res, {}, "Class ID is required");
+      }
+
+      const enrollment = await CoursesService.unenrollFromClass(userId, classId);
+
+      return Send.success(res, { enrollment }, "Unenrolled successfully");
+    } catch (error: any) {
+      logger.error({ error }, "Error unenrolling from class");
+      return Send.error(res, {}, error.message || "Internal server error");
+    }
+  }
+}

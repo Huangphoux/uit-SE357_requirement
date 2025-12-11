@@ -34,4 +34,28 @@ export default class UserController {
       return Send.error(res, {}, "Internal server error");
     }
   }
+
+  static async listTeachers(req: Request, res: Response) {
+    try {
+      const user = await prisma.user.findMany({
+        where: { role: "TEACHER" },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+
+      if (!user) {
+        return Send.notFound(res, {}, "User not found");
+      }
+
+      return Send.success(res, { user });
+    } catch (error) {
+      logger.error({ error }, "Error fetching user info");
+      return Send.error(res, {}, "Internal server error");
+    }
+  }
 }

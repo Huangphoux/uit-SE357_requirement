@@ -14,7 +14,7 @@ import { usePagination } from "@/hooks/usePagination";
 import { validateForm, commonRules } from "@/utils/validation";
 import courseService from "@/service/course";
 import classService from "@/service/class";
-
+import userService from "@/service/user";
 import {
   LayoutDashboard,
   BookOpen,
@@ -34,7 +34,7 @@ import { mockCourses, mockClasses, Course, Class } from "@/data/mockData";
 import NotificationManagement from "@/pages/NotificationManagement";
 import { title } from "process";
 
-type MenuItem = "dashboard" | "courses" | "classes" | "users" | "notifications";
+type MenuItem = "dashboard" | "courses" | "classes" | "enrollments" | "notifications";
 
 export default function AdminDashboard() {
   const [activeMenu, setActiveMenu] = useState<MenuItem>("dashboard");
@@ -110,12 +110,12 @@ export default function AdminDashboard() {
             <span>Class Management</span>
           </button>
           <button
-            onClick={() => setActiveMenu("users")}
+            onClick={() => setActiveMenu("enrollments")}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-md mb-2 transition-colors ${
-              activeMenu === "users" ? "bg-[#004494]" : "hover:bg-[#004494]"
+              activeMenu === "enrollments" ? "bg-[#004494]" : "hover:bg-[#004494]"
             }`}
           >
-            <Users className="w-5 h-5" />
+            <Users className="w-8 h-5" />
             <span>User Management</span>
           </button>
           <button
@@ -151,7 +151,7 @@ export default function AdminDashboard() {
         {activeMenu === "dashboard" && <DashboardOverview onQuickAction={handleQuickAction} />}
         {activeMenu === "courses" && <CourseManagement />}
         {activeMenu === "classes" && <ClassManagement />}
-        {activeMenu === "users" && <UserManagement />}
+        {activeMenu === "enrollments" && <EnrollmentManagement />}
         {activeMenu === "notifications" && <NotificationManagement />}
       </div>
     </div>
@@ -600,6 +600,7 @@ function ClassManagement() {
   const [showModal, setShowModal] = useState(false);
   const [editingClass, setEditingClass] = useState<Class | null>(null);
   const [classes, setClasses] = useState<Class[]>([]);
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
 
   // Simplified formData - chỉ giữ các trường có trong backend schema
   const [formData, setFormData] = useState({
@@ -618,21 +619,32 @@ function ClassManagement() {
     try {
       const response = await classService.listClass();
       console.log("API Response:", response); // Debug log
-      
+
       // Kiểm tra cấu trúc response từ API
       const classesData = response?.data?.classes || response?.classes || [];
       console.log("Classes Data:", classesData); // Debug log
-      
+
       setClasses(Array.isArray(classesData) ? classesData : []);
     } catch (error) {
       console.error("Fetch error:", error); // Debug log
       toast.error("Failed to fetch classes");
     }
   };
+  const fetchTeachers = async () => {
+    try {
+      const response = await userService.listTeacher();
+      const teachersData = response?.data?.user || response?.user || [];
+      setTeachers(Array.isArray(teachersData) ? teachersData : []);
+    } catch (error) {
+      console.error("Fetch teachers error:", error);
+      toast.error("Failed to fetch teachers");
+    }
+  };
 
   // Listen for Quick Action events
   React.useEffect(() => {
     fetchClasses();
+    fetchTeachers();
     const handleQuickAction = () => {
       setEditingClass(null);
       setFormData({
@@ -654,7 +666,8 @@ function ClassManagement() {
     return (
       (cls.title && cls.title.toLowerCase().includes(q)) ||
       ((cls as any).course?.title && (cls as any).course.title.toLowerCase().includes(q)) ||
-      ((cls as any).course?.description && (cls as any).course.description.toLowerCase().includes(q))
+      ((cls as any).course?.description &&
+        (cls as any).course.description.toLowerCase().includes(q))
     );
   });
 
@@ -746,9 +759,11 @@ function ClassManagement() {
                   >
                     <td className="px-6 py-4">{(currentPage - 1) * itemsPerPage + index + 1}</td>
                     <td className="px-6 py-4">{cls.title}</td>
-                    <td className="px-6 py-4">{(cls as any).course?.title || 'N/A'}</td>
-                    <td className="px-6 py-4">{(cls as any).course?.description || 'No description'}</td>
-                    <td className="px-6 py-4">{(cls as any).teacher?.name || 'N/A'}</td>
+                    <td className="px-6 py-4">{(cls as any).course?.title || "N/A"}</td>
+                    <td className="px-6 py-4">
+                      {(cls as any).course?.description || "No description"}
+                    </td>
+                    <td className="px-6 py-4">{(cls as any).teacher?.name || "N/A"}</td>
                     <td className="px-6 py-4">
                       <div className="flex gap-2">
                         <button
@@ -796,7 +811,7 @@ function ClassManagement() {
 
       {showModal && (
         <div
-          className="fixed inset-0 flex items-center justify-center p-4 z-50"
+          className="fixed inset-0 flex items-center justify-center p-4 z-50 h-50"
           style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         >
           <div className="bg-card rounded-lg p-6 w-full max-w-md">
@@ -831,14 +846,21 @@ function ClassManagement() {
               </div>
 
               <div>
-                <label className="block mb-2 text-sm font-medium">Teacher ID (Optional)</label>
-                <input
-                  type="text"
+                <label className="block mb-2 text-sm font-medium">Teacher Name (Optional)</label>
+                <select
                   value={formData.teacherId}
                   onChange={(e) => setFormData({ ...formData, teacherId: e.target.value })}
                   className="w-full px-4 py-2 bg-input-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
-                  placeholder="Enter teacher ID (optional)"
-                />
+                >
+                  <option value="" disabled={!!editingClass}>
+                    -- Select Teacher --
+                  </option>
+                  {teachers.map((teacher) => (
+                    <option key={teacher.id} value={teacher.id}>
+                      {teacher.name} ({teacher.email})
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <button
@@ -912,80 +934,182 @@ function ClassManagement() {
   );
 }
 
-function UserManagement() {
-  const [showModal, setShowModal] = useState(false);
+function EnrollmentManagement() {
+  const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [deleteConfirm, setDeleteConfirm] = useState<{
+    isOpen: boolean;
+    enrollmentId: string | null;
+    classId?: string;
+    userId?: string;
+  }>({
+    isOpen: false,
+    enrollmentId: null,
+  });
+
+  const fetchEnrollments = async () => {
+    setLoading(true);
+    try {
+      const response = await courseService.getCourseEnrollmentsByAdmin(); // Hoặc enrollmentService.list()
+      console.log(response);
+
+      setEnrollments(Array.isArray(response.data.enrollments) ? response.data.enrollments : []);
+    } catch (error) {
+      console.error("Fetch error:", error);
+      toast.error("Failed to fetch enrollments");
+    }
+    setLoading(false);
+  };
+
+  React.useEffect(() => {
+    fetchEnrollments();
+  }, []);
+
+  // Filter enrollments
+  const filteredEnrollments = enrollments.filter((enrollment) => {
+    const q = searchQuery.toLowerCase();
+    return (
+      (enrollment.user?.name && enrollment.user.name.toLowerCase().includes(q)) ||
+      (enrollment.user?.email && enrollment.user.email.toLowerCase().includes(q)) ||
+      (enrollment.class?.title && enrollment.class.title.toLowerCase().includes(q)) ||
+      (enrollment.class?.course?.title && enrollment.class.course.title.toLowerCase().includes(q))
+    );
+  });
+
+  // Pagination
+  const {
+    currentPage,
+    totalPages,
+    itemsPerPage,
+    paginatedData: paginatedEnrollments,
+    setCurrentPage,
+    setItemsPerPage,
+  } = usePagination({ data: filteredEnrollments, initialItemsPerPage: 10 });
+
+  const handleRemoveEnrollment = async (classId: string, userId: string) => {
+    try {
+      const response = await courseService.unenrollFromClassStudent(classId, userId);
+      if (response.ok) {
+        fetchEnrollments();
+        toast.success("Student removed from class successfully!");
+      }
+    } catch (error) {
+      toast.error("Failed to remove student!");
+    }
+  };
 
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-8">
-        <h1>User Management</h1>
-        <button
-          onClick={() => setShowModal(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-md text-[#212529]"
-          style={{ backgroundColor: "#ffc107" }}
-          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#e0a800")}
-          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#ffc107")}
-        >
-          <Plus className="w-4 h-4" />
-          Add Teacher
-        </button>
+        <h1>Enrollment Management</h1>
       </div>
 
-      <div className="bg-card p-6 rounded-lg border border-border">
-        <h3 className="mb-4">Teachers</h3>
-        <p className="text-muted-foreground">Teacher management interface</p>
+      <div className="mb-6">
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search by student name, email, or class..."
+        />
       </div>
 
-      {showModal && (
-        <div
-          className="fixed inset-0 flex items-center justify-center p-4 z-50"
-          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
-        >
-          <div className="bg-card rounded-lg p-6 w-full max-w-md">
-            <div className="flex justify-between items-center mb-4">
-              <h3>Add Teacher</h3>
-              <button onClick={() => setShowModal(false)}>
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              <div>
-                <label className="block mb-2">Full Name</label>
-                <input
-                  type="text"
-                  className="w-full px-4 py-2 bg-input-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
-                />
-              </div>
-              <div>
-                <label className="block mb-2">Email</label>
-                <input
-                  type="email"
-                  className="w-full px-4 py-2 bg-input-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
-                />
-              </div>
-              <div>
-                <label className="block mb-2">Phone</label>
-                <input
-                  type="tel"
-                  className="w-full px-4 py-2 bg-input-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
-                />
-              </div>
-
-              <button
-                onClick={() => {
-                  toast.success("Teacher account created. Temporary password sent via email.");
-                  setShowModal(false);
-                }}
-                className="w-full px-4 py-2 rounded-md text-white"
-                style={{ backgroundColor: "#0056b3" }}
-              >
-                Create Teacher Account
-              </button>
-            </div>
+      {loading ? (
+        <div className="text-center py-8">Loading...</div>
+      ) : filteredEnrollments.length === 0 ? (
+        <EmptyState
+          icon={Users}
+          title="No enrollments found"
+          description={
+            searchQuery ? "Try adjusting your search query" : "No students are enrolled yet"
+          }
+        />
+      ) : (
+        <>
+          <div className="bg-card rounded-lg border border-border shadow-sm overflow-hidden animate-fade-in-up">
+            <table className="w-full">
+              <thead className="bg-muted">
+                <tr>
+                  <th className="px-6 py-3 text-left">#</th>
+                  <th className="px-6 py-3 text-left">Student Name</th>
+                  <th className="px-6 py-3 text-left">Email</th>
+                  <th className="px-6 py-3 text-left">Class</th>
+                  <th className="px-6 py-3 text-left">Course</th>
+                  <th className="px-6 py-3 text-left">Status</th>
+                  <th className="px-6 py-3 text-left">Enrolled Date</th>
+                  <th className="px-6 py-3 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedEnrollments.map((enrollment, index) => (
+                  <tr
+                    key={enrollment.id}
+                    className="border-t border-border hover:bg-muted/50 transition-colors"
+                  >
+                    <td className="px-6 py-4">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                    <td className="px-6 py-4">{enrollment.user?.name || "N/A"}</td>
+                    <td className="px-6 py-4">{enrollment.user?.email || "N/A"}</td>
+                    <td className="px-6 py-4">{enrollment.class?.title || "N/A"}</td>
+                    <td className="px-6 py-4">{enrollment.class?.course?.title || "N/A"}</td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs ${
+                          enrollment.status === "ACTIVE"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-gray-100 text-gray-800"
+                        }`}
+                      >
+                        {enrollment.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      {new Date(enrollment.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4">
+                      <button
+                        className="p-2 hover:bg-muted rounded-md transition-all transform hover:scale-110"
+                        onClick={() =>
+                          setDeleteConfirm({
+                            isOpen: true,
+                            enrollmentId: enrollment.id,
+                            classId: enrollment.classId, // Thêm classId vào đây
+                            userId: enrollment.userId, // Thêm userId vào đây
+                          })
+                        }
+                        title="Remove enrollment"
+                      >
+                        <Trash2 className="w-4 h-4 text-destructive" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </div>
+
+          <div className="mt-6">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={filteredEnrollments.length}
+              itemsPerPage={itemsPerPage}
+              onPageChange={setCurrentPage}
+              onItemsPerPageChange={setItemsPerPage}
+            />
+          </div>
+        </>
       )}
+
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        onClose={() => setDeleteConfirm({ isOpen: false, enrollmentId: null })}
+        onConfirm={async () => {
+          if (deleteConfirm.enrollmentId) {
+            await handleRemoveEnrollment(deleteConfirm.classId || "", deleteConfirm.userId || "");
+          }
+        }}
+        title="Remove Student"
+        message={`Are you sure you want to remove this enrollment from class ${deleteConfirm.classId || "N/A"}? This action cannot be undone.`}
+      />
     </div>
   );
 }
