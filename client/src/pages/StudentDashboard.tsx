@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import courseService from "../service/course";
 import submissionService from "../service/submission";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 // Types
 interface Class {
   id: string;
@@ -95,20 +96,6 @@ const imageUrls = [
   "https://images.unsplash.com/photo-1519452635265-7b1fbfd1e4e0?w=800&h=400&fit=crop",
 ];
 
-// Mock Components
-const NotificationBellIcon = () => (
-  <button className="p-2 rounded-md hover:bg-white hover:bg-opacity-10 transition-colors">
-    <div className="w-5 h-5 bg-white rounded-full"></div>
-  </button>
-);
-
-const DarkModeToggle = () => (
-  <button className="p-2 rounded-md hover:bg-white hover:bg-opacity-10 transition-colors">
-    <div className="w-5 h-5 bg-white rounded-full"></div>
-  </button>
-);
-
-// Toast Component
 const showToast = (message: string, type: "success" | "error") => {
   const toast = document.createElement("div");
   toast.style.cssText = `
@@ -137,6 +124,7 @@ export default function StudentDashboard() {
   const { logout, user } = useAuth();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loadingSubmissions, setLoadingSubmissions] = useState(false);
+
   // Load courses from API
   useEffect(() => {
     const loadAll = async () => {
@@ -828,10 +816,12 @@ function CourseCard({
   onUnenroll,
   imageIndex,
 }: CourseCardProps) {
+  const [showDetails, setShowDetails] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedClass, setSelectedClass] = useState<Class | null>(null);
   const [modalAction, setModalAction] = useState<"enroll" | "unenroll">("enroll");
-  const imageUrl = imageUrls[imageIndex % imageUrls.length]; // ← THÊM DÒNG NÀY
+  const imageUrl = imageUrls[imageIndex % imageUrls.length];
+  const navigate = useNavigate();
 
   const isEnrolled = (classId: string) => {
     return enrolledClasses.some((e) => e.classId === classId && e.status === "ACTIVE");
@@ -898,7 +888,58 @@ function CourseCard({
           <p style={{ fontSize: "0.875rem", color: "#6c757d", marginBottom: "1rem" }}>
             {course.description}
           </p>
-
+          <button
+            onClick={() => setShowDetails(!showDetails)}
+            style={{
+              width: "100%",
+              padding: "0.5rem 0",
+              marginBottom: "1rem",
+              backgroundColor: "transparent",
+              color: "#0056b3",
+              border: "none",
+              cursor: "pointer",
+              fontSize: "0.875rem",
+              fontWeight: "500",
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#004494")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "#0056b3")}
+          >
+            {showDetails ? "Hide Details ↑" : "View More Details ↓"}
+          </button>
+          {showDetails && (
+            <div
+              style={{
+                marginBottom: "1rem",
+                padding: "1rem",
+                backgroundColor: "#f0f8ff",
+                borderRadius: "0.5rem",
+                border: "1px solid #dcdcdc",
+              }}
+            >
+              <h4
+                style={{
+                  fontSize: "1rem",
+                  fontWeight: "600",
+                  color: "#0056b3",
+                  marginBottom: "0.5rem",
+                }}
+              >
+                Course Information
+              </h4>
+              <p style={{ fontSize: "0.875rem", color: "#495057", marginBottom: "0.5rem" }}>
+                <span style={{ fontWeight: "600" }}>ID:</span> {course.id}
+              </p>
+              <p style={{ fontSize: "0.875rem", color: "#495057", marginBottom: "0.5rem" }}>
+                <span style={{ fontWeight: "600" }}>Created At:</span>{" "}
+                {new Date(course.createdAt).toLocaleDateString()}
+              </p>
+              <p style={{ fontSize: "0.875rem", color: "#495057" }}>
+                <span style={{ fontWeight: "600" }}>Last Updated:</span>{" "}
+                {new Date(course.updatedAt).toLocaleDateString()}
+              </p>
+            </div>
+          )}
           <div style={{ marginBottom: "1rem" }}>
             <div
               style={{
@@ -986,6 +1027,8 @@ function CourseCard({
               ))}
             </div>
           </div>
+
+          
         </div>
       </div>
 

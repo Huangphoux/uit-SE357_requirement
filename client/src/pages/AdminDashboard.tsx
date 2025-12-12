@@ -445,64 +445,66 @@ function CourseManagement() {
       ) : (
         <>
           <div className="bg-card rounded-lg border border-border shadow-sm overflow-hidden animate-fade-in-up">
-            <table className="w-full">
-              <thead className="bg-muted">
-                <tr>
-                  <th className="px-6 py-3 text-left">#</th>
-                  <th className="px-6 py-3 text-left">Course Name</th>
-                  <th className="px-6 py-3 text-left">Description</th>
-                  <th className="px-6 py-3 text-left">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedCourses.map((course, index) => (
-                  <tr
-                    key={course.id}
-                    className="border-t border-border hover:bg-muted/50 transition-colors"
-                  >
-                    <td className="px-6 py-4">{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                    <td className="px-6 py-4">
-                      <InlineEdit
-                        value={course.title}
-                        onSave={(newValue: string) =>
-                          handleInlineEdit(course.id, "title", newValue)
-                        }
-                      />
-                    </td>
-                    <td className="px-6 py-4">
-                      <InlineEdit
-                        value={course.description}
-                        onSave={(newValue: string) =>
-                          handleInlineEdit(course.id, "description", newValue)
-                        }
-                      />
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex gap-2">
-                        <button
-                          className="p-2 hover:bg-muted rounded-md transition-all transform hover:scale-110"
-                          onClick={() => {
-                            setEditingCourse(course);
-                            setFormData({ title: course.title, description: course.description });
-                            setShowModal(true);
-                          }}
-                          title="Edit course"
-                        >
-                          <Edit className="w-4 h-4 text-[#0056b3]" />
-                        </button>
-                        <button
-                          className="p-2 hover:bg-muted rounded-md transition-all transform hover:scale-110"
-                          onClick={() => setDeleteConfirm({ isOpen: true, courseId: course.id })}
-                          title="Delete course"
-                        >
-                          <Trash2 className="w-4 h-4 text-destructive" />
-                        </button>
-                      </div>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-muted">
+                  <tr>
+                    <th className="px-6 py-3 text-left">#</th>
+                    <th className="px-6 py-3 text-left">Course Name</th>
+                    <th className="px-6 py-3 text-left">Description</th>
+                    <th className="px-6 py-3 text-left">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {paginatedCourses.map((course, index) => (
+                    <tr
+                      key={course.id}
+                      className="border-t border-border hover:bg-muted/50 transition-colors"
+                    >
+                      <td className="px-6 py-4">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                      <td className="px-6 py-4">
+                        <InlineEdit
+                          value={course.title}
+                          onSave={(newValue: string) =>
+                            handleInlineEdit(course.id, "title", newValue)
+                          }
+                        />
+                      </td>
+                      <td className="px-6 py-4">
+                        <InlineEdit
+                          value={course.description}
+                          onSave={(newValue: string) =>
+                            handleInlineEdit(course.id, "description", newValue)
+                          }
+                        />
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex gap-2">
+                          <button
+                            className="p-2 hover:bg-muted rounded-md transition-all transform hover:scale-110"
+                            onClick={() => {
+                              setEditingCourse(course);
+                              setFormData({ title: course.title, description: course.description });
+                              setShowModal(true);
+                            }}
+                            title="Edit course"
+                          >
+                            <Edit className="w-4 h-4 text-[#0056b3]" />
+                          </button>
+                          <button
+                            className="p-2 hover:bg-muted rounded-md transition-all transform hover:scale-110"
+                            onClick={() => setDeleteConfirm({ isOpen: true, courseId: course.id })}
+                            title="Delete course"
+                          >
+                            <Trash2 className="w-4 h-4 text-destructive" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div className="mt-6">
@@ -557,7 +559,7 @@ function CourseManagement() {
                   accept="image/*"
                   maxSize={5}
                   multiple={false}
-                  onFilesSelected={(files) => console.log("Files:", files)}
+                  onFilesSelected={(files)}
                 />
               </div>
 
@@ -618,11 +620,8 @@ function ClassManagement() {
   const fetchClasses = async () => {
     try {
       const response = await classService.listClass();
-      console.log("API Response:", response); // Debug log
 
-      // Kiểm tra cấu trúc response từ API
       const classesData = response?.data?.classes || response?.classes || [];
-      console.log("Classes Data:", classesData); // Debug log
 
       setClasses(Array.isArray(classesData) ? classesData : []);
     } catch (error) {
@@ -740,60 +739,62 @@ function ClassManagement() {
       ) : (
         <>
           <div className="bg-card rounded-lg border border-border shadow-sm overflow-hidden animate-fade-in-up">
-            <table className="w-full">
-              <thead className="bg-muted">
-                <tr>
-                  <th className="px-6 py-3 text-left">#</th>
-                  <th className="px-6 py-3 text-left">Class Name</th>
-                  <th className="px-6 py-3 text-left">Course</th>
-                  <th className="px-6 py-3 text-left">Description</th>
-                  <th className="px-6 py-3 text-left">Teacher Name</th>
-                  <th className="px-6 py-3 text-left">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedClasses.map((cls, index) => (
-                  <tr
-                    key={cls.id}
-                    className="border-t border-border hover:bg-muted/50 transition-colors"
-                  >
-                    <td className="px-6 py-4">{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                    <td className="px-6 py-4">{cls.title}</td>
-                    <td className="px-6 py-4">{(cls as any).course?.title || "N/A"}</td>
-                    <td className="px-6 py-4">
-                      {(cls as any).course?.description || "No description"}
-                    </td>
-                    <td className="px-6 py-4">{(cls as any).teacher?.name || "N/A"}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex gap-2">
-                        <button
-                          className="p-2 hover:bg-muted rounded-md transition-all transform hover:scale-110"
-                          onClick={() => {
-                            setEditingClass(cls);
-                            setFormData({
-                              title: cls.title,
-                              courseId: cls.courseId,
-                              teacherId: cls.teacherId || "",
-                            });
-                            setShowModal(true);
-                          }}
-                          title="Edit class"
-                        >
-                          <Edit className="w-4 h-4 text-[#0056b3]" />
-                        </button>
-                        <button
-                          className="p-2 hover:bg-muted rounded-md transition-all transform hover:scale-110"
-                          onClick={() => setDeleteConfirm({ isOpen: true, classId: cls.id })}
-                          title="Delete class"
-                        >
-                          <Trash2 className="w-4 h-4 text-destructive" />
-                        </button>
-                      </div>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-muted">
+                  <tr>
+                    <th className="px-6 py-3 text-left">#</th>
+                    <th className="px-6 py-3 text-left">Class Name</th>
+                    <th className="px-6 py-3 text-left">Course</th>
+                    <th className="px-6 py-3 text-left">Description</th>
+                    <th className="px-6 py-3 text-left">Teacher Name</th>
+                    <th className="px-6 py-3 text-left">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {paginatedClasses.map((cls, index) => (
+                    <tr
+                      key={cls.id}
+                      className="border-t border-border hover:bg-muted/50 transition-colors"
+                    >
+                      <td className="px-6 py-4">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                      <td className="px-6 py-4">{cls.title}</td>
+                      <td className="px-6 py-4">{(cls as any).course?.title || "N/A"}</td>
+                      <td className="px-6 py-4">
+                        {(cls as any).course?.description || "No description"}
+                      </td>
+                      <td className="px-6 py-4">{(cls as any).teacher?.name || "N/A"}</td>
+                      <td className="px-6 py-4">
+                        <div className="flex gap-2">
+                          <button
+                            className="p-2 hover:bg-muted rounded-md transition-all transform hover:scale-110"
+                            onClick={() => {
+                              setEditingClass(cls);
+                              setFormData({
+                                title: cls.title,
+                                courseId: cls.courseId,
+                                teacherId: cls.teacherId || "",
+                              });
+                              setShowModal(true);
+                            }}
+                            title="Edit class"
+                          >
+                            <Edit className="w-4 h-4 text-[#0056b3]" />
+                          </button>
+                          <button
+                            className="p-2 hover:bg-muted rounded-md transition-all transform hover:scale-110"
+                            onClick={() => setDeleteConfirm({ isOpen: true, classId: cls.id })}
+                            title="Delete class"
+                          >
+                            <Trash2 className="w-4 h-4 text-destructive" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div className="mt-6">
@@ -952,7 +953,6 @@ function EnrollmentManagement() {
     setLoading(true);
     try {
       const response = await courseService.getCourseEnrollmentsByAdmin(); // Hoặc enrollmentService.list()
-      console.log(response);
 
       setEnrollments(Array.isArray(response.data.enrollments) ? response.data.enrollments : []);
     } catch (error) {
@@ -1026,64 +1026,66 @@ function EnrollmentManagement() {
       ) : (
         <>
           <div className="bg-card rounded-lg border border-border shadow-sm overflow-hidden animate-fade-in-up">
-            <table className="w-full">
-              <thead className="bg-muted">
-                <tr>
-                  <th className="px-6 py-3 text-left">#</th>
-                  <th className="px-6 py-3 text-left">Student Name</th>
-                  <th className="px-6 py-3 text-left">Email</th>
-                  <th className="px-6 py-3 text-left">Class</th>
-                  <th className="px-6 py-3 text-left">Course</th>
-                  <th className="px-6 py-3 text-left">Status</th>
-                  <th className="px-6 py-3 text-left">Enrolled Date</th>
-                  <th className="px-6 py-3 text-left">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedEnrollments.map((enrollment, index) => (
-                  <tr
-                    key={enrollment.id}
-                    className="border-t border-border hover:bg-muted/50 transition-colors"
-                  >
-                    <td className="px-6 py-4">{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                    <td className="px-6 py-4">{enrollment.user?.name || "N/A"}</td>
-                    <td className="px-6 py-4">{enrollment.user?.email || "N/A"}</td>
-                    <td className="px-6 py-4">{enrollment.class?.title || "N/A"}</td>
-                    <td className="px-6 py-4">{enrollment.class?.course?.title || "N/A"}</td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs ${
-                          enrollment.status === "ACTIVE"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
-                      >
-                        {enrollment.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      {new Date(enrollment.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4">
-                      <button
-                        className="p-2 hover:bg-muted rounded-md transition-all transform hover:scale-110"
-                        onClick={() =>
-                          setDeleteConfirm({
-                            isOpen: true,
-                            enrollmentId: enrollment.id,
-                            classId: enrollment.classId, // Thêm classId vào đây
-                            userId: enrollment.userId, // Thêm userId vào đây
-                          })
-                        }
-                        title="Remove enrollment"
-                      >
-                        <Trash2 className="w-4 h-4 text-destructive" />
-                      </button>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-muted">
+                  <tr>
+                    <th className="px-6 py-3 text-left">#</th>
+                    <th className="px-6 py-3 text-left">Student Name</th>
+                    <th className="px-6 py-3 text-left">Email</th>
+                    <th className="px-6 py-3 text-left">Class</th>
+                    <th className="px-6 py-3 text-left">Course</th>
+                    <th className="px-6 py-3 text-left">Status</th>
+                    <th className="px-6 py-3 text-left">Enrolled Date</th>
+                    <th className="px-6 py-3 text-left">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {paginatedEnrollments.map((enrollment, index) => (
+                    <tr
+                      key={enrollment.id}
+                      className="border-t border-border hover:bg-muted/50 transition-colors"
+                    >
+                      <td className="px-6 py-4">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                      <td className="px-6 py-4">{enrollment.user?.name || "N/A"}</td>
+                      <td className="px-6 py-4">{enrollment.user?.email || "N/A"}</td>
+                      <td className="px-6 py-4">{enrollment.class?.title || "N/A"}</td>
+                      <td className="px-6 py-4">{enrollment.class?.course?.title || "N/A"}</td>
+                      <td className="px-6 py-4">
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs ${
+                            enrollment.status === "ACTIVE"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-gray-100 text-gray-800"
+                          }`}
+                        >
+                          {enrollment.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        {new Date(enrollment.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="px-6 py-4">
+                        <button
+                          className="p-2 hover:bg-muted rounded-md transition-all transform hover:scale-110"
+                          onClick={() =>
+                            setDeleteConfirm({
+                              isOpen: true,
+                              enrollmentId: enrollment.id,
+                              classId: enrollment.classId, // Thêm classId vào đây
+                              userId: enrollment.userId, // Thêm userId vào đây
+                            })
+                          }
+                          title="Remove enrollment"
+                        >
+                          <Trash2 className="w-4 h-4 text-destructive" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div className="mt-6">

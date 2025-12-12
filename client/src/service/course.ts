@@ -3,7 +3,6 @@ import apiClient from "@/api/axios";
 const getCouresEnrollments = async () => {
   try {
     const response = await apiClient.get(`/materials/enrollments`);
-    console.log(response.data.data);
 
     return response.data;
   } catch (error) {
@@ -15,7 +14,6 @@ const getCouresEnrollments = async () => {
 const getCourseEnrollmentsByAdmin = async () => {
   try {
     const response = await apiClient.get(`/materials/enrollmentsByAdmin`);
-    console.log(response.data.data);
 
     return response.data;
   } catch (error) {

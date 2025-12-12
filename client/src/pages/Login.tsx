@@ -24,7 +24,6 @@ export default function Login({ onShowRegister }: LoginProps) {
       const success = await auth.LoginAPI({ email, password });
       if (success.ok) {
         toast.success("Login successful!");
-        console.log("User logged in:", success.data);
 
         await login(success.data as any);
         setLoading(false);
@@ -90,13 +89,13 @@ export default function Login({ onShowRegister }: LoginProps) {
 
             {/* Links */}
             <div className="space-y-2 text-center">
-              <a
+              {/* <a
                 href="#"
                 className="block text-[#0056b3] hover:underline"
                 style={{ fontSize: "0.875rem" }}
               >
                 Forgot Password?
-              </a>
+              </a> */}
               <button
                 type="button"
                 onClick={onShowRegister}

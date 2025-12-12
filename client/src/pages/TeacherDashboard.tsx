@@ -241,7 +241,7 @@ function TeacherCourseDetail({ classData, courses, onBack }: { classData: any; c
   return (
     <div className="min-h-screen bg-background">
       <div className="sticky top-0 z-50 bg-[#0056b3] text-white shadow-md w-full">
-        <div className="px-6 py-6">
+        <div className="px-4 py-4">
           <button
             onClick={onBack}
             className="flex items-center gap-2 hover:opacity-80 transition-opacity mb-4"
@@ -252,9 +252,9 @@ function TeacherCourseDetail({ classData, courses, onBack }: { classData: any; c
           <h2 className="mb-2 text-2xl font-bold">{course.title}</h2>
           <p className="text-white/80 text-sm">{classData.title} • {course.description}</p>
         </div>
-
+    
         <div className="px-6">
-          <div className="flex gap-6 border-b border-[#004494]">
+          <div className="flex gap-4 border-b border-[#004494]">
             <button
               onClick={() => setActiveTab("materials")}
               className={`px-4 py-3 transition-colors font-medium ${
@@ -1126,7 +1126,7 @@ function GradingInterface({ assignmentId, onBack }: { assignmentId: string; onBa
   if (selectedSubmission && currentSubmission) {
     return (
       <div className="min-h-screen bg-background">
-        <div className="w-full px-6 py-6">
+        <div className="w-full px-4 py-4">
           <div className="mb-6">
             <button
               onClick={() => setSelectedSubmission(null)}
@@ -1250,7 +1250,7 @@ function GradingInterface({ assignmentId, onBack }: { assignmentId: string; onBa
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="w-full px-6 py-6">
+      <div className="w-full px-4 py-4">
         <div className="mb-6">
           <button
             onClick={onBack}
