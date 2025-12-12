@@ -104,65 +104,50 @@ export default class CoursesService {
     const classExists = await prisma.class.findUnique({
       where: { id: classId },
     });
-
     if (!classExists) {
       throw new Error("Class not found");
     }
 
     const existingEnrollment = await prisma.enrollment.findUnique({
       where: {
-        userId_classId: {
-          userId,
-          classId,
-        },
+        userId_classId: { userId, classId },
       },
     });
 
     if (existingEnrollment) {
-      if (existingEnrollment.status === "ACTIVE") {
-        throw new Error("Already enrolled in this class");
-      }
-
-      const enrollment = await prisma.enrollment.update({
+      // if (existingEnrollment.status === "ACTIVE") {
+      //   throw new Error("Already enrolled in this class");
+      // }
+      // Re-activate nếu đã DROPPED
+      return await prisma.enrollment.update({
         where: { id: existingEnrollment.id },
         data: { status: "ACTIVE" },
         include: {
-          class: {
-            include: {
-              course: true,
-            },
-          },
+          class: { include: { course: true } },
         },
       });
-
-      return enrollment;
     }
 
-    const enrollment = await prisma.enrollment.create({
+    // 4. Create enrollment mới
+    return await prisma.enrollment.create({
       data: {
         userId,
         classId,
         status: "ACTIVE",
       },
       include: {
-        class: {
-          include: {
-            course: true,
-          },
-        },
+        class: { include: { course: true } },
       },
     });
-
-    return enrollment;
   }
 
   static async unenrollFromClass(userId: string, classId: string) {
+    // Xóa console.log
+    // console.log(userId, classId); ← XÓA DÒNG NÀY
+
     const enrollment = await prisma.enrollment.findUnique({
       where: {
-        userId_classId: {
-          userId,
-          classId,
-        },
+        userId_classId: { userId, classId },
       },
     });
 
@@ -171,21 +156,18 @@ export default class CoursesService {
     }
 
     if (enrollment.status !== "ACTIVE") {
-      throw new Error("Enrollment is not active");
+      throw new Error("Enrollment is already inactive");
     }
 
-    const updatedEnrollment = await prisma.enrollment.update({
+    return await prisma.enrollment.update({
       where: { id: enrollment.id },
-      data: { status: "DROPPED" },
+      data: {
+        status: "DROPPED",
+        // Có thể thêm droppedAt: new Date() nếu muốn track thời gian
+      },
       include: {
-        class: {
-          include: {
-            course: true,
-          },
-        },
+        class: { include: { course: true } },
       },
     });
-
-    return updatedEnrollment;
   }
 }

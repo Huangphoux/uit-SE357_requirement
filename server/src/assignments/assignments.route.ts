@@ -118,6 +118,13 @@ class AssignmentsRoutes extends BaseRouter {
         middlewares: [AuthMiddleware.authenticateUser],
         controller: AssignmentsController.getAssignments,
       },
+
+      {
+        method: "get",
+        path: "/getAssignmentsByStudent",
+        middlewares: [AuthMiddleware.authenticateUser],
+        controller: AssignmentsController.getAssignmentsByStudent,
+      },
       {
         method: "get",
         path: "/:id",
@@ -127,13 +134,21 @@ class AssignmentsRoutes extends BaseRouter {
       {
         method: "post",
         path: "/",
-        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireTeacher, validateBody(assignmentCreateSchema)],
+        middlewares: [
+          AuthMiddleware.authenticateUser,
+          AuthMiddleware.requireTeacher,
+          validateBody(assignmentCreateSchema),
+        ],
         controller: AssignmentsController.createAssignment,
       },
       {
         method: "put",
         path: "/:id",
-        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireTeacher, validateBody(assignmentUpdateSchema)],
+        middlewares: [
+          AuthMiddleware.authenticateUser,
+          AuthMiddleware.requireTeacher,
+          validateBody(assignmentUpdateSchema),
+        ],
         controller: AssignmentsController.updateAssignment,
       },
       {

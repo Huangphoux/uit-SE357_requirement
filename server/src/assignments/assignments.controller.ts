@@ -23,6 +23,24 @@ export default class AssignmentsController {
     }
   }
 
+  static async getAssignmentsByStudent(req: Request, res: Response) {
+    try {
+      const userId = (req as any).userId;
+
+      const result = await AssignmentsService.findByStudent(userId);
+
+      if (!result) {
+        return Send.notFound(res, {}, userId ? "Assignment not found" : "Assignments not found");
+      }
+
+      const response = userId ? { assignment: result } : { assignments: result };
+      return Send.success(res, response);
+    } catch (error) {
+      logger.error({ error }, "Error fetching assignments");
+      return Send.error(res, {}, "Internal server error");
+    }
+  }
+
   static async createAssignment(req: Request, res: Response) {
     try {
       const userId = (req as any).userId;

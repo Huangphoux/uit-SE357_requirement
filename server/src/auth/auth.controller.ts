@@ -39,7 +39,7 @@ export default class AuthController {
       res.cookie("accessToken", accessToken, {
         httpOnly: true, // Ensure the cookie cannot be accessed via JavaScript (security against XSS attacks)
         secure: process.env.NODE_ENV === "production", // Set to true in production for HTTPS-only cookies
-        maxAge: 15 * ONE_MINUTE,
+        maxAge: 24 * 60 * ONE_MINUTE,
         sameSite: "strict", // Ensures the cookie is sent only with requests from the same site
       });
 

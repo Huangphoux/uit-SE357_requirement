@@ -24,10 +24,10 @@ export default class ClassesService {
       });
     }
 
-    return await prisma.class.findMany({
+    const classes = await prisma.class.findMany({
       where: q
         ? {
-            OR: [{ title: { contains: q, mode: "insensitive" } }],
+            OR: [{ title: { contains: q } }],
           }
         : undefined,
       include: {
@@ -47,13 +47,29 @@ export default class ClassesService {
         assignments: true,
       },
     });
+
+    // Lấy danh sách teacherId khác null
+    const teacherIds = classes.map((cls) => cls.teacherId).filter((id) => !!id);
+
+    let teachersMap: Record<string, any> = {};
+    if (teacherIds.length > 0) {
+      const teachers = await prisma.user.findMany({
+        where: { id: { in: teacherIds } },
+        select: { id: true, name: true, email: true, role: true },
+      });
+      teachersMap = Object.fromEntries(teachers.map((t) => [t.id, t]));
+    }
+
+    // Gắn thông tin teacher vào từng class
+    const result = classes.map((cls) => ({
+      ...cls,
+      teacher: cls.teacherId ? teachersMap[cls.teacherId] : null,
+    }));
+
+    return result;
   }
 
-  static async create(data: {
-    courseId: string;
-    title: string;
-    teacherId?: string;
-  }) {
+  static async create(data: { courseId: string; title: string; teacherId?: string }) {
     if (!data.title) {
       throw new Error("Title is required");
     }
@@ -85,10 +101,7 @@ export default class ClassesService {
     return classData;
   }
 
-  static async update(
-    id: string,
-    data: { courseId?: string; title?: string; teacherId?: string }
-  ) {
+  static async update(id: string, data: { courseId?: string; title?: string; teacherId?: string }) {
     const classData = await prisma.class.findUnique({ where: { id } });
     if (!classData) {
       throw new Error("Class not found");
