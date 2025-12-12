@@ -78,6 +78,20 @@ const getStudentSubmissionsByStudent = async () => {
     throw error;
   }
 };
+
+const submitAssignment = async (assignmentId: string, content: string, url: string) => {
+  try {
+    const response = await apiClient.post(`/submissions`, {
+      assignmentId,
+      content,
+      url,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to submit assignment:", error);
+    throw error;
+  }
+};
 export default {
   createSubmission,
   listSubmission,
@@ -86,4 +100,5 @@ export default {
   updateSubmission,
   gradeSubmission,
   getStudentSubmissionsByStudent,
+  submitAssignment,
 };

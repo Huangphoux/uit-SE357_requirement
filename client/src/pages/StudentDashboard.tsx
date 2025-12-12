@@ -115,7 +115,9 @@ const showToast = (message: string, type: "success" | "error") => {
 };
 
 export default function StudentDashboard() {
-  const [activeTab, setActiveTab] = useState<"my-courses" | "submissions" | "catalog">("catalog");
+  const [activeTab, setActiveTab] = useState<
+    "my-courses" | "submissions" | "catalog" | "my-assignments"
+  >("catalog");
   const [courses, setCourses] = useState<Course[]>([]);
   const [enrolledClasses, setEnrolledClasses] = useState<EnrollmentData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -124,6 +126,14 @@ export default function StudentDashboard() {
   const { logout, user } = useAuth();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loadingSubmissions, setLoadingSubmissions] = useState(false);
+
+  const [myAssignments, setMyAssignments] = useState<any[]>([]);
+  const [loadingAssignments, setLoadingAssignments] = useState(false);
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [selectedAssignment, setSelectedAssignment] = useState<any>(null);
+  const [submitUrl, setSubmitUrl] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitContent, setSubmitContent] = useState("");
 
   // Load courses from API
   useEffect(() => {
@@ -134,6 +144,11 @@ export default function StudentDashboard() {
     };
     loadAll();
   }, []);
+  useEffect(() => {
+    if (enrolledClasses.length > 0 && courses.length > 0) {
+      fetchMyAssignments();
+    }
+  }, [enrolledClasses, courses]);
 
   const fetchCourses = async () => {
     try {
@@ -158,6 +173,20 @@ export default function StudentDashboard() {
     } catch (err) {
       console.error("Error fetching submissions:", err);
       setLoadingSubmissions(false);
+    }
+  };
+  const fetchMyAssignments = async () => {
+    try {
+      setLoadingAssignments(true);
+
+      // ✅ Gọi 1 lần duy nhất - API đã filter theo studentId rồi
+      const response = await courseService.getAssignmentsByCourse();
+
+      setMyAssignments(response.data.assignment || []);
+      setLoadingAssignments(false);
+    } catch (err) {
+      console.error("Error fetching assignments:", err);
+      setLoadingAssignments(false);
     }
   };
   const loadEnrollments = async () => {
@@ -207,6 +236,51 @@ export default function StudentDashboard() {
 
   const isEnrolled = (classId: string) => {
     return enrolledClasses.some((e) => e.classId === classId && e.status === "ACTIVE");
+  };
+
+  const openSubmitModal = (assignment: any) => {
+    setSelectedAssignment(assignment);
+    setShowSubmitModal(true);
+  };
+
+  const closeSubmitModal = () => {
+    setShowSubmitModal(false);
+    setSubmitUrl("");
+    setSubmitContent("");
+    setSelectedAssignment(null);
+  };
+
+  const handleSubmitAssignment = async () => {
+    if (!submitContent.trim() || !submitUrl.trim()) {
+      showToast("Please fill in both content and URL", "error");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      await submissionService.submitAssignment(
+        selectedAssignment.id,
+        submitContent, // Content từ textarea
+        submitUrl // URL từ input
+      );
+
+      showToast("Assignment submitted successfully!", "success");
+      closeSubmitModal();
+      await fetchSubmissions();
+      await fetchMyAssignments();
+    } catch (err: any) {
+      showToast(err.message || "Failed to submit assignment", "error");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const getSubmissionForAssignment = (assignmentId: string) => {
+    return submissions.find((s) => s.assignmentId === assignmentId);
+  };
+
+  const isOverdue = (dueDate: string) => {
+    return new Date(dueDate) < new Date();
   };
 
   const filteredCourses = courses.filter(
@@ -335,8 +409,191 @@ export default function StudentDashboard() {
           >
             My Submissions
           </button>
-        </div>
 
+          <button
+            onClick={() => setActiveTab("my-assignments")}
+            style={{
+              padding: "0.75rem 1.5rem",
+              border: "none",
+              backgroundColor: "transparent",
+              cursor: "pointer",
+              fontWeight: "500",
+              borderBottom: activeTab === "my-assignments" ? "2px solid #0056b3" : "none",
+              color: activeTab === "my-assignments" ? "#0056b3" : "#6c757d",
+              transition: "color 0.2s",
+            }}
+          >
+            My Assignments ({myAssignments.length})
+          </button>
+        </div>
+        {showSubmitModal && selectedAssignment && (
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "1rem",
+              zIndex: 9999,
+            }}
+            onClick={closeSubmitModal}
+          >
+            <div
+              style={{
+                backgroundColor: "white",
+                borderRadius: "0.75rem",
+                boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
+                maxWidth: "32rem",
+                width: "100%",
+                padding: "1.5rem",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "start",
+                  marginBottom: "1rem",
+                }}
+              >
+                <div>
+                  <h3 style={{ fontSize: "1.25rem", fontWeight: "600", marginBottom: "0.25rem" }}>
+                    Submit Assignment
+                  </h3>
+                  <p style={{ fontSize: "0.875rem", color: "#6c757d" }}>
+                    {selectedAssignment.title}
+                  </p>
+                </div>
+                <button
+                  onClick={closeSubmitModal}
+                  style={{
+                    backgroundColor: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    color: "#6c757d",
+                    padding: "0.25rem",
+                  }}
+                >
+                  <AlertCircle style={{ width: "1.5rem", height: "1.5rem" }} />
+                </button>
+              </div>
+
+              <div style={{ marginBottom: "1.5rem" }}>
+                {/* Ô nhập Content */}
+                <div style={{ marginBottom: "1rem" }}>
+                  <label
+                    style={{
+                      display: "block",
+                      fontSize: "0.875rem",
+                      fontWeight: "500",
+                      marginBottom: "0.5rem",
+                    }}
+                  >
+                    Assignment Content *
+                  </label>
+                  <textarea
+                    value={submitContent}
+                    onChange={(e) => setSubmitContent(e.target.value)}
+                    placeholder="Enter your assignment description or notes..."
+                    rows={4}
+                    style={{
+                      width: "100%",
+                      padding: "0.75rem",
+                      border: "1px solid #dee2e6",
+                      borderRadius: "0.5rem",
+                      fontSize: "0.875rem",
+                      fontFamily: "inherit",
+                      resize: "vertical",
+                    }}
+                  />
+                </div>
+
+                {/* Ô nhập URL */}
+                <div>
+                  <label
+                    style={{
+                      display: "block",
+                      fontSize: "0.875rem",
+                      fontWeight: "500",
+                      marginBottom: "0.5rem",
+                    }}
+                  >
+                    Submission URL *
+                  </label>
+                  <input
+                    type="url"
+                    value={submitUrl}
+                    onChange={(e) => setSubmitUrl(e.target.value)}
+                    placeholder="https://example.com/your-work"
+                    style={{
+                      width: "100%",
+                      padding: "0.75rem",
+                      border: "1px solid #dee2e6",
+                      borderRadius: "0.5rem",
+                      fontSize: "0.875rem",
+                    }}
+                  />
+                  <p style={{ fontSize: "0.75rem", color: "#6c757d", marginTop: "0.5rem" }}>
+                    Enter the URL to your completed assignment (Google Drive, GitHub, etc.)
+                  </p>
+                </div>
+              </div>
+
+              <div style={{ display: "flex", gap: "0.75rem" }}>
+                <button
+                  onClick={handleSubmitAssignment}
+                  disabled={submitting || !submitUrl.trim()}
+                  style={{
+                    flex: 1,
+                    padding: "0.75rem",
+                    backgroundColor: submitting || !submitUrl.trim() ? "#e9ecef" : "#0056b3",
+                    color: submitting || !submitUrl.trim() ? "#6c757d" : "white",
+                    border: "none",
+                    borderRadius: "0.5rem",
+                    fontWeight: "500",
+                    cursor: submitting || !submitUrl.trim() ? "not-allowed" : "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "0.5rem",
+                  }}
+                >
+                  {submitting ? (
+                    <>
+                      <Loader2
+                        style={{
+                          width: "1rem",
+                          height: "1rem",
+                          animation: "spin 1s linear infinite",
+                        }}
+                      />
+                      Submitting...
+                    </>
+                  ) : (
+                    "Submit"
+                  )}
+                </button>
+                <button
+                  onClick={closeSubmitModal}
+                  disabled={submitting}
+                  style={{
+                    padding: "0.75rem 1.5rem",
+                    border: "1px solid #dee2e6",
+                    backgroundColor: "transparent",
+                    borderRadius: "0.5rem",
+                    cursor: submitting ? "not-allowed" : "pointer",
+                    opacity: submitting ? 0.5 : 1,
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         {/* Search Bar for Catalog */}
         {activeTab === "catalog" && (
           <div style={{ marginBottom: "1.5rem" }}>
@@ -786,6 +1043,257 @@ export default function StudentDashboard() {
             )}
           </div>
         )}
+        {!loading && activeTab === "my-assignments" && (
+          <div style={{ padding: "1.5rem" }}>
+            {loadingAssignments ? (
+              <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}>
+                <Loader2 className="animate-spin" size={32} color="#0056b3" />
+                <span style={{ marginLeft: "0.75rem" }}>Loading assignments...</span>
+              </div>
+            ) : myAssignments.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "3rem" }}>
+                <BookOpen size={48} color="#6c757d" style={{ margin: "0 auto 1rem" }} />
+                <h3 style={{ fontSize: "1.25rem", fontWeight: "600", marginBottom: "0.5rem" }}>
+                  No Assignments Available
+                </h3>
+                <p style={{ color: "#6c757d" }}>Enroll in courses to see assignments</p>
+              </div>
+            ) : (
+              <div style={{ display: "grid", gap: "1.5rem" }}>
+                {myAssignments.map((assignment) => {
+                  const submission = getSubmissionForAssignment(assignment.id);
+                  const overdue = isOverdue(assignment.dueDate);
+
+                  return (
+                    <div
+                      key={assignment.id}
+                      style={{
+                        backgroundColor: "white",
+                        borderRadius: "0.75rem",
+                        boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                        padding: "1.5rem",
+                        border: "1px solid #e5e7eb",
+                      }}
+                    >
+                      {/* Header */}
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "start",
+                          marginBottom: "1rem",
+                        }}
+                      >
+                        <div>
+                          <h3
+                            style={{
+                              fontSize: "1.25rem",
+                              fontWeight: "600",
+                              marginBottom: "0.25rem",
+                            }}
+                          >
+                            {assignment.title}
+                          </h3>
+                          <p style={{ color: "#6c757d", fontSize: "0.875rem" }}>
+                            {assignment.description}
+                          </p>
+                        </div>
+                        <span
+                          style={{
+                            padding: "0.375rem 0.75rem",
+                            borderRadius: "9999px",
+                            fontSize: "0.75rem",
+                            fontWeight: "600",
+                            backgroundColor: submission
+                              ? submission.status === "GRADED"
+                                ? "#d4edda"
+                                : "#cfe2ff"
+                              : overdue
+                                ? "#f8d7da"
+                                : "#fff3cd",
+                            color: submission
+                              ? submission.status === "GRADED"
+                                ? "#155724"
+                                : "#084298"
+                              : overdue
+                                ? "#842029"
+                                : "#856404",
+                          }}
+                        >
+                          {submission
+                            ? submission.status === "GRADED"
+                              ? "✓ Graded"
+                              : "✓ Submitted"
+                            : overdue
+                              ? "Overdue"
+                              : "Pending"}
+                        </span>
+                      </div>
+
+                      {/* Info Grid */}
+                      <div
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+                          gap: "1rem",
+                          marginBottom: "1rem",
+                          padding: "1rem",
+                          backgroundColor: "#f8f9fa",
+                          borderRadius: "0.5rem",
+                        }}
+                      >
+                        <div>
+                          <span
+                            style={{
+                              fontSize: "0.75rem",
+                              color: "#6c757d",
+                              display: "block",
+                              marginBottom: "0.25rem",
+                            }}
+                          >
+                            Due Date
+                          </span>
+                          <span style={{ fontWeight: "500", fontSize: "0.875rem" }}>
+                            {new Date(assignment.dueDate).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <div>
+                          <span
+                            style={{
+                              fontSize: "0.75rem",
+                              color: "#6c757d",
+                              display: "block",
+                              marginBottom: "0.25rem",
+                            }}
+                          >
+                            Max Score
+                          </span>
+                          <span style={{ fontWeight: "500", fontSize: "0.875rem" }}>
+                            {assignment.maxScore} points
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Submission or Submit Button */}
+                      {submission ? (
+                        <div
+                          style={{
+                            backgroundColor: "#e7f3ff",
+                            border: "1px solid #b6d4fe",
+                            borderRadius: "0.5rem",
+                            padding: "1rem",
+                          }}
+                        >
+                          <p
+                            style={{
+                              fontSize: "0.875rem",
+                              fontWeight: "600",
+                              color: "#084298",
+                              marginBottom: "0.5rem",
+                            }}
+                          >
+                            Your Submission
+                          </p>
+                          <a
+                            href={submission.content}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              color: "#0056b3",
+                              textDecoration: "none",
+                              fontSize: "0.875rem",
+                              wordBreak: "break-all",
+                            }}
+                          >
+                            🔗 {submission.content}
+                          </a>
+                          <p style={{ fontSize: "0.75rem", color: "#6c757d", marginTop: "0.5rem" }}>
+                            Submitted on {new Date(submission.submittedAt).toLocaleString()}
+                          </p>
+
+                          {/* Feedback */}
+                          {submission.feedback && submission.feedback.length > 0 && (
+                            <div
+                              style={{
+                                marginTop: "1rem",
+                                paddingTop: "1rem",
+                                borderTop: "1px solid #b6d4fe",
+                              }}
+                            >
+                              <p
+                                style={{
+                                  fontSize: "0.875rem",
+                                  fontWeight: "600",
+                                  color: "#084298",
+                                  marginBottom: "0.5rem",
+                                }}
+                              >
+                                Feedback
+                              </p>
+                              {submission.feedback.map((fb) => (
+                                <div key={fb.id}>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      justifyContent: "space-between",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    <p style={{ fontSize: "0.875rem", color: "#495057" }}>
+                                      {fb.comment}
+                                    </p>
+                                    <span
+                                      style={{
+                                        fontSize: "1.125rem",
+                                        fontWeight: "700",
+                                        color:
+                                          fb.score >= 80
+                                            ? "#28a745"
+                                            : fb.score >= 60
+                                              ? "#ffc107"
+                                              : "#dc3545",
+                                      }}
+                                    >
+                                      {fb.score}/{assignment.maxScore}
+                                    </span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => openSubmitModal(assignment)}
+                          disabled={overdue}
+                          style={{
+                            width: "100%",
+                            padding: "0.75rem",
+                            borderRadius: "0.5rem",
+                            border: "none",
+                            fontWeight: "500",
+                            cursor: overdue ? "not-allowed" : "pointer",
+                            backgroundColor: overdue ? "#e9ecef" : "#0056b3",
+                            color: overdue ? "#6c757d" : "white",
+                            transition: "background-color 0.2s",
+                          }}
+                          onMouseEnter={(e) => {
+                            if (!overdue) e.currentTarget.style.backgroundColor = "#004494";
+                          }}
+                          onMouseLeave={(e) => {
+                            if (!overdue) e.currentTarget.style.backgroundColor = "#0056b3";
+                          }}
+                        >
+                          {overdue ? "Assignment Overdue" : "Submit Assignment"}
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <style>
@@ -1027,8 +1535,6 @@ function CourseCard({
               ))}
             </div>
           </div>
-
-          
         </div>
       </div>
 

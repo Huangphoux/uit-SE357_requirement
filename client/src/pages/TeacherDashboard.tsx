@@ -39,7 +39,7 @@ export default function TeacherDashboard() {
   const [classes, setClasses] = useState<any[]>([]);
   const [courses, setCourses] = useState<any[]>([]);
   const { logout, user } = useAuth();
-  
+
   const PLACEHOLDER_IMAGES = [
     "https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=400&h=250&fit=crop&auto=format",
     "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?q=80&w=400&h=250&fit=crop&auto=format",
@@ -65,7 +65,7 @@ export default function TeacherDashboard() {
         toast.error("Failed to fetch data");
       }
     };
-    
+
     if (user?.id) {
       fetchData();
     }
@@ -101,7 +101,7 @@ export default function TeacherDashboard() {
   }
 
   if (selectedClass) {
-    const classData = classes.find(c => c.id === selectedClass);
+    const classData = classes.find((c) => c.id === selectedClass);
     if (!classData) {
       return (
         <div className="min-h-screen bg-background flex items-center justify-center">
@@ -109,12 +109,12 @@ export default function TeacherDashboard() {
         </div>
       );
     }
-    
+
     return (
-      <TeacherCourseDetail 
+      <TeacherCourseDetail
         classData={classData}
         courses={courses}
-        onBack={() => setSelectedClass(null)} 
+        onBack={() => setSelectedClass(null)}
       />
     );
   }
@@ -176,9 +176,9 @@ export default function TeacherDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {classes.map((cls, index) => {
               const fallbackImageUrl = PLACEHOLDER_IMAGES[index % PLACEHOLDER_IMAGES.length];
-              
+
               // Tìm course info từ courses array
-              const courseInfo = courses.find(c => c.id === cls.courseId);
+              const courseInfo = courses.find((c) => c.id === cls.courseId);
 
               return (
                 <div
@@ -225,9 +225,17 @@ export default function TeacherDashboard() {
   );
 }
 
-function TeacherCourseDetail({ classData, courses, onBack }: { classData: any; courses: any[]; onBack: () => void }) {
+function TeacherCourseDetail({
+  classData,
+  courses,
+  onBack,
+}: {
+  classData: any;
+  courses: any[];
+  onBack: () => void;
+}) {
   const [activeTab, setActiveTab] = useState<"materials" | "assignments">("materials");
-  
+
   const course = courses.find((c) => c.id === classData.courseId);
 
   if (!course) {
@@ -250,38 +258,44 @@ function TeacherCourseDetail({ classData, courses, onBack }: { classData: any; c
             <span>Back to My Classes</span>
           </button>
           <h2 className="mb-2 text-2xl font-bold">{course.title}</h2>
-          <p className="text-white/80 text-sm">{classData.title} • {course.description}</p>
+          <p className="text-white/80 text-sm">
+            {classData.title} • {course.description}
+          </p>
         </div>
-    
-        <div className="px-6">
-          <div className="flex gap-4 border-b border-[#004494]">
-            <button
-              onClick={() => setActiveTab("materials")}
-              className={`px-4 py-3 transition-colors font-medium ${
-                activeTab === "materials"
-                  ? "border-b-2 border-white"
-                  : "opacity-70 hover:opacity-100"
-              }`}
-            >
-              Materials
-            </button>
-            <button
-              onClick={() => setActiveTab("assignments")}
-              className={`px-4 py-3 transition-colors font-medium ${
-                activeTab === "assignments"
-                  ? "border-b-2 border-white"
-                  : "opacity-70 hover:opacity-100"
-              }`}
-            >
-              Assignments
-            </button>
-          </div>
+      </div>
+
+      <div className="px-6 bg-white/10 border-b border-white/20 flex items-center pt-4">
+        <div className="flex gap-4 ">
+          <button
+            onClick={() => setActiveTab("materials")}
+            className={`px-4 py-3 transition-colors font-medium ${
+              activeTab === "materials"
+                ? "border-b-2 border-[#0056b3]"
+                : "opacity-70 hover:opacity-100"
+            }`}
+          >
+            Materials
+          </button>
+          <button
+            onClick={() => setActiveTab("assignments")}
+            className={`px-4 py-3 transition-colors font-medium ${
+              activeTab === "assignments"
+                ? "border-b-2 border-white"
+                : "opacity-70 hover:opacity-100"
+            }`}
+          >
+            Assignments
+          </button>
         </div>
       </div>
 
       <div className="w-full px-6 py-8 bg-card">
-        {activeTab === "materials" && <MaterialsManagement courseId={course.id} classId={classData.id} />}
-        {activeTab === "assignments" && <AssignmentsManagement courseId={course.id} classId={classData.id} />}
+        {activeTab === "materials" && (
+          <MaterialsManagement courseId={course.id} classId={classData.id} />
+        )}
+        {activeTab === "assignments" && (
+          <AssignmentsManagement courseId={course.id} classId={classData.id} />
+        )}
       </div>
     </div>
   );
@@ -291,11 +305,11 @@ function MaterialsManagement({ courseId, classId }: { courseId: string; classId:
   const [showModal, setShowModal] = useState(false);
   const [editingMaterial, setEditingMaterial] = useState<any | null>(null);
   const [materials, setMaterials] = useState<any[]>([]);
-  const [formData, setFormData] = useState({ 
-    title: "", 
-    description: "", 
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
     type: "PDF" as "PDF" | "VIDEO" | "LINK" | "DOC",
-    url: "" 
+    url: "",
   });
   const [deleteConfirm, setDeleteConfirm] = useState<{
     isOpen: boolean;
@@ -419,9 +433,9 @@ function MaterialsManagement({ courseId, classId }: { courseId: string; classId:
                         {material.type}
                       </span>
                       {material.url && (
-                        <a 
-                          href={material.url} 
-                          target="_blank" 
+                        <a
+                          href={material.url}
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="text-xs text-[#0056b3] hover:underline"
                           onClick={(e) => e.stopPropagation()}
@@ -436,11 +450,11 @@ function MaterialsManagement({ courseId, classId }: { courseId: string; classId:
                   <button
                     onClick={() => {
                       setEditingMaterial(material);
-                      setFormData({ 
-                        title: material.title, 
+                      setFormData({
+                        title: material.title,
                         description: material.description || "",
                         type: material.type,
-                        url: material.url 
+                        url: material.url,
                       });
                       setShowModal(true);
                     }}
@@ -563,7 +577,7 @@ function MaterialsManagement({ courseId, classId }: { courseId: string; classId:
                         type: formData.type,
                         url: formData.url,
                       });
-                      
+
                       // Update local state
                       setMaterials(
                         materials.map((m) =>
@@ -579,7 +593,7 @@ function MaterialsManagement({ courseId, classId }: { courseId: string; classId:
                         url: formData.url,
                         classId,
                       });
-                      
+
                       // Add to local state
                       setMaterials([...materials, response.data.material]);
                       toast.success("Material added successfully!");
@@ -633,11 +647,11 @@ function AssignmentsManagement({ courseId, classId }: { courseId: string; classI
   const [editingAssignment, setEditingAssignment] = useState<any | null>(null);
   const [selectedAssignment, setSelectedAssignment] = useState<string | null>(null);
   const [assignments, setAssignments] = useState<any[]>([]);
-  const [formData, setFormData] = useState({ 
-    title: "", 
-    description: "", 
-    dueDate: "", 
-    maxScore: "" 
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    dueDate: "",
+    maxScore: "",
   });
   const [deleteConfirm, setDeleteConfirm] = useState<{
     isOpen: boolean;
@@ -752,9 +766,9 @@ function AssignmentsManagement({ courseId, classId }: { courseId: string; classI
           <>
             <div className="space-y-4">
               {paginatedAssignments.map((assignment, index) => {
-                const submissions = mockSubmissions.filter((s) => s.assignmentId === assignment.id);
+                const submissions = assignment.submissions || [];
                 const needsGrading = submissions.filter(
-                  (s) => s.status === "submitted" || s.status === "late"
+                  (s: any) => s.status === "SUBMITTED" // API trả về "SUBMITTED", không phải "submitted"
                 ).length;
 
                 return (
@@ -800,7 +814,9 @@ function AssignmentsManagement({ courseId, classId }: { courseId: string; classI
                             setFormData({
                               title: assignment.title,
                               description: assignment.description || "",
-                              dueDate: assignment.dueDate ? new Date(assignment.dueDate).toISOString().split('T')[0] : "",
+                              dueDate: assignment.dueDate
+                                ? new Date(assignment.dueDate).toISOString().split("T")[0]
+                                : "",
                               maxScore: assignment.maxScore?.toString() || "",
                             });
                             setShowCreateModal(true);
@@ -921,11 +937,11 @@ function AssignmentsManagement({ courseId, classId }: { courseId: string; classI
                         title: formData.title,
                         dueDate: dueDateISO,
                       };
-                      
+
                       if (formData.description) {
                         updateData.description = formData.description;
                       }
-                      
+
                       if (formData.maxScore) {
                         updateData.maxScore = parseInt(formData.maxScore);
                       }
@@ -934,7 +950,7 @@ function AssignmentsManagement({ courseId, classId }: { courseId: string; classI
                         editingAssignment.id,
                         updateData
                       );
-                      
+
                       setAssignments(
                         assignments.map((a) =>
                           a.id === editingAssignment.id ? response.data.assignment : a
@@ -947,11 +963,11 @@ function AssignmentsManagement({ courseId, classId }: { courseId: string; classI
                         classId,
                         dueDate: dueDateISO,
                       };
-                      
+
                       if (formData.description) {
                         createData.description = formData.description;
                       }
-                      
+
                       if (formData.maxScore) {
                         createData.maxScore = parseInt(formData.maxScore);
                       }
@@ -1018,14 +1034,15 @@ function GradingInterface({ assignmentId, onBack }: { assignmentId: string; onBa
     const fetchSubmissions = async () => {
       try {
         setIsLoading(true);
-        
-        const submissionsResponse = await submissionService.getSubmissionsByAssignment(assignmentId);
-        const submissionsData = Array.isArray(submissionsResponse.data.submissions) 
-          ? submissionsResponse.data.submissions 
+
+        const submissionsResponse =
+          await submissionService.getSubmissionsByAssignment(assignmentId);
+        const submissionsData = Array.isArray(submissionsResponse.data.submissions)
+          ? submissionsResponse.data.submissions
           : [];
-        
+
         setSubmissions(submissionsData);
-        
+
         // Extract assignment from first submission
         if (submissionsData.length > 0 && submissionsData[0].assignment) {
           setAssignment(submissionsData[0].assignment);
@@ -1068,7 +1085,7 @@ function GradingInterface({ assignmentId, onBack }: { assignmentId: string; onBa
 
     const gradeNum = parseInt(grade);
     const maxScore = currentSubmission.assignment?.maxScore || 100;
-    
+
     if (isNaN(gradeNum) || gradeNum < 0 || gradeNum > maxScore) {
       toast.error(`Grade must be between 0 and ${maxScore}`);
       return;
@@ -1083,30 +1100,34 @@ function GradingInterface({ assignmentId, onBack }: { assignmentId: string; onBa
       });
 
       // Update local state
-      setSubmissions(submissions.map(s => 
-        s.id === currentSubmission.id 
-          ? { 
-              ...s, 
-              feedback: [{
-                score: gradeNum,
-                comment: feedback || "",
-                createdAt: new Date().toISOString(),
-              }]
-            }
-          : s
-      ));
+      setSubmissions(
+        submissions.map((s) =>
+          s.id === currentSubmission.id
+            ? {
+                ...s,
+                feedback: [
+                  {
+                    score: gradeNum,
+                    comment: feedback || "",
+                    createdAt: new Date().toISOString(),
+                  },
+                ],
+              }
+            : s
+        )
+      );
 
       toast.success("Grade saved successfully!");
 
       // Find next ungraded submission
-      const nextUngraded = submissions.find(
-        (s) => {
-          const hasGrade = s.feedback && s.feedback.length > 0 && 
-                          s.feedback[0].score !== null && 
-                          s.feedback[0].score !== undefined;
-          return !hasGrade && s.id !== selectedSubmission;
-        }
-      );
+      const nextUngraded = submissions.find((s) => {
+        const hasGrade =
+          s.feedback &&
+          s.feedback.length > 0 &&
+          s.feedback[0].score !== null &&
+          s.feedback[0].score !== undefined;
+        return !hasGrade && s.id !== selectedSubmission;
+      });
 
       if (nextUngraded) {
         setSelectedSubmission(nextUngraded.id);
@@ -1140,16 +1161,16 @@ function GradingInterface({ assignmentId, onBack }: { assignmentId: string; onBa
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 bg-card rounded-lg border border-border p-6">
               <h3 className="mb-4 font-medium text-lg">Submission Preview</h3>
-              
+
               {currentSubmission.fileUrl && (
                 <div className="bg-muted p-8 rounded-lg text-center mb-4">
                   <FileText className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
                   <p className="text-muted-foreground mb-4">
                     File: {currentSubmission.fileUrl.split("/").pop()}
                   </p>
-                  <a 
-                    href={currentSubmission.fileUrl} 
-                    target="_blank" 
+                  <a
+                    href={currentSubmission.fileUrl}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#0056b3] hover:underline"
                   >
@@ -1157,7 +1178,7 @@ function GradingInterface({ assignmentId, onBack }: { assignmentId: string; onBa
                   </a>
                 </div>
               )}
-              
+
               {currentSubmission.content && (
                 <div className="bg-muted p-6 rounded-lg">
                   <h4 className="font-medium mb-2">Submission Content:</h4>
@@ -1179,11 +1200,12 @@ function GradingInterface({ assignmentId, onBack }: { assignmentId: string; onBa
                     <User className="w-5 h-5 text-[#0056b3]" />
                   </div>
                   <div>
-                    <h4 className="font-medium">
-                      {currentSubmission.user?.name || "Student"}
-                    </h4>
+                    <h4 className="font-medium">{currentSubmission.user?.name || "Student"}</h4>
                     <p className="text-muted-foreground" style={{ fontSize: "0.875rem" }}>
-                      Submitted: {new Date(currentSubmission.submittedAt || currentSubmission.createdAt).toLocaleString()}
+                      Submitted:{" "}
+                      {new Date(
+                        currentSubmission.submittedAt || currentSubmission.createdAt
+                      ).toLocaleString()}
                     </p>
                   </div>
                 </div>
@@ -1204,7 +1226,7 @@ function GradingInterface({ assignmentId, onBack }: { assignmentId: string; onBa
                     max={currentSubmission.assignment?.maxScore || 100}
                   />
                 </div>
-                
+
                 <div>
                   <label className="block mb-2 font-medium">Feedback / Comments</label>
                   <textarea
@@ -1215,7 +1237,7 @@ function GradingInterface({ assignmentId, onBack }: { assignmentId: string; onBa
                     placeholder="Provide detailed feedback for the student..."
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <LoadingButton
                     loading={isSaving}
@@ -1226,7 +1248,7 @@ function GradingInterface({ assignmentId, onBack }: { assignmentId: string; onBa
                   >
                     Save & Next
                   </LoadingButton>
-                  
+
                   <button
                     onClick={async () => {
                       await handleSaveGrade();
@@ -1286,15 +1308,16 @@ function GradingInterface({ assignmentId, onBack }: { assignmentId: string; onBa
                 <tbody>
                   {paginatedSubmissions.map((submission) => {
                     const submittedDate = new Date(submission.submittedAt || submission.createdAt);
-                    const dueDate = submission.assignment?.dueDate 
-                      ? new Date(submission.assignment.dueDate) 
+                    const dueDate = submission.assignment?.dueDate
+                      ? new Date(submission.assignment.dueDate)
                       : null;
                     const isLate = dueDate ? submittedDate > dueDate : false;
-                    
+
                     // Check feedback array for grade
-                    const feedbackGrade = submission.feedback && submission.feedback.length > 0 
-                      ? submission.feedback[0].score 
-                      : null;
+                    const feedbackGrade =
+                      submission.feedback && submission.feedback.length > 0
+                        ? submission.feedback[0].score
+                        : null;
                     const isGraded = feedbackGrade !== null && feedbackGrade !== undefined;
 
                     return (

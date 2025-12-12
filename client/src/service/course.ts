@@ -90,6 +90,17 @@ const unenrollFromClassStudent = async (classId: string, userId: string) => {
     throw error;
   }
 };
+
+const getAssignmentsByCourse = async () => {
+  try {
+    const response = await apiClient.get(`/assignments/getAssignmentsByStudent`);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch assignments for course:", error);
+    throw error;
+  }
+};
+
 export default {
   getCouresEnrollments,
   createCourse,
@@ -100,4 +111,5 @@ export default {
   unenrollFromClass,
   getCourseEnrollmentsByAdmin,
   unenrollFromClassStudent,
+  getAssignmentsByCourse,
 };
