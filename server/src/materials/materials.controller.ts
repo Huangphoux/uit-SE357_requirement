@@ -24,6 +24,24 @@ export default class MaterialsController {
     }
   }
 
+   static async getMaterialsByStudent(req: Request, res: Response) {
+    try {
+      const { classId } = req.body;
+
+      const result = await MaterialsService.findByAdmin(classId as string);
+
+      if (!result) {
+        return Send.notFound(res, {}, "Materials not found");
+      }
+
+      const response = { materials: result };
+      return Send.success(res, response);
+    } catch (error: any) {
+      logger.error({ error }, "Error fetching materials");
+      return Send.error(res, {}, error.message || "Internal server error");
+    }
+  }
+
   static async getEnrollments(req: Request, res: Response) {
     try {
       const { id } = req.params;

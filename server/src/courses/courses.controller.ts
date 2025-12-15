@@ -110,6 +110,27 @@ export default class CoursesController {
     }
   }
 
+  static async enrollInClassByAdmin(req: Request, res: Response) {
+    try {
+      const { classId, userId } = req.body;
+
+      if (!userId) {
+        return Send.unauthorized(res, {}, "User not authenticated");
+      }
+
+      if (!classId) {
+        return Send.badRequest(res, {}, "Class ID is required");
+      }
+
+      const enrollment = await CoursesService.enrollInClass(userId, classId);
+
+      return Send.success(res, { enrollment }, "Enrolled successfully");
+    } catch (error: any) {
+      logger.error({ error }, "Error enrolling in class");
+      return Send.error(res, {}, error.message || "Internal server error");
+    }
+  }
+
   static async unenrollFromClass(req: Request, res: Response) {
     try {
       const userId = (req as any).userId;

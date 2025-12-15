@@ -1052,6 +1052,9 @@
     .bg-input-background {
         background-color: var(--input-background);
     }
+    .dark .bg-input-background {
+        background-color: var(--input-background-dark, #23272f);
+    }
 
     .bg-muted {
         background-color: var(--muted);
@@ -1653,6 +1656,7 @@
     --border: #ced4da;
     --input: transparent;
     --input-background: #fff;
+    --input-background-dark: #23272f;
     --switch-background: #cbced4;
     --font-weight-medium: 500;
     --font-weight-normal: 400;

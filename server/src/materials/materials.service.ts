@@ -61,6 +61,22 @@ export default class MaterialsService {
     });
   }
 
+  static async findByAdmin(classId: string) {
+    return await prisma.material.findMany({
+      where: { classId },
+      include: {
+        class: {
+          include: {
+            course: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }
+
   static async findEnrollments(userId?: string) {
     const enrollment = await prisma.enrollment.findMany({
       where: { userId: userId },

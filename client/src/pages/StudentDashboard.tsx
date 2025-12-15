@@ -7,13 +7,16 @@ import {
   Loader2,
   AlertCircle,
   Sun,
+  Moon,
   Bell,
 } from "lucide-react";
 import { toast } from "sonner";
 import courseService from "../service/course";
 import submissionService from "../service/submission";
 import { useAuth } from "@/contexts/AuthContext";
+import { useDarkMode } from "@/contexts/DarkModeContext";
 import { useNavigate } from "react-router-dom";
+import material from "@/service/material";
 // Types
 interface Class {
   id: string;
@@ -124,9 +127,14 @@ export default function StudentDashboard() {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const { logout, user } = useAuth();
+  const { isDark, toggleDarkMode } = useDarkMode();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loadingSubmissions, setLoadingSubmissions] = useState(false);
-
+  const [selectedClassId, setSelectedClassId] = useState<string | null>(null);
+  const [selectedClassInfo, setSelectedClassInfo] = useState<{
+    courseTitle: string;
+    classTitle: string;
+  } | null>(null);
   const [myAssignments, setMyAssignments] = useState<any[]>([]);
   const [loadingAssignments, setLoadingAssignments] = useState(false);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
@@ -179,8 +187,8 @@ export default function StudentDashboard() {
     try {
       setLoadingAssignments(true);
 
-      // ✅ Gọi 1 lần duy nhất - API đã filter theo studentId rồi
       const response = await courseService.getAssignmentsByCourse();
+      console.log(response.data.assignment);
 
       setMyAssignments(response.data.assignment || []);
       setLoadingAssignments(false);
@@ -202,8 +210,15 @@ export default function StudentDashboard() {
     }
   };
 
-  const saveEnrollments = (enrollments: EnrollmentData[]) => {
-    setEnrolledClasses(enrollments);
+  const handleViewMaterials = (classId: string, courseTitle: string, classTitle: string) => {
+    setSelectedClassId(classId);
+    setSelectedClassInfo({ courseTitle, classTitle });
+  };
+
+  // ✅ THÊM HANDLER - để quay lại
+  const handleBackFromMaterials = () => {
+    setSelectedClassId(null);
+    setSelectedClassInfo(null);
   };
 
   const handleEnroll = async (classId: string, courseTitle: string) => {
@@ -292,7 +307,20 @@ export default function StudentDashboard() {
   const enrolledCourses = courses.filter((course) =>
     course.classes.some((cls) => isEnrolled(cls.id))
   );
-
+  if (selectedClassId) {
+    return (
+      <MaterialsView
+        classId={selectedClassId}
+        courseTitle={selectedClassInfo?.courseTitle || ""}
+        classTitle={selectedClassInfo?.classTitle || ""}
+        onBack={handleBackFromMaterials}
+        user={user}
+        logout={logout}
+        isDark={isDark}
+        toggleDarkMode={toggleDarkMode}
+      />
+    );
+  }
   return (
     <div className="min-h-screen bg-background">
       {/* Top Navigation - Sticky added */}
@@ -322,16 +350,14 @@ export default function StudentDashboard() {
               <Bell className="w-5 h-5" />
             </button>
 
-            {/* 🌙 2. Dark Mode Toggle Icon (Thay thế chấm tròn 2) */}
-            {/* NOTE: Bạn sẽ cần state để chuyển đổi giữa Sun và Moon */}
+            {/* 🌙 2. Dark Mode Toggle Icon */}
             <button
-              // Thêm onClick handler của bạn tại đây (ví dụ: toggleDarkMode)
+              onClick={toggleDarkMode}
               className="p-2 rounded-full text-white hover:bg-[#004494] transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
-              aria-label="Toggle Dark Mode"
+              aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+              title={isDark ? "Light mode" : "Dark mode"}
             >
-              {/* Giả định đang ở chế độ sáng, nên hiển thị icon Sun */}
-              <Sun className="w-5 h-5" />
-              {/* Hoặc dùng Moon nếu bạn muốn hiển thị chế độ để chuyển sang */}
+              {isDark ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
             </button>
 
             {/* 🚪 3. Logout Button (Chỉ thêm gap để tách khỏi icons utility) */}
@@ -378,21 +404,6 @@ export default function StudentDashboard() {
           >
             My Courses ({enrolledCourses.length})
           </button>
-          <button
-            onClick={() => setActiveTab("catalog")}
-            style={{
-              padding: "0.75rem 1.5rem",
-              border: "none",
-              backgroundColor: "transparent",
-              cursor: "pointer",
-              fontWeight: "500",
-              borderBottom: activeTab === "catalog" ? "2px solid #0056b3" : "none",
-              color: activeTab === "catalog" ? "#0056b3" : "#6c757d",
-              transition: "color 0.2s",
-            }}
-          >
-            Course Catalog
-          </button>
 
           <button
             onClick={() => setActiveTab("submissions")}
@@ -423,7 +434,23 @@ export default function StudentDashboard() {
               transition: "color 0.2s",
             }}
           >
-            My Assignments ({myAssignments.length})
+            My Assignments
+          </button>
+
+          <button
+            onClick={() => setActiveTab("catalog")}
+            style={{
+              padding: "0.75rem 1.5rem",
+              border: "none",
+              backgroundColor: "transparent",
+              cursor: "pointer",
+              fontWeight: "500",
+              borderBottom: activeTab === "catalog" ? "2px solid #0056b3" : "none",
+              color: activeTab === "catalog" ? "#0056b3" : "#6c757d",
+              transition: "color 0.2s",
+            }}
+          >
+            Browse Courses
           </button>
         </div>
         {showSubmitModal && selectedAssignment && (
@@ -733,6 +760,7 @@ export default function StudentDashboard() {
                     imageIndex={courses.indexOf(course)}
                     onEnroll={handleEnroll}
                     onUnenroll={handleUnenroll}
+                    onViewMaterials={handleViewMaterials}
                   />
                 ))}
               </div>
@@ -783,6 +811,7 @@ export default function StudentDashboard() {
                     onEnroll={handleEnroll}
                     imageIndex={courses.indexOf(course)}
                     onUnenroll={handleUnenroll}
+                    onViewMaterials={handleViewMaterials}
                   />
                 ))}
               </div>
@@ -1059,238 +1088,156 @@ export default function StudentDashboard() {
                 <p style={{ color: "#6c757d" }}>Enroll in courses to see assignments</p>
               </div>
             ) : (
-              <div style={{ display: "grid", gap: "1.5rem" }}>
-                {myAssignments.map((assignment) => {
+              (() => {
+                const pendingAssignments = myAssignments.filter((assignment) => {
                   const submission = getSubmissionForAssignment(assignment.id);
-                  const overdue = isOverdue(assignment.dueDate);
+                  return !submission;
+                });
 
+                if (pendingAssignments.length === 0) {
                   return (
-                    <div
-                      key={assignment.id}
-                      style={{
-                        backgroundColor: "white",
-                        borderRadius: "0.75rem",
-                        boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-                        padding: "1.5rem",
-                        border: "1px solid #e5e7eb",
-                      }}
-                    >
-                      {/* Header */}
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "start",
-                          marginBottom: "1rem",
-                        }}
+                    <div style={{ textAlign: "center", padding: "3rem" }}>
+                      <BookOpen size={48} color="#6c757d" style={{ margin: "0 auto 1rem" }} />
+                      <h3
+                        style={{ fontSize: "1.25rem", fontWeight: "600", marginBottom: "0.5rem" }}
                       >
-                        <div>
-                          <h3
-                            style={{
-                              fontSize: "1.25rem",
-                              fontWeight: "600",
-                              marginBottom: "0.25rem",
-                            }}
-                          >
-                            {assignment.title}
-                          </h3>
-                          <p style={{ color: "#6c757d", fontSize: "0.875rem" }}>
-                            {assignment.description}
-                          </p>
-                        </div>
-                        <span
-                          style={{
-                            padding: "0.375rem 0.75rem",
-                            borderRadius: "9999px",
-                            fontSize: "0.75rem",
-                            fontWeight: "600",
-                            backgroundColor: submission
-                              ? submission.status === "GRADED"
-                                ? "#d4edda"
-                                : "#cfe2ff"
-                              : overdue
-                                ? "#f8d7da"
-                                : "#fff3cd",
-                            color: submission
-                              ? submission.status === "GRADED"
-                                ? "#155724"
-                                : "#084298"
-                              : overdue
-                                ? "#842029"
-                                : "#856404",
-                          }}
-                        >
-                          {submission
-                            ? submission.status === "GRADED"
-                              ? "✓ Graded"
-                              : "✓ Submitted"
-                            : overdue
-                              ? "Overdue"
-                              : "Pending"}
-                        </span>
-                      </div>
-
-                      {/* Info Grid */}
-                      <div
-                        style={{
-                          display: "grid",
-                          gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
-                          gap: "1rem",
-                          marginBottom: "1rem",
-                          padding: "1rem",
-                          backgroundColor: "#f8f9fa",
-                          borderRadius: "0.5rem",
-                        }}
-                      >
-                        <div>
-                          <span
-                            style={{
-                              fontSize: "0.75rem",
-                              color: "#6c757d",
-                              display: "block",
-                              marginBottom: "0.25rem",
-                            }}
-                          >
-                            Due Date
-                          </span>
-                          <span style={{ fontWeight: "500", fontSize: "0.875rem" }}>
-                            {new Date(assignment.dueDate).toLocaleDateString()}
-                          </span>
-                        </div>
-                        <div>
-                          <span
-                            style={{
-                              fontSize: "0.75rem",
-                              color: "#6c757d",
-                              display: "block",
-                              marginBottom: "0.25rem",
-                            }}
-                          >
-                            Max Score
-                          </span>
-                          <span style={{ fontWeight: "500", fontSize: "0.875rem" }}>
-                            {assignment.maxScore} points
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Submission or Submit Button */}
-                      {submission ? (
-                        <div
-                          style={{
-                            backgroundColor: "#e7f3ff",
-                            border: "1px solid #b6d4fe",
-                            borderRadius: "0.5rem",
-                            padding: "1rem",
-                          }}
-                        >
-                          <p
-                            style={{
-                              fontSize: "0.875rem",
-                              fontWeight: "600",
-                              color: "#084298",
-                              marginBottom: "0.5rem",
-                            }}
-                          >
-                            Your Submission
-                          </p>
-                          <a
-                            href={submission.content}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                              color: "#0056b3",
-                              textDecoration: "none",
-                              fontSize: "0.875rem",
-                              wordBreak: "break-all",
-                            }}
-                          >
-                            🔗 {submission.content}
-                          </a>
-                          <p style={{ fontSize: "0.75rem", color: "#6c757d", marginTop: "0.5rem" }}>
-                            Submitted on {new Date(submission.submittedAt).toLocaleString()}
-                          </p>
-
-                          {/* Feedback */}
-                          {submission.feedback && submission.feedback.length > 0 && (
-                            <div
-                              style={{
-                                marginTop: "1rem",
-                                paddingTop: "1rem",
-                                borderTop: "1px solid #b6d4fe",
-                              }}
-                            >
-                              <p
-                                style={{
-                                  fontSize: "0.875rem",
-                                  fontWeight: "600",
-                                  color: "#084298",
-                                  marginBottom: "0.5rem",
-                                }}
-                              >
-                                Feedback
-                              </p>
-                              {submission.feedback.map((fb) => (
-                                <div key={fb.id}>
-                                  <div
-                                    style={{
-                                      display: "flex",
-                                      justifyContent: "space-between",
-                                      alignItems: "center",
-                                    }}
-                                  >
-                                    <p style={{ fontSize: "0.875rem", color: "#495057" }}>
-                                      {fb.comment}
-                                    </p>
-                                    <span
-                                      style={{
-                                        fontSize: "1.125rem",
-                                        fontWeight: "700",
-                                        color:
-                                          fb.score >= 80
-                                            ? "#28a745"
-                                            : fb.score >= 60
-                                              ? "#ffc107"
-                                              : "#dc3545",
-                                      }}
-                                    >
-                                      {fb.score}/{assignment.maxScore}
-                                    </span>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      ) : (
-                        <button
-                          onClick={() => openSubmitModal(assignment)}
-                          disabled={overdue}
-                          style={{
-                            width: "100%",
-                            padding: "0.75rem",
-                            borderRadius: "0.5rem",
-                            border: "none",
-                            fontWeight: "500",
-                            cursor: overdue ? "not-allowed" : "pointer",
-                            backgroundColor: overdue ? "#e9ecef" : "#0056b3",
-                            color: overdue ? "#6c757d" : "white",
-                            transition: "background-color 0.2s",
-                          }}
-                          onMouseEnter={(e) => {
-                            if (!overdue) e.currentTarget.style.backgroundColor = "#004494";
-                          }}
-                          onMouseLeave={(e) => {
-                            if (!overdue) e.currentTarget.style.backgroundColor = "#0056b3";
-                          }}
-                        >
-                          {overdue ? "Assignment Overdue" : "Submit Assignment"}
-                        </button>
-                      )}
+                        No Pending Assignments
+                      </h3>
+                      <p style={{ color: "#6c757d" }}>
+                        Great job! You've completed all your assignments.
+                      </p>
                     </div>
                   );
-                })}
-              </div>
+                }
+
+                return (
+                  <div style={{ display: "grid", gap: "1.5rem" }}>
+                    {pendingAssignments.map((assignment) => {
+                      const submission = getSubmissionForAssignment(assignment.id);
+                      const overdue = isOverdue(assignment.dueDate);
+
+                      return (
+                        <div
+                          key={assignment.id}
+                          style={{
+                            backgroundColor: "white",
+                            borderRadius: "0.75rem",
+                            boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                            padding: "1.5rem",
+                            border: "1px solid #e5e7eb",
+                          }}
+                        >
+                          {/* Header */}
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "start",
+                              marginBottom: "1rem",
+                            }}
+                          >
+                            <div>
+                              <h3
+                                style={{
+                                  fontSize: "1.25rem",
+                                  fontWeight: "600",
+                                  marginBottom: "0.25rem",
+                                }}
+                              >
+                                {assignment.title}
+                              </h3>
+                              <p style={{ color: "#6c757d", fontSize: "0.875rem" }}>
+                                {assignment.description}
+                              </p>
+                            </div>
+                            <span
+                              style={{
+                                padding: "0.375rem 0.75rem",
+                                borderRadius: "9999px",
+                                fontSize: "0.75rem",
+                                fontWeight: "600",
+                                backgroundColor: overdue ? "#f8d7da" : "#fff3cd",
+                                color: overdue ? "#842029" : "#856404",
+                              }}
+                            >
+                              {overdue ? "Overdue" : "Pending"}
+                            </span>
+                          </div>
+
+                          {/* Info Grid */}
+                          <div
+                            style={{
+                              display: "grid",
+                              gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+                              gap: "1rem",
+                              marginBottom: "1rem",
+                              padding: "1rem",
+                              backgroundColor: "#f8f9fa",
+                              borderRadius: "0.5rem",
+                            }}
+                          >
+                            <div>
+                              <span
+                                style={{
+                                  fontSize: "0.75rem",
+                                  color: "#6c757d",
+                                  display: "block",
+                                  marginBottom: "0.25rem",
+                                }}
+                              >
+                                Due Date
+                              </span>
+                              <span style={{ fontWeight: "500", fontSize: "0.875rem" }}>
+                                {new Date(assignment.dueDate).toLocaleDateString()}
+                              </span>
+                            </div>
+                            <div>
+                              <span
+                                style={{
+                                  fontSize: "0.75rem",
+                                  color: "#6c757d",
+                                  display: "block",
+                                  marginBottom: "0.25rem",
+                                }}
+                              >
+                                Max Score
+                              </span>
+                              <span style={{ fontWeight: "500", fontSize: "0.875rem" }}>
+                                {assignment.maxScore} points
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Submit Button */}
+                          <button
+                            onClick={() => openSubmitModal(assignment)}
+                            disabled={overdue}
+                            style={{
+                              width: "100%",
+                              padding: "0.75rem",
+                              borderRadius: "0.5rem",
+                              border: "none",
+                              fontWeight: "500",
+                              cursor: overdue ? "not-allowed" : "pointer",
+                              backgroundColor: overdue ? "#e9ecef" : "#0056b3",
+                              color: overdue ? "#6c757d" : "white",
+                              transition: "background-color 0.2s",
+                            }}
+                            onMouseEnter={(e) => {
+                              if (!overdue) e.currentTarget.style.backgroundColor = "#004494";
+                            }}
+                            onMouseLeave={(e) => {
+                              if (!overdue) e.currentTarget.style.backgroundColor = "#0056b3";
+                            }}
+                          >
+                            {overdue ? "Assignment Overdue" : "Submit Assignment"}
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })()
             )}
           </div>
         )}
@@ -1314,7 +1261,8 @@ interface CourseCardProps {
   enrolledClasses: EnrollmentData[];
   onEnroll: (classId: string, courseTitle: string) => void;
   onUnenroll: (classId: string, courseTitle: string) => void;
-  imageIndex: number; // ← THÊM DÒNG NÀY
+  imageIndex: number;
+  onViewMaterials: (classId: string, courseTitle: string, classTitle: string) => void; // ✅ THÊM PROP MỚI
 }
 
 function CourseCard({
@@ -1323,6 +1271,7 @@ function CourseCard({
   onEnroll,
   onUnenroll,
   imageIndex,
+  onViewMaterials,
 }: CourseCardProps) {
   const [showDetails, setShowDetails] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -1356,24 +1305,7 @@ function CourseCard({
 
   return (
     <>
-      <div
-        style={{
-          backgroundColor: "#ffffff",
-          borderRadius: "0.5rem",
-          border: "1px solid #dee2e6",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-          overflow: "hidden",
-          transition: "all 0.3s",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.boxShadow = "0 4px 6px rgba(0,0,0,0.15)";
-          e.currentTarget.style.transform = "translateY(-4px)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
-          e.currentTarget.style.transform = "translateY(0)";
-        }}
-      >
+      <div className="bg-card border rounded-lg shadow transition-all duration-300 overflow-hidden hover:shadow-lg hover:-translate-y-1">
         <div
           style={{
             height: "10rem",
@@ -1382,21 +1314,10 @@ function CourseCard({
           }}
         />
 
-        <div style={{ padding: "1.25rem" }}>
-          <h3
-            style={{
-              fontSize: "1.125rem",
-              fontWeight: "600",
-              color: "#212529",
-              marginBottom: "0.5rem",
-            }}
-          >
-            {course.title}
-          </h3>
-          <p style={{ fontSize: "0.875rem", color: "#6c757d", marginBottom: "1rem" }}>
-            {course.description}
-          </p>
-          <button
+        <div className="p-5">
+          <h3 className="text-lg font-semibold text-foreground mb-2">{course.title}</h3>
+          <p className="text-sm text-muted-foreground mb-4">{course.description}</p>
+          {/* <button
             onClick={() => setShowDetails(!showDetails)}
             style={{
               width: "100%",
@@ -1447,90 +1368,58 @@ function CourseCard({
                 {new Date(course.updatedAt).toLocaleDateString()}
               </p>
             </div>
-          )}
-          <div style={{ marginBottom: "1rem" }}>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: "0.5rem",
-              }}
-            >
-              <span style={{ fontSize: "0.875rem", fontWeight: "500", color: "#495057" }}>
-                Available Classes:
-              </span>
+          )} */}
+          <div className="mb-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-foreground">Available Classes:</span>
               {enrolledCount > 0 && (
-                <span
-                  style={{
-                    fontSize: "0.75rem",
-                    backgroundColor: "#d1e7dd",
-                    color: "#0f5132",
-                    padding: "0.25rem 0.5rem",
-                    borderRadius: "0.25rem",
-                  }}
-                >
+                <span className="text-xs bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded">
                   {enrolledCount} enrolled
                 </span>
               )}
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            <div className="flex flex-col gap-2">
               {course.classes.map((cls) => (
                 <div
                   key={cls.id}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "0.5rem",
-                    backgroundColor: "#f8f9fa",
-                    borderRadius: "0.375rem",
-                    border: "1px solid #dee2e6",
-                  }}
+                  className="flex items-center justify-between p-2 bg-muted border rounded"
                 >
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <Calendar style={{ width: "1rem", height: "1rem", color: "#6c757d" }} />
-                    <span style={{ fontSize: "0.875rem", fontWeight: "500" }}>{cls.title}</span>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm font-medium text-foreground">{cls.title}</span>
                   </div>
 
-                  {isEnrolled(cls.id) ? (
-                    <button
-                      onClick={() => handleClassAction(cls, "unenroll")}
-                      style={{
-                        padding: "0.25rem 0.75rem",
-                        fontSize: "0.75rem",
-                        backgroundColor: "#dc3545",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "0.25rem",
-                        cursor: "pointer",
-                        transition: "background-color 0.2s",
-                      }}
-                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#c82333")}
-                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#dc3545")}
-                    >
-                      Unenroll
-                    </button>
-                  ) : (
-                    <button
-                      onClick={() => handleClassAction(cls, "enroll")}
-                      style={{
-                        padding: "0.25rem 0.75rem",
-                        fontSize: "0.75rem",
-                        backgroundColor: "#ffc107",
-                        color: "#212529",
-                        border: "none",
-                        borderRadius: "0.25rem",
-                        cursor: "pointer",
-                        fontWeight: "500",
-                        transition: "background-color 0.2s",
-                      }}
-                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#e0a800")}
-                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#ffc107")}
-                    >
-                      Enroll
-                    </button>
-                  )}
+                  {/* ✅ THÊM DIV NÀY - wrap các buttons */}
+                  <div className="flex items-center gap-2">
+                    {/* ✅ THÊM NÚT VIEW MATERIALS - chỉ hiện khi enrolled */}
+                    {isEnrolled(cls.id) && (
+                      <button
+                        onClick={() => onViewMaterials(cls.id, course.title, cls.title)}
+                        className="px-3 py-1 text-xs bg-blue-600 hover:bg-blue-700 text-black rounded transition-colors"
+                        title="View Materials"
+                      >
+                        View Materials
+                      </button>
+                    )}
+
+                    {/* Existing enroll/unenroll buttons */}
+                    {isEnrolled(cls.id) ? (
+                      <button
+                        onClick={() => handleClassAction(cls, "unenroll")}
+                        className="px-3 py-1 text-xs bg-red-600 hover:bg-red-700 text-black rounded transition-colors"
+                      >
+                        Unenroll
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleClassAction(cls, "enroll")}
+                        className="px-3 py-1 text-xs bg-yellow-400 hover:bg-yellow-500 text-black font-medium rounded transition-colors"
+                      >
+                        Enroll
+                      </button>
+                    )}
+                  </div>
+                  {/* ✅ HẾT DIV THÊM */}
                 </div>
               ))}
             </div>
@@ -1626,5 +1515,300 @@ function CourseCard({
         </div>
       )}
     </>
+  );
+}
+
+// ✅ COMPONENT MỚI - hiển thị materials của class
+interface MaterialsViewProps {
+  classId: string;
+  courseTitle: string;
+  classTitle: string;
+  onBack: () => void;
+  user: any;
+  logout: () => void;
+  isDark: boolean;
+  toggleDarkMode: () => void;
+}
+
+function MaterialsView({
+  classId,
+  courseTitle,
+  classTitle,
+  onBack,
+  user,
+  logout,
+  isDark,
+  toggleDarkMode,
+}: MaterialsViewProps) {
+  const [materials, setMaterials] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchMaterials = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // ✅ CALL API - lấy materials của class
+        const response = await material.listMaterialByAdmin(classId);
+        setMaterials(Array.isArray(response.data.materials) ? response.data.materials : []);
+      } catch (err) {
+        console.error("Error fetching materials:", err);
+        setError("Failed to load materials");
+        setMaterials([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMaterials();
+  }, [classId]);
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Top Navigation */}
+      <nav className="sticky top-0 z-50 bg-[#0056b3] text-white px-6 py-4 shadow-md">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center">
+              <GraduationCap className="w-6 h-6 text-[#0056b3]" />
+            </div>
+            <div>
+              <p>Student Portal</p>
+              <p className="opacity-90" style={{ fontSize: "0.875rem" }}>
+                {user?.name}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1">
+            <button
+              className="p-2 rounded-full text-white hover:bg-[#004494] transition-colors"
+              aria-label="Notifications"
+            >
+              <Bell className="w-5 h-5" />
+            </button>
+
+            <button
+              onClick={toggleDarkMode}
+              className="p-2 rounded-full text-white hover:bg-[#004494] transition-colors"
+            >
+              {isDark ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+            </button>
+
+            <div className="ml-2">
+              <button
+                onClick={() => {
+                  logout();
+                  toast.success("Logged out successfully");
+                }}
+                className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-[#004494] transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Logout</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Content */}
+      <div style={{ maxWidth: "80rem", margin: "0 auto", padding: "1.5rem" }}>
+        {/* Back Button */}
+        <button
+          onClick={onBack}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            marginBottom: "1.5rem",
+            padding: "0.5rem 1rem",
+            backgroundColor: "transparent",
+            border: "1px solid #dee2e6",
+            borderRadius: "0.5rem",
+            cursor: "pointer",
+            color: "#0056b3",
+            fontWeight: "500",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#f8f9fa")}
+          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+        >
+          ← Back to Courses
+        </button>
+
+        {/* Header */}
+        <div style={{ marginBottom: "2rem" }}>
+          <h1 style={{ fontSize: "1.875rem", fontWeight: "700", marginBottom: "0.5rem" }}>
+            {courseTitle}
+          </h1>
+          <p style={{ color: "#6c757d", fontSize: "1.125rem" }}>{classTitle}</p>
+        </div>
+
+        {/* Loading State */}
+        {loading && (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "5rem 0",
+            }}
+          >
+            <Loader2
+              style={{
+                width: "3rem",
+                height: "3rem",
+                color: "#0056b3",
+                animation: "spin 1s linear infinite",
+                marginBottom: "1rem",
+              }}
+            />
+            <p style={{ color: "#6c757d" }}>Loading materials...</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.75rem",
+              backgroundColor: "#f8d7da",
+              border: "1px solid #f5c2c7",
+              color: "#842029",
+              padding: "1rem",
+              borderRadius: "0.5rem",
+              marginBottom: "1.5rem",
+            }}
+          >
+            <AlertCircle style={{ width: "1.25rem", height: "1.25rem" }} />
+            <p style={{ margin: 0, flex: 1 }}>{error}</p>
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!loading && !error && materials.length === 0 && (
+          <div style={{ textAlign: "center", padding: "5rem 0" }}>
+            <BookOpen
+              style={{
+                width: "4rem",
+                height: "4rem",
+                color: "#adb5bd",
+                margin: "0 auto 1rem",
+              }}
+            />
+            <h3
+              style={{
+                fontSize: "1.25rem",
+                fontWeight: "600",
+                color: "#212529",
+                marginBottom: "0.5rem",
+              }}
+            >
+              No Materials Available
+            </h3>
+            <p style={{ color: "#6c757d" }}>Your instructor hasn't uploaded any materials yet</p>
+          </div>
+        )}
+
+        {/* Materials List */}
+        {!loading && !error && materials.length > 0 && (
+          <div
+            style={{
+              display: "grid",
+              gap: "1rem",
+            }}
+          >
+            {materials.map((material, index) => (
+              <div
+                key={material.id}
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: "0.75rem",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                  padding: "1.5rem",
+                  border: "1px solid #e5e7eb",
+                  display: "flex",
+                  alignItems: "start",
+                  gap: "1rem",
+                }}
+              >
+                {/* Icon */}
+                <div
+                  style={{
+                    width: "3rem",
+                    height: "3rem",
+                    borderRadius: "0.5rem",
+                    backgroundColor: "#e9f2ff",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}
+                >
+                  <BookOpen style={{ width: "1.5rem", height: "1.5rem", color: "#0056b3" }} />
+                </div>
+
+                {/* Content */}
+                <div style={{ flex: 1 }}>
+                  <h3
+                    style={{
+                      fontSize: "1.125rem",
+                      fontWeight: "600",
+                      marginBottom: "0.5rem",
+                    }}
+                  >
+                    {material.title}
+                  </h3>
+                  <p
+                    style={{
+                      color: "#6c757d",
+                      fontSize: "0.875rem",
+                      marginBottom: "0.75rem",
+                    }}
+                  >
+                    {material.description || "No description"}
+                  </p>
+                  <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                    <span
+                      style={{
+                        fontSize: "0.75rem",
+                        padding: "0.25rem 0.75rem",
+                        borderRadius: "9999px",
+                        backgroundColor: "#e9f2ff",
+                        color: "#0056b3",
+                        fontWeight: "500",
+                      }}
+                    >
+                      {material.type}
+                    </span>
+                    {material.url && (
+                      <a
+                        href={material.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          color: "#0056b3",
+                          fontSize: "0.875rem",
+                          textDecoration: "none",
+                          fontWeight: "500",
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.textDecoration = "underline")}
+                        onMouseLeave={(e) => (e.currentTarget.style.textDecoration = "none")}
+                      >
+                        View Resource →
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

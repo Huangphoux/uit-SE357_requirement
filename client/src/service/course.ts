@@ -91,6 +91,16 @@ const unenrollFromClassStudent = async (classId: string, userId: string) => {
   }
 };
 
+const enrollToClassStudent = async (classId: string, userId: string) => {
+  try {
+    const response = await apiClient.post(`/courses/enrollByAdmin`, { classId, userId });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to enroll in class:", error);
+    throw error;
+  }
+};
+
 const getAssignmentsByCourse = async () => {
   try {
     const response = await apiClient.get(`/assignments/getAssignmentsByStudent`);
@@ -112,4 +122,5 @@ export default {
   getCourseEnrollmentsByAdmin,
   unenrollFromClassStudent,
   getAssignmentsByCourse,
+  enrollToClassStudent,
 };

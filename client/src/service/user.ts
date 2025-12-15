@@ -32,6 +32,16 @@ const listTeacher = async () => {
   }
 };
 
+const listStudent = async () => {
+  try {
+    const response = await apiClient.get(`/user/listStudents`);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to list user:", error);
+    throw error;
+  }
+};
+
 const deleteUser = async (id: string) => {
   try {
     const response = await apiClient.delete(`/user/${id}`);
@@ -52,4 +62,4 @@ const updateUser = async (id: string, UserData: any) => {
   }
 };
 
-export default { createUser, listUser, listTeacher, deleteUser, updateUser };
+export default { createUser, listUser, listTeacher, deleteUser, updateUser, listStudent };

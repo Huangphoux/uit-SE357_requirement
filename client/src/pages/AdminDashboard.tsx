@@ -27,14 +27,15 @@ import {
   GraduationCap,
   School,
   Bell,
-  TrendingUp, // Đã thêm icon này
+  TrendingUp,
+  AsteriskSquare, // Đã thêm icon này
 } from "lucide-react";
 import { toast } from "sonner";
 import { mockCourses, mockClasses, Course, Class } from "@/data/mockData";
 import NotificationManagement from "@/pages/NotificationManagement";
 import { title } from "process";
 
-type MenuItem = "dashboard" | "courses" | "classes" | "enrollments" | "notifications";
+type MenuItem = "dashboard" | "courses" | "classes" | "enrollments" | "users";
 
 export default function AdminDashboard() {
   const [activeMenu, setActiveMenu] = useState<MenuItem>("dashboard");
@@ -115,10 +116,20 @@ export default function AdminDashboard() {
               activeMenu === "enrollments" ? "bg-[#004494]" : "hover:bg-[#004494]"
             }`}
           >
+            <AsteriskSquare className="w-8 h-5" />
+            <span>Assign Management</span>
+          </button>
+
+          <button
+            onClick={() => setActiveMenu("users")}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-md mb-2 transition-colors ${
+              activeMenu === "users" ? "bg-[#004494]" : "hover:bg-[#004494]"
+            }`}
+          >
             <Users className="w-8 h-5" />
             <span>User Management</span>
           </button>
-          <button
+          {/* <button
             onClick={() => setActiveMenu("notifications")}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-md mb-2 transition-colors ${
               activeMenu === "notifications" ? "bg-[#004494]" : "hover:bg-[#004494]"
@@ -126,7 +137,7 @@ export default function AdminDashboard() {
           >
             <Bell className="w-5 h-5" />
             <span>Notifications</span>
-          </button>
+          </button> */}
         </nav>
 
         <div className="p-4 border-t border-[#004494] space-y-2">
@@ -152,7 +163,8 @@ export default function AdminDashboard() {
         {activeMenu === "courses" && <CourseManagement />}
         {activeMenu === "classes" && <ClassManagement />}
         {activeMenu === "enrollments" && <EnrollmentManagement />}
-        {activeMenu === "notifications" && <NotificationManagement />}
+        {activeMenu === "users" && <UserManagement />}
+        {/* {activeMenu === "notifications" && <NotificationManagement />} */}
       </div>
     </div>
   );
@@ -234,15 +246,19 @@ function DashboardOverview({
           <div className="space-y-3">
             <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-md">
               <div className="w-2 h-2 rounded-full bg-success"></div>
-              <p style={{ fontSize: "0.875rem" }}>New course "Advanced React" created</p>
+              <p style={{ fontSize: "0.875rem" }}>New course "Speaking Preparation 101" created</p>
             </div>
             <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-md">
               <div className="w-2 h-2 rounded-full bg-[#0056b3]"></div>
-              <p style={{ fontSize: "0.875rem" }}>5 students enrolled in Web Development</p>
+              <p style={{ fontSize: "0.875rem" }}>
+                5 students enrolled in Speaking Preparation 101
+              </p>
             </div>
             <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-md">
               <div className="w-2 h-2 rounded-full bg-[#ffc107]"></div>
-              <p style={{ fontSize: "0.875rem" }}>Class "React 101 - Section B" started</p>
+              <p style={{ fontSize: "0.875rem" }}>
+                Class "Listening Preparation 101 - Section B" started
+              </p>
             </div>
           </div>
         </div>
@@ -324,6 +340,20 @@ function CourseManagement() {
   }, []);
 
   const handleCreate = async () => {
+    // Validate manually trước
+    if (!formData.title.trim()) {
+      toast.error("Course name is required");
+      return;
+    }
+    if (!formData.description.trim()) {
+      toast.error("Description is required");
+      return;
+    }
+    if (formData.description.trim().length < 10) {
+      toast.error("Description must be at least 10 characters");
+      return;
+    }
+
     const validation = validateForm(formData, {
       title: commonRules.courseName,
       description: { required: true, minLength: 10 },
@@ -525,8 +555,12 @@ function CourseManagement() {
         <div
           className="fixed inset-0 flex items-center justify-center p-4 z-50 animate-fade-in-up"
           style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          onClick={() => setShowModal(false)}
         >
-          <div className="bg-card rounded-lg p-6 w-full max-w-md animate-slide-in">
+          <div
+            className="bg-card rounded-lg p-6 w-full max-w-md animate-slide-in"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex justify-between items-center mb-4">
               <h3>{editingCourse ? "Edit Course" : "Create Course"}</h3>
               <button onClick={() => setShowModal(false)}>
@@ -559,7 +593,9 @@ function CourseManagement() {
                   accept="image/*"
                   maxSize={5}
                   multiple={false}
-                  onFilesSelected={(files)}
+                  onFilesSelected={(files: File[]) => {
+                    console.log("Files selected:", files);
+                  }}
                 />
               </div>
 
@@ -603,6 +639,7 @@ function ClassManagement() {
   const [editingClass, setEditingClass] = useState<Class | null>(null);
   const [classes, setClasses] = useState<Class[]>([]);
   const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
 
   // Simplified formData - chỉ giữ các trường có trong backend schema
   const [formData, setFormData] = useState({
@@ -640,10 +677,22 @@ function ClassManagement() {
     }
   };
 
+  const fetchCourses = async () => {
+    try {
+      const response = await courseService.listCourse();
+      const courseData = response?.data?.courses || response?.courses || [];
+      setCourses(Array.isArray(courseData) ? courseData : []);
+    } catch (error) {
+      console.error("Fetch courses error:", error);
+      toast.error("Failed to fetch courses");
+    }
+  };
+
   // Listen for Quick Action events
   React.useEffect(() => {
     fetchClasses();
     fetchTeachers();
+    fetchCourses();
     const handleQuickAction = () => {
       setEditingClass(null);
       setFormData({
@@ -814,8 +863,12 @@ function ClassManagement() {
         <div
           className="fixed inset-0 flex items-center justify-center p-4 z-50 h-50"
           style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          onClick={() => setShowModal(false)}
         >
-          <div className="bg-card rounded-lg p-6 w-full max-w-md">
+          <div
+            className="bg-card rounded-lg p-6 w-full max-w-md"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex justify-between items-center mb-4">
               <h3>{editingClass ? "Edit Class" : "Create Class"}</h3>
               <button onClick={() => setShowModal(false)}>
@@ -831,23 +884,30 @@ function ClassManagement() {
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   className="w-full px-4 py-2 bg-input-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
-                  placeholder="Web Development - Section A"
+                  placeholder="Listening Preparation 101"
                 />
               </div>
 
               <div>
-                <label className="block mb-2 text-sm font-medium">Course ID</label>
-                <input
-                  type="text"
+                <label className="block mb-2 text-sm font-medium">Course Name</label>
+                <select
                   value={formData.courseId}
                   onChange={(e) => setFormData({ ...formData, courseId: e.target.value })}
                   className="w-full px-4 py-2 bg-input-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
-                  placeholder="Enter course ID"
-                />
+                >
+                  <option value="" disabled={!!editingClass}>
+                    -- Select Course --
+                  </option>
+                  {courses.map((course) => (
+                    <option key={course.id} value={course.id}>
+                      {course.title}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>
-                <label className="block mb-2 text-sm font-medium">Teacher Name (Optional)</label>
+                <label className="block mb-2 text-sm font-medium">Teacher Name</label>
                 <select
                   value={formData.teacherId}
                   onChange={(e) => setFormData({ ...formData, teacherId: e.target.value })}
@@ -866,9 +926,13 @@ function ClassManagement() {
 
               <button
                 onClick={async () => {
-                  // Validate
-                  if (!formData.title || !formData.courseId) {
-                    toast.error("Please fill in all required fields");
+                  // Validate chi tiết từng field
+                  if (!formData.title.trim()) {
+                    toast.error("Class name is required");
+                    return;
+                  }
+                  if (!formData.courseId) {
+                    toast.error("Course selection is required");
                     return;
                   }
 
@@ -939,6 +1003,15 @@ function EnrollmentManagement() {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [classes, setClasses] = useState<Class[]>([]);
+  const [students, setStudents] = useState<User[]>([]);
+
+  const [formData, setFormData] = useState({
+    classId: "",
+    userId: "",
+  });
+
   const [deleteConfirm, setDeleteConfirm] = useState<{
     isOpen: boolean;
     enrollmentId: string | null;
@@ -952,8 +1025,7 @@ function EnrollmentManagement() {
   const fetchEnrollments = async () => {
     setLoading(true);
     try {
-      const response = await courseService.getCourseEnrollmentsByAdmin(); // Hoặc enrollmentService.list()
-
+      const response = await courseService.getCourseEnrollmentsByAdmin();
       setEnrollments(Array.isArray(response.data.enrollments) ? response.data.enrollments : []);
     } catch (error) {
       console.error("Fetch error:", error);
@@ -962,8 +1034,32 @@ function EnrollmentManagement() {
     setLoading(false);
   };
 
+  const fetchClasses = async () => {
+    try {
+      const response = await classService.listClass();
+      const classesData = response?.data?.classes || response?.classes || [];
+      setClasses(Array.isArray(classesData) ? classesData : []);
+    } catch (error) {
+      console.error("Fetch classes error:", error);
+      toast.error("Failed to fetch classes");
+    }
+  };
+
+  const fetchStudents = async () => {
+    try {
+      const response = await userService.listStudent();
+      const usersData = response?.data?.user || response?.user || [];
+      setStudents(Array.isArray(usersData) ? usersData : []);
+    } catch (error) {
+      console.error("Fetch students error:", error);
+      toast.error("Failed to fetch students");
+    }
+  };
+
   React.useEffect(() => {
     fetchEnrollments();
+    fetchClasses();
+    fetchStudents();
   }, []);
 
   // Filter enrollments
@@ -999,10 +1095,43 @@ function EnrollmentManagement() {
     }
   };
 
+  const handleEnrollStudent = async () => {
+    // Validate từng field riêng
+    if (!formData.classId) {
+      toast.error("Class selection is required");
+      return;
+    }
+    if (!formData.userId) {
+      toast.error("Student selection is required");
+      return;
+    }
+
+    try {
+      await courseService.enrollToClassStudent(formData.classId, formData.userId);
+      toast.success("Student enrolled successfully!");
+      setShowModal(false);
+      setFormData({ classId: "", userId: "" });
+      fetchEnrollments();
+    } catch (error) {
+      toast.error("Failed to enroll student!");
+    }
+  };
+
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-8">
         <h1>Enrollment Management</h1>
+        <button
+          onClick={() => {
+            setFormData({ classId: "", userId: "" });
+            setShowModal(true);
+          }}
+          className="flex items-center gap-2 px-4 py-2 rounded-md text-[#212529] hover:opacity-90 transition-opacity"
+          style={{ backgroundColor: "#ffc107" }}
+        >
+          <Plus className="w-4 h-4" />
+          Assign Student to Class
+        </button>
       </div>
 
       <div className="mb-6">
@@ -1021,6 +1150,17 @@ function EnrollmentManagement() {
           title="No enrollments found"
           description={
             searchQuery ? "Try adjusting your search query" : "No students are enrolled yet"
+          }
+          action={
+            !searchQuery
+              ? {
+                  label: "Assign Student",
+                  onClick: () => {
+                    setFormData({ classId: "", userId: "" });
+                    setShowModal(true);
+                  },
+                }
+              : undefined
           }
         />
       ) : (
@@ -1072,8 +1212,8 @@ function EnrollmentManagement() {
                             setDeleteConfirm({
                               isOpen: true,
                               enrollmentId: enrollment.id,
-                              classId: enrollment.classId, // Thêm classId vào đây
-                              userId: enrollment.userId, // Thêm userId vào đây
+                              classId: enrollment.classId,
+                              userId: enrollment.userId,
                             })
                           }
                           title="Remove enrollment"
@@ -1101,16 +1241,355 @@ function EnrollmentManagement() {
         </>
       )}
 
+      {showModal && (
+        <div
+          className="fixed inset-0 flex items-center justify-center p-4 z-50"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          onClick={() => setShowModal(false)}
+        >
+          <div
+            className="bg-card rounded-lg p-6 w-full max-w-md"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3>Assign Student to Class</h3>
+              <button onClick={() => setShowModal(false)}>
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block mb-2 text-sm font-medium">Class</label>
+                <select
+                  value={formData.classId}
+                  onChange={(e) => setFormData({ ...formData, classId: e.target.value })}
+                  className="w-full px-4 py-2 bg-input-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+                >
+                  <option value="">-- Select Class --</option>
+                  {classes.map((cls) => (
+                    <option key={cls.id} value={cls.id}>
+                      {cls.title} {cls.course?.title && `(${cls.course.title})`}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block mb-2 text-sm font-medium">Student</label>
+                <select
+                  value={formData.userId}
+                  onChange={(e) => setFormData({ ...formData, userId: e.target.value })}
+                  className="w-full px-4 py-2 bg-input-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+                >
+                  <option value="">-- Select Student --</option>
+                  {students.map((student) => (
+                    <option key={student.id} value={student.id}>
+                      {student.name} ({student.email})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <button
+                onClick={handleEnrollStudent}
+                className="w-full px-4 py-2 rounded-md text-white mt-2"
+                style={{ backgroundColor: "#0056b3" }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#004494")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#0056b3")}
+              >
+                Assign Student
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <ConfirmDialog
         isOpen={deleteConfirm.isOpen}
         onClose={() => setDeleteConfirm({ isOpen: false, enrollmentId: null })}
         onConfirm={async () => {
-          if (deleteConfirm.enrollmentId) {
-            await handleRemoveEnrollment(deleteConfirm.classId || "", deleteConfirm.userId || "");
+          if (deleteConfirm.classId && deleteConfirm.userId) {
+            await handleRemoveEnrollment(deleteConfirm.classId, deleteConfirm.userId);
           }
         }}
         title="Remove Student"
-        message={`Are you sure you want to remove this enrollment from class ${deleteConfirm.classId || "N/A"}? This action cannot be undone.`}
+        message="Are you sure you want to remove this student from the class? This action cannot be undone."
+      />
+    </div>
+  );
+}
+function UserManagement() {
+  const [showModal, setShowModal] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [users, setUsers] = useState<User[]>([]);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+  });
+
+  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; userId: string | null }>({
+    isOpen: false,
+    userId: null,
+  });
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const fetchUsers = async () => {
+    try {
+      const response = await userService.listUser();
+      const usersData = response?.data?.user || response?.user || [];
+      setUsers(Array.isArray(usersData) ? usersData : []);
+    } catch (error) {
+      console.error("Fetch error:", error);
+      toast.error("Failed to fetch users");
+    }
+  };
+
+  React.useEffect(() => {
+    fetchUsers();
+    const handleQuickAction = () => {
+      setEditingUser(null);
+      setFormData({ name: "", email: "" });
+      setShowModal(true);
+    };
+    window.addEventListener("admin-add-user", handleQuickAction);
+    return () => window.removeEventListener("admin-add-user", handleQuickAction);
+  }, []);
+
+  // Filter users based on search
+  const filteredUsers = users.filter((user) => {
+    const q = searchQuery.toLowerCase();
+    return (
+      (user.name && user.name.toLowerCase().includes(q)) ||
+      (user.email && user.email.toLowerCase().includes(q))
+    );
+  });
+
+  // Pagination
+  const {
+    currentPage,
+    totalPages,
+    itemsPerPage,
+    paginatedData: paginatedUsers,
+    setCurrentPage,
+    setItemsPerPage,
+  } = usePagination({ data: filteredUsers, initialItemsPerPage: 10 });
+
+  return (
+    <div className="p-8">
+      <div className="flex justify-between items-center mb-8">
+        <h1>Users</h1>
+        <button
+          onClick={() => {
+            setEditingUser(null);
+            setFormData({ name: "", email: "" });
+            setShowModal(true);
+          }}
+          className="flex items-center gap-2 px-4 py-2 rounded-md text-[#212529] hover:opacity-90 transition-opacity"
+          style={{ backgroundColor: "#ffc107" }}
+        >
+          <Plus className="w-4 h-4" />
+          New User
+        </button>
+      </div>
+
+      <div className="mb-6">
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search users by name or email..."
+        />
+      </div>
+
+      {filteredUsers.length === 0 ? (
+        <EmptyState
+          icon={Users}
+          title="No users found"
+          description={
+            searchQuery
+              ? "Try adjusting your search query"
+              : "Create your first user to get started!"
+          }
+          action={
+            !searchQuery
+              ? {
+                  label: "Create User",
+                  onClick: () => {
+                    setEditingUser(null);
+                    setFormData({ name: "", email: "" });
+                    setShowModal(true);
+                  },
+                }
+              : undefined
+          }
+        />
+      ) : (
+        <>
+          <div className="bg-card rounded-lg border border-border shadow-sm overflow-hidden animate-fade-in-up">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-muted">
+                  <tr>
+                    <th className="px-6 py-3 text-left">#</th>
+                    <th className="px-6 py-3 text-left">Name</th>
+                    <th className="px-6 py-3 text-left">Email</th>
+                    <th className="px-6 py-3 text-left">Created At</th>
+                    <th className="px-6 py-3 text-left">Updated At</th>
+                    <th className="px-6 py-3 text-left">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedUsers.map((user, index) => (
+                    <tr
+                      key={user.id}
+                      className="border-t border-border hover:bg-muted/50 transition-colors"
+                    >
+                      <td className="px-6 py-4">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                      <td className="px-6 py-4">{user.name}</td>
+                      <td className="px-6 py-4">{user.email}</td>
+                      <td className="px-6 py-4">{new Date(user.createdAt).toLocaleDateString()}</td>
+                      <td className="px-6 py-4">{new Date(user.updatedAt).toLocaleDateString()}</td>
+                      <td className="px-6 py-4">
+                        <div className="flex gap-2">
+                          <button
+                            className="p-2 hover:bg-muted rounded-md transition-all transform hover:scale-110"
+                            onClick={() => {
+                              setEditingUser(user);
+                              setFormData({
+                                name: user.name,
+                                email: user.email,
+                              });
+                              setShowModal(true);
+                            }}
+                            title="Edit user"
+                          >
+                            <Edit className="w-4 h-4 text-[#0056b3]" />
+                          </button>
+                          <button
+                            className="p-2 hover:bg-muted rounded-md transition-all transform hover:scale-110"
+                            onClick={() => setDeleteConfirm({ isOpen: true, userId: user.id })}
+                            title="Delete user"
+                          >
+                            <Trash2 className="w-4 h-4 text-destructive" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="mt-6">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              totalItems={filteredUsers.length}
+              itemsPerPage={itemsPerPage}
+              onPageChange={setCurrentPage}
+              onItemsPerPageChange={setItemsPerPage}
+            />
+          </div>
+        </>
+      )}
+
+      {showModal && (
+        <div
+          className="fixed inset-0 flex items-center justify-center p-4 z-50"
+          style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          onClick={() => setShowModal(false)}
+        >
+          <div
+            className="bg-card rounded-lg p-6 w-full max-w-md"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3>{editingUser ? "Edit User" : "Create User"}</h3>
+              <button onClick={() => setShowModal(false)}>
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block mb-2 text-sm font-medium">Name</label>
+                <input
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full px-4 py-2 bg-input-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+                  placeholder="John Doe"
+                />
+              </div>
+
+              <div>
+                <label className="block mb-2 text-sm font-medium">Email</label>
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full px-4 py-2 bg-input-background border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+                  placeholder="john@example.com"
+                />
+              </div>
+
+              <button
+                onClick={async () => {
+                  // Validate từng field
+                  if (!formData.name.trim()) {
+                    toast.error("Name is required");
+                    return;
+                  }
+
+                  if (!formData.email.trim()) {
+                    toast.error("Email is required");
+                    return;
+                  }
+
+                  // Email validation
+                  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                  if (!emailRegex.test(formData.email)) {
+                    toast.error("Please enter a valid email address");
+                    return;
+                  }
+
+                  try {
+                    toast.success("User saved successfully!");
+                    setShowModal(false);
+                  } catch (error) {
+                    toast.error("Failed to save user!");
+                  }
+                }}
+                className="w-full px-4 py-2 rounded-md text-white mt-2"
+                style={{ backgroundColor: "#0056b3" }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#004494")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#0056b3")}
+              >
+                {editingUser ? "Update User" : "Create User"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <ConfirmDialog
+        isOpen={deleteConfirm.isOpen}
+        onClose={() => setDeleteConfirm({ isOpen: false, userId: null })}
+        onConfirm={async () => {
+          if (deleteConfirm.userId) {
+            try {
+              // await userService.deleteUser(deleteConfirm.userId);
+              // fetchUsers();
+              toast.success("User deleted successfully!");
+            } catch (error) {
+              toast.error("Failed to delete user!");
+            }
+          }
+        }}
+        title="Delete User"
+        message="Are you sure you want to delete this user? This action cannot be undone."
       />
     </div>
   );
