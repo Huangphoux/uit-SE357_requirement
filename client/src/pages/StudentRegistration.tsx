@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import ValidatedInput from "@/pages/ValidatedInput";
 import LoadingButton from "@/pages/LoadingButton";
-import { commonRules } from "@/utils/validation";
 import { GraduationCap } from "lucide-react";
 import { toast } from "sonner";
 import auth from "@/service/auth";
 import { useNavigate } from "react-router-dom";
+
 interface StudentRegistrationProps {
   onShowLogin: () => void;
 }
@@ -18,14 +18,75 @@ export default function StudentRegistration({ onShowLogin }: StudentRegistration
     confirmPassword: "",
   });
   const [loading, setLoading] = useState(false);
+  
+  // Dùng ref để lưu validity state real-time
+  const fieldValidityRef = useRef({
+    name: false,
+    email: false,
+    password: false,
+    confirmPassword: false,
+  });
+  
   const navigate = useNavigate();
+
+  // Validate toàn bộ form
+  const validateAllFields = (): boolean => {
+    const { name, email, password, confirmPassword } = formData;
+    
+    // Validate Name
+    if (!name.trim() || name.length > 100) {
+      toast.error("Please enter a valid name");
+      return false;
+    }
+    
+    // Validate Email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      toast.error("Invalid email format");
+      return false;
+    }
+    
+    // Validate Password
+    if (password.length < 8) {
+      toast.error("Password must be at least 8 characters long");
+      return false;
+    }
+    if (!/[A-Z]/.test(password)) {
+      toast.error("Password must include at least one uppercase letter");
+      return false;
+    }
+    if (!/[a-z]/.test(password)) {
+      toast.error("Password must include at least one lowercase letter");
+      return false;
+    }
+    if (!/[0-9]/.test(password)) {
+      toast.error("Password must include at least one number");
+      return false;
+    }
+    if (!/[@$!%*?&]/.test(password)) {
+      toast.error("Password must include at least one special character");
+      return false;
+    }
+    
+    // Validate Confirm Password
+    if (!confirmPassword) {
+      toast.error("Password confirmation is required");
+      return false;
+    }
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return false;
+    }
+    
+    return true;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     try {
       e.preventDefault();
 
-      if (formData.password !== formData.confirmPassword) {
-        toast.error("Passwords do not match");
+      // Validate toàn bộ form trước khi submit
+      if (!validateAllFields()) {
         return;
       }
 
@@ -57,6 +118,13 @@ export default function StudentRegistration({ onShowLogin }: StudentRegistration
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleValidityChange = (field: string, isValid: boolean) => {
+    fieldValidityRef.current = {
+      ...fieldValidityRef.current,
+      [field]: isValid,
+    };
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4 py-8">
       <div className="w-full max-w-md">
@@ -74,80 +142,99 @@ export default function StudentRegistration({ onShowLogin }: StudentRegistration
         {/* Registration Form */}
         <div className="bg-card rounded-lg shadow-lg p-8 border border-border">
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Full Name with Live Validation */}
+            {/* Full Name - Giống BE: min 1, max 100 */}
             <ValidatedInput
               label="Full Name"
               value={formData.name}
               onChange={(value) => handleChange("name", value)}
-              validation={{ required: true, minLength: 2, maxLength: 100 }}
+              onValidityChange={(isValid) => handleValidityChange("name", isValid)}
+              validation={{
+                required: true,
+                minLength: 1,
+                maxLength: 100,
+                custom: (value) => {
+                  if (!value.trim()) return "Name is required";
+                  if (value.length > 100) return "Name must not exceed 100 characters";
+                  return null;
+                },
+              }}
               placeholder="John Doe"
               disabled={loading}
             />
 
-            {/* Email with Live Validation */}
+            {/* Email - Giống BE: z.email() */}
             <ValidatedInput
               label="Email Address"
               type="email"
               value={formData.email}
               onChange={(value) => handleChange("email", value)}
-              validation={commonRules.email}
+              onValidityChange={(isValid) => handleValidityChange("email", isValid)}
+              validation={{
+                required: true,
+                custom: (value) => {
+                  // Email regex giống z.email()
+                  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                  if (!emailRegex.test(value.trim())) {
+                    return "Invalid email format";
+                  }
+                  return null;
+                },
+              }}
               placeholder="your.email@example.com"
               disabled={loading}
             />
 
-            {/* Phone with Live Validation */}
-            {/* <ValidatedInput
-              label="Phone Number"
-              type="tel"
-              value={formData.phone}
-              onChange={(value) => handleChange('phone', value)}
-              validation={{ 
-                required: true, 
-                pattern: /^[0-9]{10,11}$/,
-                custom: (value) => {
-                  if (!/^[0-9]+$/.test(value)) {
-                    return 'Phone number must contain only digits';
-                  }
-                  if (value.length < 10) {
-                    return 'Phone number must be at least 10 digits';
-                  }
-                  return null;
-                }
-              }}
-              placeholder="0123456789"
-              disabled={loading}
-            /> */}
-
-            {/* Password with Live Validation */}
+            {/* Password - Giống BE: passwordSchema */}
             <ValidatedInput
               label="Password"
               type="password"
               value={formData.password}
               onChange={(value) => handleChange("password", value)}
+              onValidityChange={(isValid) => handleValidityChange("password", isValid)}
               validation={{
                 required: true,
-                minLength: 8,
                 custom: (value) => {
+                  // Min 8 characters
                   if (value.length < 8) {
-                    return "Password must be at least 8 characters";
+                    return "Password must be at least 8 characters long";
+                  }
+                  // At least one uppercase
+                  if (!/[A-Z]/.test(value)) {
+                    return "Password must include at least one uppercase letter";
+                  }
+                  // At least one lowercase
+                  if (!/[a-z]/.test(value)) {
+                    return "Password must include at least one lowercase letter";
+                  }
+                  // At least one number
+                  if (!/[0-9]/.test(value)) {
+                    return "Password must include at least one number";
+                  }
+                  // At least one special character
+                  if (!/[@$!%*?&]/.test(value)) {
+                    return "Password must include at least one special character";
                   }
                   return null;
                 },
               }}
               placeholder="Min 8 characters"
               disabled={loading}
-              helperText="Min 8 characters"
+              helperText="At least 8 characters, uppercase, lowercase, number & special character"
             />
 
-            {/* Confirm Password with Live Validation */}
+            {/* Confirm Password - Giống BE: refine passwords match */}
             <ValidatedInput
               label="Confirm Password"
               type="password"
               value={formData.confirmPassword}
               onChange={(value) => handleChange("confirmPassword", value)}
+              onValidityChange={(isValid) => handleValidityChange("confirmPassword", isValid)}
               validation={{
                 required: true,
                 custom: (value) => {
+                  if (!value) {
+                    return "Password confirmation is required";
+                  }
                   if (value !== formData.password) {
                     return "Passwords do not match";
                   }
@@ -158,13 +245,14 @@ export default function StudentRegistration({ onShowLogin }: StudentRegistration
               disabled={loading}
             />
 
-            {/* Submit Button with Loading State */}
+            {/* Submit Button */}
             <LoadingButton
               loading={loading}
               loadingText="Registering..."
               onClick={handleSubmit}
               type="submit"
-              className="w-full px-4 py-2.5 rounded-md text-white hover:opacity-90 transition-opacity mt-6"
+              disabled={loading}
+              className="w-full px-4 py-2.5 rounded-md text-white hover:opacity-90 transition-opacity mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ backgroundColor: "#0056b3" }}
             >
               Register

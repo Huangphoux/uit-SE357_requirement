@@ -113,12 +113,12 @@ export default function Login({ onShowRegister }: LoginProps) {
               Demo Credentials:
             </p>
             <div className="space-y-1 text-center" style={{ fontSize: "0.75rem" }}>
-              <p className="text-muted-foreground">Admin: admin@example.com / 123456789Aa@</p>
+              <p className="text-muted-foreground">Admin: admin@example.com / Admin123!</p>
               <p className="text-muted-foreground">
-                Teacher: teacher123@gmail.com / 123456789Aa@
+                Teacher: teacher1@example.com / Teacher123!
               </p>
               <p className="text-muted-foreground">
-                Student: student123@example.com / 123456789Aa@
+                Student: student1@example.com / Student123!
               </p>
             </div>
           </div>

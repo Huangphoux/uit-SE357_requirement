@@ -129,7 +129,7 @@ export default function AdminDashboard() {
             <Users className="w-8 h-5" />
             <span>User Management</span>
           </button>
-          {/* <button
+          {/* <buttoN
             onClick={() => setActiveMenu("notifications")}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-md mb-2 transition-colors ${
               activeMenu === "notifications" ? "bg-[#004494]" : "hover:bg-[#004494]"
@@ -137,7 +137,7 @@ export default function AdminDashboard() {
           >
             <Bell className="w-5 h-5" />
             <span>Notifications</span>
-          </button> */}
+          </buttoN> */}
         </nav>
 
         <div className="p-4 border-t border-[#004494] space-y-2">
