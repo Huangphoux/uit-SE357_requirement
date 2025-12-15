@@ -61,17 +61,17 @@ async function main() {
 
   // Courses
   const [web, db, algo] = await Promise.all([
-    prisma.course.create({ data: { title: "Web Development", description: "HTML, CSS, JavaScript" } }),
-    prisma.course.create({ data: { title: "Database Systems", description: "SQL and data modeling" } }),
-    prisma.course.create({ data: { title: "Algorithms", description: "Complexity analysis" } }),
+    prisma.course.create({ data: { title: "English Beginner (A1)", description: "Basic grammar, vocabulary and communication for beginners" } }),
+    prisma.course.create({ data: { title: "English Pre-Intermediate (A2–B1)", description: "Grammar expansion, daily conversation, essential writing skills" } }),
+    prisma.course.create({ data: { title: "English Speaking & Listening", description: "Improve fluency, pronunciation, listening comprehension" } }),
   ]);
 
   // Classes
   const [c1, c2, c3, c4] = await Promise.all([
-    prisma.class.create({ data: { courseId: web.id, teacherId: t1.id, title: "Web-S24" } }),
-    prisma.class.create({ data: { courseId: web.id, teacherId: t2.id, title: "Web-F24" } }),
-    prisma.class.create({ data: { courseId: db.id, teacherId: t1.id, title: "DB-S24" } }),
-    prisma.class.create({ data: { courseId: algo.id, teacherId: t2.id, title: "Algo-F24" } }),
+    prisma.class.create({ data: { courseId: web.id, teacherId: t1.id, title: "A1-F24" } }),
+    prisma.class.create({ data: { courseId: web.id, teacherId: t2.id, title: "IELTS-F24" } }),
+    prisma.class.create({ data: { courseId: db.id, teacherId: t1.id, title: "SPEAK-F24" } }),
+    prisma.class.create({ data: { courseId: algo.id, teacherId: t2.id, title: "TOEIC450-S25" } }),
   ]);
 
   // Enrollments
@@ -90,40 +90,40 @@ async function main() {
       data: {
         classId: c1.id,
         createdBy: t1.id,
-        title: "HTML Basics",
-        description: "HTML structure",
+        title: "Basic Vocabulary PDF",
+        description: "A beginner-friendly vocabulary list including 150 essential daily-use words with pictures and examples.",
         type: "PDF",
-        url: "https://example.com/html.pdf",
+        url: "https://example.com/materials/basic-vocabulary.pdf",
       },
     }),
     prisma.material.create({
       data: {
         classId: c1.id,
         createdBy: t1.id,
-        title: "CSS Tutorial",
-        description: "CSS guide",
+        title: "Present Simple Grammar Guide",
+        description: "A detailed explanation of Present Simple tense rules, structure, examples, and common mistakes.",
         type: "VIDEO",
-        url: "https://youtube.com/css",
+        url: "https://example.com/materials/present-simple-guide.pdf",
       },
     }),
     prisma.material.create({
       data: {
         classId: c3.id,
         createdBy: t1.id,
-        title: "SQL Cheat Sheet",
-        description: "SQL commands",
+        title: "Daily Activities Listening Audio",
+        description: "An audio file containing simple dialogues about daily routines to support listening practice.",
         type: "PDF",
-        url: "https://example.com/sql.pdf",
+        url: "https://example.com/materials/self-introduction-sample.mp4",
       },
     }),
     prisma.material.create({
       data: {
         classId: c4.id,
         createdBy: t2.id,
-        title: "Algorithm Slides",
-        description: "Big O notation",
+        title: "Beginner Workbook – Unit 1",
+        description: "Workbook exercises for Unit 1, including vocabulary practice, sentence building, and simple dialogues.",
         type: "PDF",
-        url: "https://example.com/bigo.pdf",
+        url: "https://example.com/materials/beginner-workbook-unit1.pdf",
       },
     }),
   ]);
@@ -134,8 +134,8 @@ async function main() {
       data: {
         classId: c1.id,
         createdBy: t1.id,
-        title: "Portfolio Website",
-        description: "HTML/CSS portfolio",
+        title: "Vocabulary Quiz 1 – Basic Words",
+        description: "A short quiz focusing on essential beginner-level vocabulary, helping learners review and strengthen basic daily-use words.",
         dueDate: new Date("2024-02-28"),
         maxScore: 100,
       },
@@ -144,8 +144,8 @@ async function main() {
       data: {
         classId: c1.id,
         createdBy: t1.id,
-        title: "JS Calculator",
-        description: "Calculator in JS",
+        title: "Grammar Exercise – Present Simple",
+        description: "Practice activities on the Present Simple tense, including affirmative, negative, and question forms to reinforce basic grammar usage.",
         dueDate: new Date("2024-03-15"),
         maxScore: 100,
       },
@@ -154,8 +154,8 @@ async function main() {
       data: {
         classId: c3.id,
         createdBy: t1.id,
-        title: "DB Design",
-        description: "Library DB design",
+        title: "Listening Practice – Daily Activities",
+        description: "A listening task featuring simple conversations about everyday routines, designed to improve comprehension of common phrases and actions.",
         dueDate: new Date("2024-03-20"),
         maxScore: 150,
       },
@@ -164,8 +164,8 @@ async function main() {
       data: {
         classId: c4.id,
         createdBy: t2.id,
-        title: "Sorting Algos",
-        description: "Quicksort, mergesort",
+        title: "Speaking Task – Self Introduction",
+        description: "Students record or present a short self-introduction to practice speaking fluency, basic sentence structure, and personal information vocabulary.",
         dueDate: new Date("2024-10-15"),
         maxScore: 100,
       },

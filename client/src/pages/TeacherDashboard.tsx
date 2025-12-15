@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { ConfirmDialog } from "../components/ConfirmDialog";
 import DarkModeToggle from "./DarkModeToggle";
-import SearchBar from "../components/SearchBar";
 import EmptyState from "../components/EmptyState";
 import LoadingButton from "./LoadingButton";
 import ValidatedInput from "./ValidatedInput";
@@ -32,6 +31,7 @@ import {
 import { toast } from "sonner";
 import { mockMaterials, mockAssignments, mockSubmissions } from "../data/mockData";
 import NotificationManagement from "./NotificationManagement";
+import SearchBar from "@/components/SearchBar";
 
 export default function TeacherDashboard() {
   const [selectedClass, setSelectedClass] = useState<string | null>(null);
@@ -235,7 +235,7 @@ function TeacherCourseDetail({
   onBack: () => void;
 }) {
   const [activeTab, setActiveTab] = useState<"materials" | "assignments">("materials");
-
+  const [resetKey, setResetKey] = useState(0);
   const course = courses.find((c) => c.id === classData.courseId);
 
   if (!course) {
@@ -277,7 +277,10 @@ function TeacherCourseDetail({
             Materials
           </button>
           <button
-            onClick={() => setActiveTab("assignments")}
+            onClick={() => {
+              setActiveTab("assignments");
+              setResetKey((prev) => prev + 1);
+            }}
             className={`px-4 py-3 transition-colors font-medium ${
               activeTab === "assignments"
                 ? "border-b-2 border-white"
@@ -294,7 +297,7 @@ function TeacherCourseDetail({
           <MaterialsManagement courseId={course.id} classId={classData.id} />
         )}
         {activeTab === "assignments" && (
-          <AssignmentsManagement courseId={course.id} classId={classData.id} />
+          <AssignmentsManagement key={resetKey} courseId={course.id} classId={classData.id} />
         )}
       </div>
     </div>
@@ -549,6 +552,22 @@ function MaterialsManagement({ courseId, classId }: { courseId: string; classId:
                 loading={isSaving}
                 loadingText={editingMaterial ? "Updating..." : "Adding..."}
                 onClick={async () => {
+                  // Validate từng field riêng
+                  if (!formData.title.trim()) {
+                    toast.error("Title is required");
+                    return;
+                  }
+
+                  if (formData.title.trim().length < 3) {
+                    toast.error("Title must be at least 3 characters");
+                    return;
+                  }
+
+                  if (!formData.url.trim()) {
+                    toast.error("URL is required");
+                    return;
+                  }
+
                   const validation = validateForm(formData, {
                     title: { required: true, minLength: 3 },
                     url: { required: true },
@@ -685,11 +704,13 @@ function AssignmentsManagement({ courseId, classId }: { courseId: string; classI
     }
   }, [classId]);
 
-  const filteredAssignments = assignments.filter(
-    (assignment) =>
-      assignment.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      assignment.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredAssignments = assignments
+    .filter(
+      (assignment) =>
+        assignment.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        assignment.description.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()); // Thêm dòng này
 
   const {
     currentPage,
@@ -916,6 +937,22 @@ function AssignmentsManagement({ courseId, classId }: { courseId: string; classI
                 loading={isSaving}
                 loadingText={editingAssignment ? "Updating..." : "Creating..."}
                 onClick={async () => {
+                  // Validate từng field riêng
+                  if (!formData.title.trim()) {
+                    toast.error("Title is required");
+                    return;
+                  }
+
+                  if (formData.title.trim().length < 3) {
+                    toast.error("Title must be at least 3 characters");
+                    return;
+                  }
+
+                  if (!formData.dueDate.trim()) {
+                    toast.error("Due date is required");
+                    return;
+                  }
+
                   const validation = validateForm(formData, {
                     title: { required: true, minLength: 3 },
                     dueDate: { required: true },
@@ -1083,11 +1120,22 @@ function GradingInterface({ assignmentId, onBack }: { assignmentId: string; onBa
   const handleSaveGrade = async () => {
     if (!currentSubmission) return;
 
+    // Validate grade field
+    if (!grade.trim()) {
+      toast.error("Score is required");
+      return;
+    }
+
     const gradeNum = parseInt(grade);
     const maxScore = currentSubmission.assignment?.maxScore || 100;
 
-    if (isNaN(gradeNum) || gradeNum < 0 || gradeNum > maxScore) {
-      toast.error(`Grade must be between 0 and ${maxScore}`);
+    if (isNaN(gradeNum)) {
+      toast.error("Score must be a valid number");
+      return;
+    }
+
+    if (gradeNum < 0 || gradeNum > maxScore) {
+      toast.error(`Score must be between 0 and ${maxScore}`);
       return;
     }
 

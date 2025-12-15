@@ -120,13 +120,20 @@ class MaterialsRoutes extends BaseRouter {
       },
 
       {
+        method: "post",
+        path: "/getMaterials",
+        middlewares: [AuthMiddleware.authenticateUser],
+        controller: MaterialsController.getMaterialsByStudent,
+      },
+
+      {
         method: "get",
         path: "/enrollments",
         middlewares: [AuthMiddleware.authenticateUser],
         controller: MaterialsController.getEnrollments,
       },
 
-          {
+      {
         method: "get",
         path: "/enrollmentsByAdmin",
         middlewares: [AuthMiddleware.authenticateUser],

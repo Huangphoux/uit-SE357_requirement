@@ -27,6 +27,16 @@ const listMaterial = async (classId: string) => {
   }
 };
 
+const listMaterialByAdmin = async (classId: string) => {
+  try {
+    const response = await apiClient.post(`/materials/getMaterials`, { classId });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to list materials:", error);
+    throw error;
+  }
+};
+
 const deleteMaterial = async (id: string) => {
   try {
     const response = await apiClient.delete(`/materials/${id}`);
@@ -55,4 +65,4 @@ const updateMaterial = async (
   }
 };
 
-export default { createMaterial, listMaterial, deleteMaterial, updateMaterial };
+export default { createMaterial, listMaterial, deleteMaterial, updateMaterial, listMaterialByAdmin };
