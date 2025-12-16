@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import Login from '@/pages/Login';
-import StudentRegistration from '@/pages/StudentRegistration';
-import AdminDashboard from '@/pages/AdminDashboard';
-import TeacherDashboard from '@/pages/TeacherDashboard';
-import StudentDashboard from '@/pages/StudentDashboard';
-import { Toaster } from 'sonner';
+import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import Login from "@/pages/Login";
+import StudentRegistration from "@/pages/StudentRegistration";
+import AdminDashboard from "@/pages/AdminDashboard";
+import TeacherDashboard from "@/pages/TeacherDashboard";
+import StudentDashboard from "@/pages/StudentDashboard";
+import { Toaster } from "sonner";
 
 export default function App() {
   const { user } = useAuth();
@@ -34,11 +34,11 @@ export default function App() {
   // Route to appropriate dashboard based on role
   const renderDashboard = () => {
     switch (user?.role) {
-      case 'ADMIN':
+      case "ADMIN":
         return <AdminDashboard />;
-      case 'TEACHER':
+      case "TEACHER":
         return <TeacherDashboard />;
-      case 'STUDENT':
+      case "STUDENT":
         return <StudentDashboard />;
       default:
         return <Login onShowRegister={() => setShowRegister(true)} />;

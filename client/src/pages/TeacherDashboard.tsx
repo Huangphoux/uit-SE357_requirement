@@ -154,7 +154,7 @@ export default function TeacherDashboard() {
       <div className="max-w-7xl mx-auto p-6">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-2xl font-bold">My Classes</h1>
-          <button
+          {/* <button
             onClick={() => setShowNotifications(true)}
             className="flex items-center gap-2 px-4 py-2 rounded-md text-white font-medium"
             style={{ backgroundColor: "#0056b3" }}
@@ -163,7 +163,7 @@ export default function TeacherDashboard() {
           >
             <Bell className="w-4 h-4" />
             Send Notifications
-          </button>
+          </button> */}
         </div>
 
         {classes.length === 0 ? (
@@ -283,7 +283,7 @@ function TeacherCourseDetail({
             }}
             className={`px-4 py-3 transition-colors font-medium ${
               activeTab === "assignments"
-                ? "border-b-2 border-white"
+                ? "border-b-2 border-[#0056b3]"
                 : "opacity-70 hover:opacity-100"
             }`}
           >
@@ -856,7 +856,8 @@ function AssignmentsManagement({ courseId, classId }: { courseId: string; classI
                         </button>
                         <button
                           onClick={() => setSelectedAssignment(assignment.id)}
-                          className="px-4 py-2 rounded-md text-white font-medium hover:brightness-110"
+                          disabled={submissions.length === 0}
+                          className="px-4 py-2 rounded-md text-white font-medium hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed" // ← THÊM disabled:opacity-50 disabled:cursor-not-allowed
                           style={{ backgroundColor: "#0056b3" }}
                         >
                           Grade Submissions

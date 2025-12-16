@@ -103,7 +103,7 @@ const showToast = (message: string, type: "success" | "error") => {
   const toast = document.createElement("div");
   toast.style.cssText = `
     position: fixed;
-    top: 1rem;
+    top: 5rem;
     right: 1rem;
     padding: 1rem 1.5rem;
     border-radius: 0.5rem;
@@ -342,13 +342,13 @@ export default function StudentDashboard() {
           {/* ➡️ Utility Icons Section (ĐÃ SỬA) */}
           <div className="flex items-center gap-1">
             {/* 🔔 1. Notification Icon (Thay thế chấm tròn 1) */}
-            <button
+            {/* <button
               // Thêm onClick handler của bạn tại đây
               className="p-2 rounded-full text-white hover:bg-[#004494] transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
               aria-label="Notifications"
             >
               <Bell className="w-5 h-5" />
-            </button>
+            </button> */}
 
             {/* 🌙 2. Dark Mode Toggle Icon */}
             <button
@@ -761,6 +761,7 @@ export default function StudentDashboard() {
                     onEnroll={handleEnroll}
                     onUnenroll={handleUnenroll}
                     onViewMaterials={handleViewMaterials}
+                    isDark={isDark}
                   />
                 ))}
               </div>
@@ -1262,6 +1263,7 @@ interface CourseCardProps {
   onEnroll: (classId: string, courseTitle: string) => void;
   onUnenroll: (classId: string, courseTitle: string) => void;
   imageIndex: number;
+  isDark: boolean;
   onViewMaterials: (classId: string, courseTitle: string, classTitle: string) => void; // ✅ THÊM PROP MỚI
 }
 
@@ -1272,13 +1274,12 @@ function CourseCard({
   onUnenroll,
   imageIndex,
   onViewMaterials,
+  isDark
 }: CourseCardProps) {
-  const [showDetails, setShowDetails] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedClass, setSelectedClass] = useState<Class | null>(null);
   const [modalAction, setModalAction] = useState<"enroll" | "unenroll">("enroll");
   const imageUrl = imageUrls[imageIndex % imageUrls.length];
-  const navigate = useNavigate();
 
   const isEnrolled = (classId: string) => {
     return enrolledClasses.some((e) => e.classId === classId && e.status === "ACTIVE");
@@ -1397,6 +1398,7 @@ function CourseCard({
                         onClick={() => onViewMaterials(cls.id, course.title, cls.title)}
                         className="px-3 py-1 text-xs bg-blue-600 hover:bg-blue-700 text-black rounded transition-colors"
                         title="View Materials"
+                        style={{ cursor: "pointer" }}
                       >
                         View Materials
                       </button>
@@ -1407,6 +1409,7 @@ function CourseCard({
                       <button
                         onClick={() => handleClassAction(cls, "unenroll")}
                         className="px-3 py-1 text-xs bg-red-600 hover:bg-red-700 text-black rounded transition-colors"
+                        style={{ cursor: "pointer" }}
                       >
                         Unenroll
                       </button>
@@ -1414,6 +1417,7 @@ function CourseCard({
                       <button
                         onClick={() => handleClassAction(cls, "enroll")}
                         className="px-3 py-1 text-xs bg-yellow-400 hover:bg-yellow-500 text-black font-medium rounded transition-colors"
+                        style={{ cursor: "pointer" }}
                       >
                         Enroll
                       </button>
@@ -1453,10 +1457,23 @@ function CourseCard({
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 style={{ fontSize: "1.125rem", fontWeight: "600", marginBottom: "1rem" }}>
+            <h3
+              style={{
+                fontSize: "1.125rem",
+                fontWeight: "600",
+                marginBottom: "1rem",
+                color: isDark ? "#ffffff" : "#000000", // ← THÊM DÒNG NÀY
+              }}
+            >
               {modalAction === "enroll" ? "Confirm Enrollment" : "Confirm Unenrollment"}
             </h3>
-            <p style={{ color: "#6c757d", marginBottom: "1.5rem", lineHeight: "1.5" }}>
+            <p
+              style={{
+                color: isDark ? "#94a3b8" : "#6c757d", // ← SỬA DÒNG NÀY
+                marginBottom: "1.5rem",
+                lineHeight: "1.5",
+              }}
+            >
               {modalAction === "enroll" ? (
                 <>
                   Are you sure you want to enroll in <strong>{course.title}</strong> -{" "}

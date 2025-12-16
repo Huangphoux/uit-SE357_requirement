@@ -45,7 +45,7 @@ const showToast = (message: string, type: "success" | "error") => {
   const toast = document.createElement("div");
   toast.style.cssText = `
     position: fixed;
-    top: 1rem;
+    top: 5rem;
     right: 1rem;
     padding: 1rem 1.5rem;
     border-radius: 0.5rem;
@@ -127,7 +127,7 @@ export default function CourseAssignments() {
       setShowSubmitModal(false);
       setSubmitUrl("");
       setSelectedAssignment(null);
-      
+
       // Refresh submissions
       await fetchSubmissions();
     } catch (err: any) {
@@ -362,10 +362,7 @@ export default function CourseAssignments() {
                 <h3 className="text-xl font-semibold text-gray-900">Submit Assignment</h3>
                 <p className="text-sm text-gray-600 mt-1">{selectedAssignment.title}</p>
               </div>
-              <button
-                onClick={closeSubmitModal}
-                className="text-gray-400 hover:text-gray-600"
-              >
+              <button onClick={closeSubmitModal} className="text-gray-400 hover:text-gray-600">
                 <X className="w-6 h-6" />
               </button>
             </div>
