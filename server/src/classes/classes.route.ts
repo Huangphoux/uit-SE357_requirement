@@ -147,19 +147,19 @@ class ClassesRoutes extends BaseRouter {
       {
         method: "post",
         path: "/",
-        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireTeacher, validateBody(classCreateSchema)],
+        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireAdmin, validateBody(classCreateSchema)],
         controller: ClassesController.createClass,
       },
       {
         method: "put",
         path: "/:id",
-        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireTeacher, validateBody(classUpdateSchema)],
+        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireAdmin, validateBody(classUpdateSchema)],
         controller: ClassesController.updateClass,
       },
       {
         method: "delete",
         path: "/:id",
-        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireTeacher],
+        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireAdmin],
         controller: ClassesController.deleteClass,
       },
       {

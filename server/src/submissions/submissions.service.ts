@@ -26,9 +26,67 @@ export default class SubmissionsService {
         },
       });
     }
+    console.log(assignmentId);
 
     const where: any = {};
     if (assignmentId) where.assignmentId = assignmentId;
+    // if (userId) where.userId = userId;
+
+    return await prisma.submission.findMany({
+      where: Object.keys(where).length > 0 ? where : undefined,
+      include: {
+        assignment: {
+          include: {
+            class: {
+              include: {
+                course: true,
+              },
+            },
+          },
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        feedback: true,
+      },
+      orderBy: {
+        submittedAt: "desc",
+      },
+    });
+  }
+
+  static async findbyStudent(id?: string, userId?: string) {
+    if (id) {
+      return await prisma.submission.findUnique({
+        where: { id },
+        include: {
+          assignment: {
+            include: {
+              class: {
+                include: {
+                  course: true,
+                },
+              },
+            },
+          },
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+          feedback: true,
+        },
+      });
+    }
+
+    const where: any = {};
+
     if (userId) where.userId = userId;
 
     return await prisma.submission.findMany({
@@ -58,12 +116,7 @@ export default class SubmissionsService {
     });
   }
 
-  static async create(data: {
-    assignmentId: string;
-    userId: string;
-    content?: string;
-    fileUrl?: string;
-  }) {
+  static async create(data: { assignmentId: string; userId: string; content?: string; fileUrl?: string }) {
     if (!data.assignmentId) {
       throw new Error("Assignment ID is required");
     }
@@ -187,5 +240,84 @@ export default class SubmissionsService {
     await prisma.submission.delete({
       where: { id },
     });
+  }
+  static async findById(id: string) {
+    return await prisma.submission.findUnique({
+      where: { id },
+      include: {
+        assignment: {
+          include: {
+            class: true,
+          },
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        feedback: true,
+      },
+    });
+  }
+
+  static async grade(
+    id: string,
+    gradeData: {
+      grade: number;
+      feedback?: string;
+    },
+    teacherId: string
+  ) {
+    try {
+      await prisma.feedback.create({
+        data: {
+          submissionId: id,
+          createdBy: teacherId,
+          score: gradeData.grade,
+          comment: gradeData.feedback || "",
+        },
+      });
+
+      // 2. Update submission status
+      await prisma.submission.update({
+        where: { id },
+        data: {
+          status: "GRADED",
+        },
+      });
+
+      // 3. Trả về submission đầy đủ
+      return await prisma.submission.findUnique({
+        where: { id },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+          feedback: {
+            orderBy: {
+              createdAt: "desc",
+            },
+          },
+          assignment: {
+            include: {
+              class: {
+                include: {
+                  course: true,
+                },
+              },
+            },
+          },
+        },
+      });
+    } catch (error) {
+      console.error("Grading error:", error);
+      throw new Error("Failed to grade submission: " + error.message);
+    }
   }
 }

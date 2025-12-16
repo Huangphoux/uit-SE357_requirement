@@ -5,3 +5,5 @@ development.env
 
 /generated/prisma
 prisma/migrations/*
+
+dev.db
