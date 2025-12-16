@@ -836,7 +836,7 @@ function AssignmentsManagement({ courseId, classId }: { courseId: string; classI
                               title: assignment.title,
                               description: assignment.description || "",
                               dueDate: assignment.dueDate
-                                ? new Date(assignment.dueDate).toISOString().split("T")[0]
+                                ? new Date(assignment.dueDate).toISOString().slice(0, 16) // Format: "2024-12-31T23:59"
                                 : "",
                               maxScore: assignment.maxScore?.toString() || "",
                             });
@@ -919,9 +919,15 @@ function AssignmentsManagement({ courseId, classId }: { courseId: string; classI
               <ValidatedInput
                 label="Due Date"
                 type="datetime-local"
-                value={formData.dueDate}
-                onChange={(value) => setFormData({ ...formData, dueDate: value })}
+                value={formData.dueDate} // Giờ đây formData.dueDate đã là string format đúng
+                onChange={(value) => {
+                  setFormData({
+                    ...formData,
+                    dueDate: value, // Lưu trực tiếp string, không convert
+                  });
+                }}
                 validation={{ required: true }}
+                placeholder="Select date and time"
               />
 
               <ValidatedInput
@@ -937,7 +943,7 @@ function AssignmentsManagement({ courseId, classId }: { courseId: string; classI
                 loading={isSaving}
                 loadingText={editingAssignment ? "Updating..." : "Creating..."}
                 onClick={async () => {
-                  // Validate từng field riêng
+                  // Validate
                   if (!formData.title.trim()) {
                     toast.error("Title is required");
                     return;
@@ -948,25 +954,15 @@ function AssignmentsManagement({ courseId, classId }: { courseId: string; classI
                     return;
                   }
 
-                  if (!formData.dueDate.trim()) {
+                  if (!formData.dueDate) {
                     toast.error("Due date is required");
-                    return;
-                  }
-
-                  const validation = validateForm(formData, {
-                    title: { required: true, minLength: 3 },
-                    dueDate: { required: true },
-                  });
-
-                  if (!validation.isValid) {
-                    toast.error("Please fill in all required fields");
                     return;
                   }
 
                   setIsSaving(true);
 
                   try {
-                    // Convert date to ISO string
+                    // Convert datetime-local string sang ISO
                     const dueDateISO = new Date(formData.dueDate).toISOString();
 
                     if (editingAssignment) {
