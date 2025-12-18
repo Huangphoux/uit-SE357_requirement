@@ -176,9 +176,22 @@ class CoursesRoutes extends BaseRouter {
       },
       {
         method: "post",
+        path: "/enrollByAdmin",
+        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireAdmin, validateBody(enrollSchema)],
+        controller: CoursesController.enrollInClassByAdmin,
+      },
+      {
+        method: "post",
         path: "/unenroll",
         middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireStudent, validateBody(unenrollSchema)],
         controller: CoursesController.unenrollFromClass,
+      },
+
+      {
+        method: "post",
+        path: "/removeEnroll",
+        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireStudent, validateBody(unenrollSchema)],
+        controller: CoursesController.unenrollFromClassStudent,
       },
       {
         method: "get",
@@ -188,13 +201,13 @@ class CoursesRoutes extends BaseRouter {
       {
         method: "post",
         path: "/",
-        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireTeacher, validateBody(courseCreateSchema)],
+        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireAdmin, validateBody(courseCreateSchema)],
         controller: CoursesController.createCourse,
       },
       {
         method: "put",
         path: "/:id",
-        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireTeacher, validateBody(courseUpdateSchema)],
+        middlewares: [AuthMiddleware.authenticateUser, AuthMiddleware.requireAdmin, validateBody(courseUpdateSchema)],
         controller: CoursesController.updateCourse,
       },
       {

@@ -7,7 +7,7 @@ export default class MaterialsController {
   static async getMaterials(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { classId } = req.query;
+      const { classId } = req.params;
       const userId = (req as any).userId;
 
       const result = await MaterialsService.find(id, classId as string, userId);
@@ -17,6 +17,61 @@ export default class MaterialsController {
       }
 
       const response = id ? { material: result } : { materials: result };
+      return Send.success(res, response);
+    } catch (error: any) {
+      logger.error({ error }, "Error fetching materials");
+      return Send.error(res, {}, error.message || "Internal server error");
+    }
+  }
+
+   static async getMaterialsByStudent(req: Request, res: Response) {
+    try {
+      const { classId } = req.body;
+
+      const result = await MaterialsService.findByAdmin(classId as string);
+
+      if (!result) {
+        return Send.notFound(res, {}, "Materials not found");
+      }
+
+      const response = { materials: result };
+      return Send.success(res, response);
+    } catch (error: any) {
+      logger.error({ error }, "Error fetching materials");
+      return Send.error(res, {}, error.message || "Internal server error");
+    }
+  }
+
+  static async getEnrollments(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const userId = (req as any).userId;
+
+      const result = await MaterialsService.findEnrollments(userId);
+
+      if (!result) {
+        return Send.notFound(res, {}, id ? "Enrollment not found" : "Enrollments not found");
+      }
+
+      const response = id ? { enrollment: result } : { enrollments: result };
+      return Send.success(res, response);
+    } catch (error: any) {
+      logger.error({ error }, "Error fetching materials");
+      return Send.error(res, {}, error.message || "Internal server error");
+    }
+  }
+
+  static async getEnrollmentsByAdmin(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+
+      const result = await MaterialsService.findEnrollmentsByAdmin();
+
+      if (!result) {
+        return Send.notFound(res, {}, id ? "Enrollment not found" : "Enrollments not found");
+      }
+
+      const response = id ? { enrollment: result } : { enrollments: result };
       return Send.success(res, response);
     } catch (error: any) {
       logger.error({ error }, "Error fetching materials");

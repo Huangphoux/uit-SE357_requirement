@@ -48,6 +48,20 @@ export default class AssignmentsService {
     });
   }
 
+  static async findByStudent(userId?: string) {
+    if (userId) {
+      const enrollments = await prisma.enrollment.findMany({
+        where: { userId },
+        select: { classId: true },
+      });
+      const classIds = enrollments.map((enrollment) => enrollment.classId);
+
+      return await prisma.assignment.findMany({
+        where: { classId: { in: classIds } },
+      });
+    }
+  }
+
   static async create(data: {
     title: string;
     description?: string;
