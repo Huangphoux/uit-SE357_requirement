@@ -328,16 +328,34 @@
   [btnUnenroll], [Button], [No], [Yes], [], [Click this button to unenroll the course.],
 )
 
-= Student Portal
+= Teacher Portal
 
-#image("images/Student_Portal.png")
+#image("images/Teacher_Portal.png")
+
+= View Assigment
+
+#image("images/View_Assignment.png")
+
 
 #table(
   columns: 6,
   [*Component*], [*Data Type*], [*Editable*], [*Mandatory*], [*Default Value*], [*Description*],
-  [btnViewCourse], [Button], [No], [Yes], [], [Click this button to view the course's materials.],
-  [btnUnenroll], [Button], [No], [Yes], [], [Click this button to unenroll the course.],
+  [btnView], [Button], [No], [Yes], [], [Click this button to view assignment.],
+  [btnBack], [Button], [No], [Yes], [], [Click this button to go back to the courses page.],
 )
 
 
 
+= View Assigment
+
+#image("images/View_Course_Catalog.png")
+
+
+#table(
+  columns: 6,
+  [*Component*], [*Data Type*], [*Editable*], [*Mandatory*], [*Default Value*], [*Description*],
+  [btnLogOut], [Button], [No], [No], [], [Click this button to log out.],
+  [txtBoxSearch], [TextBox], [Yes], [No], [], [Text box to search for courses.],
+  [btnEnroll], [Button], [No], [Yes], [], [Click this button to enroll the course.],
+  [btnUnenroll], [Button], [No], [Yes], [], [Click this button to unenroll the course.],
+)
