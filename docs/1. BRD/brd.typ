@@ -29,7 +29,7 @@ Xây dựng website quản lí trung tâm tiếng Anh",
 == Domain objects
 
 === Diagram
-#image("/out/docs/2. Diagrams/Domain/DomainDiagram.svg")
+#image("/out/docs/2. Diagrams/Domain/DomainDiagram.png")
 
 === Domain Objects Description
 #include "domain.typ"

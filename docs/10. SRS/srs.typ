@@ -27,7 +27,11 @@ Xây dựng website quản lí trung tâm tiếng Anh",
 #include "us_srs.typ"
 
 == List Description
+#include "../4. View Description/list_description.typ"
+
 == View Description
+#include "../4. View Description/view_description.typ"
+
 
 = Non-Functional Requirements
 
@@ -35,8 +39,10 @@ Xây dựng website quản lí trung tâm tiếng Anh",
 #include "matrix.typ"
 
 == Performance Requirements
+#include "performance_requirements.typ"
 
 == Implementation Requirements
-
+#include "implementation_requirements.typ"
 
 = Other Requirements
+#include "other_requirements.typ"
