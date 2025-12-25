@@ -1,71 +1,66 @@
 @startuml SignUp
-title <font size=24>Sign Up Sequence</font>
+title <font size=24>Sign Up Sequence (MVP - No Email Verification)</font>
 skinparam sequenceMessageAlign center
 autonumber
 
 actor User as act
 boundary SignUp_Page as page
 participant ":AuthRouter" as router
-control AuthController as controler
-participant ":User" as context
+control AuthController as controller
+participant AuthService as service
 database Database as db
 
 loop Input invalid
-    act -> page: Enter new information of User and click "Lưu" button
+    act -> page: Enter name, email, password and click "Sign Up" button
     activate page
-    page -> page: Validation input
+    page -> page: Client-side validation
     activate page
-
     deactivate page
     autonumber 3
-    page --> act: Display invalid input
+    page --> act: Display validation errors
 end
 
 autonumber 4
-page -> router: endpoint /api/auth/register
+page -> router: POST /api/auth/register
 activate router
-router -> controler: Call CreateNewUser(userData) method
-activate controler
-controler -> context: Call FindOne(userData.email) method
-activate context
-context -> db: Query database
+router -> controller: register(req, res)
+activate controller
+controller -> service: register(name, email, password)
+activate service
+service -> db: Check if email exists
 activate db
-db --> context: Return user
+db --> service: Return existing user or null
 deactivate db
-context --> controler: Return User
-deactivate context
-controler -> controler: Check null User
-activate controler
-deactivate controler
-opt User not null
-    autonumber 10.1
-    controler --> router: Return "User had existed"
-    router --> page: Return "User had existed"
-    page --> act: Return "User had existed"
+
+opt Email already registered
+    autonumber 9.1
+    service --> controller: Throw error "Email already exists"
+    controller --> router: Send.error("Email already exists")
+    router --> page: 400 Error response
+    page --> act: Show error message
 end
-autonumber 11
-controler -> context: Call newUser.save(userData) method
-activate context
-context -> db: Insert database
+
+autonumber 10
+service -> service: Hash password with bcrypt
+service -> db: Create user (role: STUDENT)
 activate db
-db --> context: Return number
+db --> service: Return new user
 deactivate db
-context --> controler: Return number
-deactivate context
-alt number < 0
-    autonumber 14.1
-    controler --> router: Return message error
-    autonumber 14.1.1
-    router --> page: Return message error
-    page --> act: Show message error
-else number > 0
-    autonumber 14.2
-    controler --> router: Return message error
-    autonumber 14.2.1
-    deactivate controler
-    router --> page: Return message successful
-    deactivate router
-    page --> act: Show message successful and redirect to login page
-    deactivate page
-end
+service --> controller: Return {id, name, email}
+deactivate service
+controller --> router: Send.success(user, "User registered")
+deactivate controller
+router --> page: 200 Success response
+deactivate router
+page --> act: Show success message
+act -> page: Click "Go to Login"
+page --> act: Navigate to login page
+deactivate page
+
+note right of page
+  MVP: No email verification
+  User can login immediately
+  Role defaults to STUDENT
+end note
+
 @enduml

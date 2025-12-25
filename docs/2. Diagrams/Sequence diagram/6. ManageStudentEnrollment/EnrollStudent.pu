@@ -1,17 +1,60 @@
 @startuml EnrollStudent
-title Enroll Student Sequence Diagram
+title Admin Enroll Student Sequence (Actual Implementation)
 
 actor Admin
-boundary ClassOrStudentProfileUI
-control EnrollmentController
-entity EnrollmentRepository
+boundary EnrollmentManagementUI as UI
+participant ":CoursesRouter" as router
+control CoursesController as controller
+participant CoursesService as service
+database Database as db
 
-Admin -> ClassOrStudentProfileUI : Open profile
-Admin -> ClassOrStudentProfileUI : Click 'Enroll' button
-ClassOrStudentProfileUI -> EnrollmentController : Enroll student request
-EnrollmentController -> EnrollmentRepository : Add enrollment record
-EnrollmentRepository --> EnrollmentController : Confirmation
-EnrollmentController --> ClassOrStudentProfileUI : Success response
-ClassOrStudentProfileUI -> Admin : Update UI with enrollment status
+Admin -> UI : Navigate to "Assign Management" tab
+UI -> router : GET /api/materials/enrollmentsByAdmin
+router --> UI : Return all enrollments with user+class data
+UI --> Admin : Display enrollment table
+
+Admin -> UI : Select class from dropdown
+Admin -> UI : Select student from dropdown
+Admin -> UI : Click "Enroll Student" button
+
+UI -> router : POST /api/courses/enrollByAdmin
+activate router
+router -> controller : enrollInClassByAdmin(req, res)
+activate controller
+controller -> service : enrollInClass(userId, classId)
+activate service
+
+service -> db : Check if enrollment exists
+activate db
+db --> service : Return existing enrollment or null
+deactivate db
+
+opt Already enrolled
+    service --> controller : Throw error
+    controller --> router : Send.error("Already enrolled")
+    router --> UI : 400 Error response
+    UI --> Admin : Show error toast
+end
+
+service -> db : Create enrollment (status: ACTIVE)
+activate db
+db --> service : Return new enrollment
+deactivate db
+
+service --> controller : Return enrollment
+deactivate service
+controller --> router : Send.success(enrollment)
+deactivate controller
+router --> UI : 200 Success response
+deactivate router
+UI -> UI : Refresh enrollment list
+UI --> Admin : Show success toast + updated table
+
+note right of router
+  API: POST /courses/enrollByAdmin
+  Body: {classId, userId}
+  Auth: Admin only
+  Creates record in Enrollment table
+end note
 
 @enduml

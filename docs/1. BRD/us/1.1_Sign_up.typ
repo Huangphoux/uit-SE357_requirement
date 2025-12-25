@@ -1,5 +1,3 @@
-
-
 = Sign up
 
 - Epic: User Authentication & Roles
@@ -8,8 +6,8 @@
 - BR: BR1
 - Description / Notes: Register on the platform
 - As a: New student
-- I want to: Sign up with email and password
-- Trigger: User clicks on the “Sign Up” or “Create Account” button
+- I want to: Sign up with name, email and password
+- Trigger: User clicks on the "Sign Up" or "Create Account" button
 - Pre-conditions:
   - User is not currently logged in.
   - User has a stable internet connection.
@@ -17,14 +15,18 @@
   - The email entered has not been registered before.
 - So that: I can access my account
 - Solution (Step-by-Step):
-  - Display registration form (email, password)
-  - Validate input fields
-  - Submit to backend API
-  - Hash password, create user
-  - Send confirmation email (optional)
-  - Redirect or auto-login
+  - Display registration form (name, email, password)
+  - Validate input fields (client-side)
+  - Submit to backend API: `POST /api/auth/register`
+  - Backend validates and checks for duplicate email
+  - Hash password with bcrypt, create user with role STUDENT
+  - Return success response
+  - User manually navigates to login page
 - Post-conditions:
   - New user account is successfully created in the database.
-  - (Optional) Verification email is sent.
+  - User role is set to STUDENT by default.
   - User can log in with their credentials.
-  - Registration event is logged for tracking.
+  - Registration event is logged.
+- Future Phase (Post-MVP):
+  - Email verification with confirmation link
+  - Auto-login after registration

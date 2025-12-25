@@ -1,18 +1,68 @@
 @startuml EnrollInCourse
-title Enroll in Course Sequence Diagram
+title Student Self-Enroll in Class Sequence (Actual Implementation)
 
 actor Student
-boundary CourseCatalogUI
-control EnrollmentController
-entity EnrollmentRepository
+boundary StudentDashboardUI as UI
+participant ":CoursesRouter" as router
+control CoursesController as controller
+participant CoursesService as service
+database Database as db
 
-Student -> CourseCatalogUI : Access course catalog
-Student -> CourseCatalogUI : Click 'Enroll' button on course
-CourseCatalogUI -> EnrollmentController : Send enroll request
-EnrollmentController -> EnrollmentRepository : Create enrollment record
-EnrollmentRepository --> EnrollmentController : Confirmation
-EnrollmentController --> CourseCatalogUI : Enrollment success response
-CourseCatalogUI -> Student : Update UI with enrolled courses
-Student -> DashboardUI : View dashboard with current enrollments
+Student -> UI : Navigate to course catalog
+UI -> router : GET /api/courses
+router --> UI : Return available courses
+UI --> Student : Display course list
+
+Student -> UI : Browse classes for a course
+Student -> UI : Click 'Enroll' button on class
+
+UI -> router : POST /api/courses/enroll
+activate router
+router -> controller : enrollInClass(req, res)
+activate controller
+controller -> service : enrollInClass(userId, classId)
+activate service
+
+service -> db : Verify class exists
+activate db
+db --> service : Return class
+deactivate db
+
+service -> db : Check if already enrolled
+activate db
+db --> service : Return enrollment or null
+deactivate db
+
+opt Already enrolled
+    service --> controller : Throw error
+    controller --> router : Send.error("Already enrolled")
+    router --> UI : 400 Error response
+    UI --> Student : Show error message
+end
+
+service -> db : Create enrollment (userId, classId, status: ACTIVE)
+activate db
+db --> service : Return new enrollment
+deactivate db
+
+service --> controller : Return enrollment
+deactivate service
+controller --> router : Send.success(enrollment)
+deactivate controller
+router --> UI : 200 Success response
+deactivate router
+
+UI --> Student : Show success message
+Student -> UI : View enrolled classes
+UI -> router : GET /api/courses/enrolled
+router --> UI : Return student's enrollments
+UI --> Student : Display enrolled courses
+
+note right of router
+  API: POST /courses/enroll
+  Body: {classId}
+  Auth: Student role required
+  userId extracted from JWT token
+end note
 
 @enduml
