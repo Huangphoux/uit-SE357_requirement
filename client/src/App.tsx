@@ -16,7 +16,7 @@ export default function App() {
     return (
       <>
         <StudentRegistration onShowLogin={() => setShowRegister(false)} />
-        <Toaster position="top-right" richColors />
+        <Toaster position="bottom-center" richColors />
       </>
     );
   }
@@ -26,7 +26,7 @@ export default function App() {
     return (
       <>
         <Login onShowRegister={() => setShowRegister(true)} />
-        <Toaster position="top-right" richColors />
+        <Toaster position="bottom-center" richColors />
       </>
     );
   }
@@ -48,7 +48,7 @@ export default function App() {
   return (
     <>
       {renderDashboard()}
-      <Toaster position="top-right" richColors />
+      <Toaster position="bottom-center" richColors />
     </>
   );
 }
