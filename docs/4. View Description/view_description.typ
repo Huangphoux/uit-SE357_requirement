@@ -1,3 +1,5 @@
+#set heading(level: 1)
+
 = Add Material
 
 #image("images/Add_Material.png")

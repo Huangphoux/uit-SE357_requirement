@@ -23,7 +23,6 @@ Xây dựng website quản lí trung tâm tiếng Anh",
 = Functional Requirements
 
 == Use Case Description
-
 #include "us_srs.typ"
 
 == List Description
@@ -31,7 +30,6 @@ Xây dựng website quản lí trung tâm tiếng Anh",
 
 == View Description
 #include "../4. View Description/view_description.typ"
-
 
 = Non-Functional Requirements
 

@@ -1,4 +1,5 @@
 #set page(width: auto)
+#set heading(level: 1)
 
 == List 07 - Course Management
 
