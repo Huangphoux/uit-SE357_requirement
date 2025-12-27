@@ -1,6 +1,6 @@
 #set heading(numbering: "1.")
 
-= ReviewSubmissions&Comment Business Rules
+= ReviewSubmissions&Comment Business Requirements
 
 #table(
   columns: (1fr, 1fr, 3fr),

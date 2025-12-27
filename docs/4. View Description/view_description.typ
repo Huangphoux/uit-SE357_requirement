@@ -1,4 +1,4 @@
-#set heading(level: 1)
+#set heading(offset: 2)
 
 = Add Material
 

@@ -1,5 +1,5 @@
-#set page(width: auto)
-#set heading(level: 1)
+// #set page(width: auto)
+#set heading(offset: 1)
 
 == List 07 - Course Management
 
@@ -114,7 +114,7 @@
   [],
 )
 
-=== Custom Business Rules
+=== Custom Business Requirements
 
 #table(
   columns: 3,
@@ -239,7 +239,7 @@
   [],
 )
 
-=== Custom Business Rules
+=== Custom Business Requirements
 
 #table(
   columns: 3,
@@ -376,7 +376,7 @@
   [],
 )
 
-=== Custom Business Rules
+=== Custom Business Requirements
 
 #table(
   columns: 3,
@@ -513,7 +513,7 @@
   [],
 )
 
-=== Custom Business Rules
+=== Custom Business Requirements
 
 #table(
   columns: 3,
@@ -653,7 +653,7 @@
   [],
 )
 
-=== Custom Business Rules
+=== Custom Business Requirements
 
 #table(
   columns: 3,
@@ -778,7 +778,7 @@
   [],
 )
 
-=== Custom Business Rules
+=== Custom Business Requirements
 
 #table(
   columns: 3,
@@ -903,7 +903,7 @@
   [7], [], [Button], [Edit], [No], [], [], [This button opens a form to edit score and feedback.], [], [], [], [], [],
 )
 
-=== Custom Business Rules
+=== Custom Business Requirements
 
 #table(
   columns: 3,
@@ -1028,7 +1028,7 @@
   [],
 )
 
-=== Custom Business Rules
+=== Custom Business Requirements
 
 #table(
   columns: 3,
@@ -1183,7 +1183,7 @@
   [],
 )
 
-=== Custom Business Rules
+=== Custom Business Requirements
 
 #table(
   columns: 3,

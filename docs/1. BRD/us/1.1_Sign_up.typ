@@ -3,7 +3,6 @@
 - Epic: User Authentication & Roles
 - Actor: Student
 - MVP: Yes
-- BR: BR1
 - Description / Notes: Register on the platform
 - As a: New student
 - I want to: Sign up with name, email and password

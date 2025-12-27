@@ -33,7 +33,7 @@
 *Class Diagrams:* #link("../2. Diagrams/Class")[Class/] directory
 *Use Case Diagrams:* #link("../2. Diagrams/Use case diagram")[Use case diagram/] directory
 *Domain Models:* #link("../2. Diagrams/Domain")[Domain/] directory
-*Business Rules:* #link("../2. Diagrams/Business rules")[Business rules/] directory
+*Business Requirements:* #link("../2. Diagrams/Business Requirements")[Business Requirements/] directory
 
 == System Specifications
 

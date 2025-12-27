@@ -1,6 +1,6 @@
 #set heading(numbering: "1.")
 
-= ViewEnrolledCourses Business Rules
+= ViewEnrolledCourses Business Requirements
 
 #table(
   columns: (1fr, 1fr, 3fr),

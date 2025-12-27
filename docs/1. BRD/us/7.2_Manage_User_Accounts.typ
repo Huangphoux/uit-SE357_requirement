@@ -2,26 +2,25 @@
 
 - Epic: Admin Dashboard & Settings
 - Actor: Admin
-- MVP: No
-- BR: BR22
+- MVP: No2
 - Description / Notes: Edit/delete/deactivate users
 - As a: Admin
 - I want to: Manage all user accounts
 - So that: I can edit or deactivate users
 - Trigger: The administrator needs to manage user accounts in the system.
 - Pre-condition:
-    - The administrator has successfully logged into the system.
-    - User accounts exist in the system.
+  - The administrator has successfully logged into the system.
+  - User accounts exist in the system.
 - Post-condition:
-    - User account information is successfully updated, or the account is deactivated/deleted.
-    - Changes are reflected in the system's user directory.
+  - User account information is successfully updated, or the account is deactivated/deleted.
+  - Changes are reflected in the system's user directory.
 - Solution (Step-by-Step):
-    - The administrator navigates to the user management panel.
-    - The system displays a list of all user accounts with their details.
-    - The administrator can:
-        - Search for specific user accounts.
-        - Edit user details (e.g., name, email, roles).
-        - Deactivate a user account, preventing them from logging in.
-        - Delete a user account (if applicable and with appropriate warnings).
-    - The system validates the changes and updates the user records in the database.
-    - A confirmation or error message is displayed to the administrator.
+  - The administrator navigates to the user management panel.
+  - The system displays a list of all user accounts with their details.
+  - The administrator can:
+    - Search for specific user accounts.
+    - Edit user details (e.g., name, email, roles).
+    - Deactivate a user account, preventing them from logging in.
+    - Delete a user account (if applicable and with appropriate warnings).
+  - The system validates the changes and updates the user records in the database.
+  - A confirmation or error message is displayed to the administrator.

@@ -3,7 +3,6 @@
 - Epic: Course & Class Management
 - Actor: Admin
 - MVP: Yes (Implemented via Courses API)
-- BR: BR7
 - Description / Notes: Assign/remove students from classes
 - As a: Admin
 - I want to: Enroll/remove students from classes

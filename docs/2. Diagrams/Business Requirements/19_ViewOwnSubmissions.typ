@@ -1,6 +1,6 @@
 #set heading(numbering: "1.")
 
-= ViewOwnSubmissions Business Rules
+= ViewOwnSubmissions Business Requirements
 
 #table(
   columns: (1fr, 1fr, 3fr),

@@ -1,6 +1,6 @@
 #set heading(numbering: "1.")
 
-= ReceiveNotifications Business Rules
+= ReceiveNotifications Business Requirements
 
 #table(
   columns: (1fr, 1fr, 3fr),
