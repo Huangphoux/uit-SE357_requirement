@@ -1,24 +1,35 @@
 = Edit Class
 
-- Epic: Class Management
-- Actor: Admin
-- MVP: Yes
-- BR: BR-CLS-2
-- Description / Notes: Edit a class in the admin panel.
-- As a: Admin
-- I want to: Edit a class's details
-- So that: I can update its information.
-- Trigger: The admin needs to change a class's details (e.g., name, teacher).
-- Pre-condition:
+#table(
+  columns: (auto, 1fr),
+  [*Epic*], [Class Management],
+  [*Actor*], [Admin],
+  [*MVP*], [Yes],
+  [*BR*], [BR-CLS-2],
+  [*Description / Notes*], [Edit a class in the admin panel.],
+  [*As a*], [Admin],
+  [*I want to*], [Edit a class's details],
+  [*So that*], [I can update its information.],
+  [*Trigger*], [The admin needs to change a class's details (e.g., name, teacher).],
+  [*Pre-condition*],
+  [
     - The admin must be logged into the system.
     - The admin must have class management permissions.
     - The class to be edited must exist.
-- Post-condition:
+  ],
+
+  [*Post-condition*],
+  [
     - The class's details are updated.
-- Solution (Step-by-Step):
-  - Open class management panel.
-  - Find the class to edit.
-  - Click the "Edit" button for that class.
-  - Modify the class's details in the form.
-  - Submit the form.
-  - Backend updates the class.
+  ],
+
+  [*Solution (Step-by-Step)*],
+  [
+    - Open class management panel.
+    - Find the class to edit.
+    - Click the "Edit" button for that class.
+    - Modify the class's details in the form.
+    - Submit the form.
+    - Backend updates the class.
+  ],
+)

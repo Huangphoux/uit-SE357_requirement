@@ -1,24 +1,35 @@
 = Edit Course
 
-- Epic: Course Management
-- Actor: Admin
-- MVP: Yes
-- BR: BR-CRS-2
-- Description / Notes: Edit a course in the admin panel.
-- As a: Admin
-- I want to: Edit a course's details
-- So that: I can update its information.
-- Trigger: The admin needs to change a course's details (e.g., name, description).
-- Pre-condition:
+#table(
+  columns: (auto, 1fr),
+  [*Epic*], [Course Management],
+  [*Actor*], [Admin],
+  [*MVP*], [Yes],
+  [*BR*], [BR-CRS-2],
+  [*Description / Notes*], [Edit a course in the admin panel.],
+  [*As a*], [Admin],
+  [*I want to*], [Edit a course's details],
+  [*So that*], [I can update its information.],
+  [*Trigger*], [The admin needs to change a course's details (e.g., name, description).],
+  [*Pre-condition*],
+  [
     - The admin must be logged into the system.
     - The admin must have course management permissions.
     - The course to be edited must exist.
-- Post-condition:
+  ],
+
+  [*Post-condition*],
+  [
     - The course's details are updated.
-- Solution (Step-by-Step):
-  - Open course management panel.
-  - Find the course to edit.
-  - Click the "Edit" button for that course.
-  - Modify the course's details in the form.
-  - Submit the form.
-  - Backend updates the course.
+  ],
+
+  [*Solution (Step-by-Step)*],
+  [
+    - Open course management panel.
+    - Find the course to edit.
+    - Click the "Edit" button for that course.
+    - Modify the course's details in the form.
+    - Submit the form.
+    - Backend updates the course.
+  ],
+)

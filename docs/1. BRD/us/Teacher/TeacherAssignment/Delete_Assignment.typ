@@ -1,21 +1,32 @@
 = Delete Assignment
 
-- Epic: Assignment Management
-- Actor: Teacher
-- MVP: Yes
-- BR: BR-ASM-3
-- Description / Notes: Delete an assignment.
-- As a: Teacher
-- I want to: CRUD written assignments
-- So that: Students can practice and be assessed.
-- Trigger: The teacher wants to remove an assignment.
-- Pre-condition:
+#table(
+  columns: (auto, 1fr),
+  [*Epic*], [Assignment Management],
+  [*Actor*], [Teacher],
+  [*MVP*], [Yes],
+  [*BR*], [BR-ASM-3],
+  [*Description / Notes*], [Delete an assignment.],
+  [*As a*], [Teacher],
+  [*I want to*], [CRUD written assignments],
+  [*So that*], [Students can practice and be assessed.],
+  [*Trigger*], [The teacher wants to remove an assignment.],
+  [*Pre-condition*],
+  [
     - The teacher is logged in and assigned to the course.
     - The assignment exists.
-- Post-condition:
+  ],
+
+  [*Post-condition*],
+  [
     - The assignment is removed.
-- Solution (Step-by-Step):
-  - Go to the course page.
-  - Find the assignment to delete.
-  - Click "Delete".
-  - Confirm the deletion.
+  ],
+
+  [*Solution (Step-by-Step)*],
+  [
+    - Go to the course page.
+    - Find the assignment to delete.
+    - Click "Delete".
+    - Confirm the deletion.
+  ],
+)
