@@ -1,31 +1,45 @@
 = Sign up
 
-- Epic: User Authentication & Roles
-- Actor: Student
-- MVP: Yes
-- Description / Notes: Register on the platform
-- As a: New student
-- I want to: Sign up with name, email and password
-- Trigger: User clicks on the "Sign Up" or "Create Account" button
-- Pre-conditions:
-  - User is not currently logged in.
-  - User has a stable internet connection.
-  - Registration page and backend API are available.
-  - The email entered has not been registered before.
-- So that: I can access my account
-- Solution (Step-by-Step):
-  - Display registration form (name, email, password)
-  - Validate input fields (client-side)
-  - Submit to backend API: `POST /api/auth/register`
-  - Backend validates and checks for duplicate email
-  - Hash password with bcrypt, create user with role STUDENT
-  - Return success response
-  - User manually navigates to login page
-- Post-conditions:
-  - New user account is successfully created in the database.
-  - User role is set to STUDENT by default.
-  - User can log in with their credentials.
-  - Registration event is logged.
-- Future Phase (Post-MVP):
-  - Email verification with confirmation link
-  - Auto-login after registration
+#table(
+  columns: (auto, 1fr),
+  [*Epic*], [User Authentication & Roles],
+  [*Actor*], [Student],
+  [*MVP*], [Yes],
+  [*Description / Notes*], [Register on the platform],
+  [*As a*], [New student],
+  [*I want to*], [Sign up with name, email and password],
+  [*Trigger*], [User clicks on the "Sign Up" or "Create Account" button],
+  [*Pre-conditions*],
+  [
+    - User is not currently logged in.
+    - User has a stable internet connection.
+    - Registration page and backend API are available.
+    - The email entered has not been registered before.
+  ],
+
+  [*So that*], [I can access my account],
+  [*Solution (Step-by-Step)*],
+  [
+    - Display registration form (name, email, password)
+    - Validate input fields (client-side)
+    - Submit to backend API: `POST /api/auth/register`
+    - Backend validates and checks for duplicate email
+    - Hash password with bcrypt, create user with role STUDENT
+    - Return success response
+    - User manually navigates to login page
+  ],
+
+  [*Post-conditions*],
+  [
+    - New user account is successfully created in the database.
+    - User role is set to STUDENT by default.
+    - User can log in with their credentials.
+    - Registration event is logged.
+  ],
+
+  [*Future Phase (Post-MVP)*],
+  [
+    - Email verification with confirmation link
+    - Auto-login after registration
+  ],
+)

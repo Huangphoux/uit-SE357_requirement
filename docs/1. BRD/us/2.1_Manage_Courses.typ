@@ -1,25 +1,36 @@
 = Manage Courses
 
-- Epic: Course & Class Management
-- Actor: Admin
-- MVP: Yes
-- Description / Notes: Full course lifecycle management
-- As a: Admin
-- I want to: CRUD courses
-- So that: We can structure learning content
-- Trigger: The administrator wants to manage course information in the system.
-- Pre-condition:
-  - The administrator has successfully logged into the system.
-  - The system has a list of available courses.
-- Post-condition:
-  - The course information is successfully created, updated, or deleted from the system.
-  - The changes are reflected in the course list.
-- Solution (Step-by-Step):
-  - The administrator accesses the course management page.
-  - The system displays a list of existing courses.
-  - The administrator can:
-    - Add a new course by providing information such as course name, description, and other relevant details.
-    - Edit information for an existing course.
-    - Delete a course from the system.
-  - The system validates the information and updates the database.
-  - The system displays a notification of success or failure.
+#table(
+  columns: (auto, 1fr),
+  [*Epic*], [Course & Class Management],
+  [*Actor*], [Admin],
+  [*MVP*], [Yes],
+  [*Description / Notes*], [Full course lifecycle management],
+  [*As a*], [Admin],
+  [*I want to*], [CRUD courses],
+  [*So that*], [We can structure learning content],
+  [*Trigger*], [The administrator wants to manage course information in the system.],
+  [*Pre-condition*],
+  [
+    - The administrator has successfully logged into the system.
+    - The system has a list of available courses.
+  ],
+
+  [*Post-condition*],
+  [
+    - The course information is successfully created, updated, or deleted from the system.
+    - The changes are reflected in the course list.
+  ],
+
+  [*Solution (Step-by-Step)*],
+  [
+    - The administrator accesses the course management page.
+    - The system displays a list of existing courses.
+    - The administrator can:
+      - Add a new course by providing information such as course name, description, and other relevant details.
+      - Edit information for an existing course.
+      - Delete a course from the system.
+    - The system validates the information and updates the database.
+    - The system displays a notification of success or failure.
+  ],
+)
