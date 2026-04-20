@@ -1,6 +1,7 @@
 import { prisma } from "util/db";
 import jwt from "jsonwebtoken";
 import authConfig from "config/auth.config";
+import lockoutConfig from "config/lockout.config";
 import { comparePassword, hashPassword } from "util/hash";
 // import { z } from "zod";
 // import AuthSchema from "./auth.schema";
@@ -20,26 +21,80 @@ export default class AuthService {
     return user;
   }
 
-  static async login(email: string, password: string) {
+  static async login(email: string, password: string, ip: string) {
+    const MAX_ATTEMPTS = parseInt(lockoutConfig.maxAttempts);
+    const BLOCK_TIME = parseInt(lockoutConfig.lockoutTime);
+
+    const attempt = await prisma.loginAttempt.findUnique({
+      where: { ip },
+    });
+
+    if (attempt?.blockedUntil && attempt.blockedUntil > new Date()) {
+      throw new Error("Too many failed attempts. Try again later.");
+    }
+
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) {
-      throw new Error("Invalid credentials");
-    }
 
-    const isPasswordValid = await comparePassword(password, user.password);
+    const isPasswordValid =
+      user && (await comparePassword(password, user.password));
+
     if (!isPasswordValid) {
+      if (!attempt) {
+        await prisma.loginAttempt.create({
+          data: {
+            ip,
+            attempts: 1,
+            lastTry: new Date(),
+          },
+        });
+      } else {
+        const newAttempts = attempt.attempts + 1;
+
+        let blockedUntil: Date | null = null;
+
+        if (newAttempts >= MAX_ATTEMPTS) {
+          blockedUntil = new Date(Date.now() + BLOCK_TIME);
+        }
+
+        await prisma.loginAttempt.update({
+          where: { ip },
+          data: {
+            attempts: newAttempts,
+            blockedUntil,
+            lastTry: new Date(),
+          },
+        });
+      }
+
       throw new Error("Invalid credentials");
     }
 
-    const accessToken = jwt.sign({ userId: user.id, role: user.role }, authConfig.secret, {
-      expiresIn: authConfig.secret_expires_in as any,
-    });
+    if (attempt) {
+      await prisma.loginAttempt.delete({
+        where: { ip },
+      });
+    }
 
-    const refreshToken = jwt.sign({ userId: user.id, role: user.role }, authConfig.refresh_secret, {
-      expiresIn: authConfig.refresh_secret_expires_in as any,
-    });
+    const accessToken = jwt.sign(
+      { userId: user.id, role: user.role },
+      authConfig.secret,
+      {
+        expiresIn: authConfig.secret_expires_in as any,
+      }
+    );
 
-    await prisma.user.update({ where: { email }, data: { refreshToken } });
+    const refreshToken = jwt.sign(
+      { userId: user.id, role: user.role },
+      authConfig.refresh_secret,
+      {
+        expiresIn: authConfig.refresh_secret_expires_in as any,
+      }
+    );
+
+    await prisma.user.update({
+      where: { email },
+      data: { refreshToken },
+    });
 
     return { user, accessToken, refreshToken };
   }

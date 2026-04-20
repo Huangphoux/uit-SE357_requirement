@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { logger } from "util/logger";
 import SubmissionsService from "./submissions.service";
 import { prisma } from "util/db";
+import { getRequestIp, writeAuditLog } from "util/auditLogger";
 
 export default class SubmissionsController {
   static async getSubmissions(req: Request, res: Response) {
@@ -21,6 +22,19 @@ export default class SubmissionsController {
       if (!result) {
         return Send.notFound(res, {}, id ? "Submission not found" : "Submissions not found");
       }
+
+      await writeAuditLog({
+        category: "FILE_ACCESS",
+        action: id ? "SUBMISSION_READ_ONE" : "SUBMISSION_READ_LIST",
+        success: true,
+        userId: userId ? String(userId) : undefined,
+        ip: getRequestIp(req),
+        method: req.method,
+        path: req.originalUrl,
+        statusCode: 200,
+        resourceType: "SUBMISSION",
+        resourceId: id,
+      });
 
       const response = id ? { submission: result } : { submissions: result };
       return Send.success(res, response);
@@ -66,6 +80,20 @@ export default class SubmissionsController {
         fileUrl,
       });
 
+      await writeAuditLog({
+        category: "FILE_ACCESS",
+        action: "SUBMISSION_CREATE",
+        success: true,
+        userId: String(userId),
+        ip: getRequestIp(req),
+        method: req.method,
+        path: req.originalUrl,
+        statusCode: 200,
+        resourceType: "SUBMISSION",
+        resourceId: submission.id,
+        metadata: { assignmentId },
+      });
+
       return Send.success(res, { submission }, "Submission created successfully");
     } catch (error: any) {
       logger.error({ error }, "Error creating submission");
@@ -83,6 +111,19 @@ export default class SubmissionsController {
         fileUrl,
       });
 
+      await writeAuditLog({
+        category: "FILE_ACCESS",
+        action: "SUBMISSION_UPDATE",
+        success: true,
+        userId: (req as any).userId ? String((req as any).userId) : undefined,
+        ip: getRequestIp(req),
+        method: req.method,
+        path: req.originalUrl,
+        statusCode: 200,
+        resourceType: "SUBMISSION",
+        resourceId: id,
+      });
+
       return Send.success(res, { submission }, "Submission updated successfully");
     } catch (error: any) {
       logger.error({ error }, "Error updating submission");
@@ -95,6 +136,19 @@ export default class SubmissionsController {
       const { id } = req.params;
 
       await SubmissionsService.delete(id);
+
+      await writeAuditLog({
+        category: "FILE_ACCESS",
+        action: "SUBMISSION_DELETE",
+        success: true,
+        userId: (req as any).userId ? String((req as any).userId) : undefined,
+        ip: getRequestIp(req),
+        method: req.method,
+        path: req.originalUrl,
+        statusCode: 200,
+        resourceType: "SUBMISSION",
+        resourceId: id,
+      });
 
       return Send.success(res, {}, "Submission deleted successfully");
     } catch (error: any) {
@@ -153,6 +207,20 @@ export default class SubmissionsController {
         },
         teacherId
       );
+
+      await writeAuditLog({
+        category: "ADMIN",
+        action: "SUBMISSION_GRADED",
+        success: true,
+        userId: String(teacherId),
+        ip: getRequestIp(req),
+        method: req.method,
+        path: req.originalUrl,
+        statusCode: 200,
+        resourceType: "SUBMISSION",
+        resourceId: id,
+        metadata: { grade },
+      });
 
       return Send.success(res, { submission: gradedSubmission }, "Submission graded successfully");
     } catch (error: any) {

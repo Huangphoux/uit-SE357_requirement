@@ -21,8 +21,11 @@ import materialRoute from "materials/materials.route";
 import assignmentRoute from "assignments/assignments.route";
 import submissionRoute from "submissions/submissions.route";
 import feedbackRoute from "feedback/feedback.route";
+import auditRoute from "audit/audit.route";
 
 import { logger } from "util/logger";
+import { rateLimiter } from "middlewares/rateLimit";
+import rateLimit from "./config/rateLimit.config"
 
 export default class App {
   private app: Express;
@@ -54,6 +57,13 @@ export default class App {
     this.app.use(morgan("dev"));
     this.app.use(helmet());
     this.app.use(compression());
+    this.app.use(rateLimiter({
+      endpoint: "/api",
+      rate_limit: {
+        time: parseInt(rateLimit.limitWindow), // 1 minute
+        limit: parseInt(rateLimit.limitMax) // 10 requests
+      }
+    }));
 
     this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
   }
@@ -67,6 +77,7 @@ export default class App {
     this.app.use("/api/assignments", assignmentRoute); // /api/assignments/*
     this.app.use("/api/submissions", submissionRoute); // /api/submissions/*
     this.app.use("/api/feedback", feedbackRoute); // /api/feedback/*
+    this.app.use("/api/audit", auditRoute); // /api/audit/*
 
     this.app.use("/api", healthRoute); // /api/healthcheck
 

@@ -37,4 +37,21 @@ const login = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
-export { login as loginSchema, register as registerSchema, passwordSchema, usernameSchema };
+const loginAttemptSchema = z.object({
+  ip: z
+    .string()
+    .min(1, "IP is required")
+    .max(45, "Invalid IP length"),
+
+  attempts: z
+    .number()
+    .int()
+    .min(0, "Attempts must be >= 0")
+    .max(100, "Too many attempts"),
+
+  lastTry: z.date(),
+
+  blockedUntil: z.date().nullable().optional(),
+});
+
+export { login as loginSchema, register as registerSchema, passwordSchema, usernameSchema, loginAttemptSchema };

@@ -2,6 +2,7 @@ import Send from "util/response";
 import { Request, Response } from "express";
 import { logger } from "util/logger";
 import MaterialsService from "./materials.service";
+import { getRequestIp, writeAuditLog } from "util/auditLogger";
 
 export default class MaterialsController {
   static async getMaterials(req: Request, res: Response) {
@@ -15,6 +16,19 @@ export default class MaterialsController {
       if (!result) {
         return Send.notFound(res, {}, id ? "Material not found" : "Materials not found");
       }
+
+      await writeAuditLog({
+        category: "FILE_ACCESS",
+        action: id ? "MATERIAL_READ_ONE" : "MATERIAL_READ_LIST",
+        success: true,
+        userId: userId ? String(userId) : undefined,
+        ip: getRequestIp(req),
+        method: req.method,
+        path: req.originalUrl,
+        statusCode: 200,
+        resourceType: "MATERIAL",
+        resourceId: id,
+      });
 
       const response = id ? { material: result } : { materials: result };
       return Send.success(res, response);
@@ -97,6 +111,20 @@ export default class MaterialsController {
         createdBy: userId,
       });
 
+      await writeAuditLog({
+        category: "FILE_ACCESS",
+        action: "MATERIAL_CREATE",
+        success: true,
+        userId: String(userId),
+        ip: getRequestIp(req),
+        method: req.method,
+        path: req.originalUrl,
+        statusCode: 200,
+        resourceType: "MATERIAL",
+        resourceId: material.id,
+        metadata: { classId },
+      });
+
       return Send.success(res, { material }, "Material created successfully");
     } catch (error: any) {
       logger.error({ error }, "Error creating material");
@@ -116,6 +144,19 @@ export default class MaterialsController {
         url,
       });
 
+      await writeAuditLog({
+        category: "FILE_ACCESS",
+        action: "MATERIAL_UPDATE",
+        success: true,
+        userId: (req as any).userId ? String((req as any).userId) : undefined,
+        ip: getRequestIp(req),
+        method: req.method,
+        path: req.originalUrl,
+        statusCode: 200,
+        resourceType: "MATERIAL",
+        resourceId: id,
+      });
+
       return Send.success(res, { material }, "Material updated successfully");
     } catch (error: any) {
       logger.error({ error }, "Error updating material");
@@ -128,6 +169,19 @@ export default class MaterialsController {
       const { id } = req.params;
 
       await MaterialsService.delete(id);
+
+      await writeAuditLog({
+        category: "FILE_ACCESS",
+        action: "MATERIAL_DELETE",
+        success: true,
+        userId: (req as any).userId ? String((req as any).userId) : undefined,
+        ip: getRequestIp(req),
+        method: req.method,
+        path: req.originalUrl,
+        statusCode: 200,
+        resourceType: "MATERIAL",
+        resourceId: id,
+      });
 
       return Send.success(res, {}, "Material deleted successfully");
     } catch (error: any) {

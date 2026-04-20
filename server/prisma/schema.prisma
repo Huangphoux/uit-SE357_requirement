@@ -32,6 +32,13 @@ model User {
     submissions Submission[]
 }
 
+model LoginAttempt {
+    ip          String   @id
+    attempts    Int      @default(0)
+    lastTry     DateTime @default(now())
+    blockedUntil DateTime?
+}
+
 // Course model
 model Course {
     id          String   @id @default(cuid())

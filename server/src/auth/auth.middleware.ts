@@ -5,6 +5,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { prisma } from "util/db";
 import { UserRole } from "@prisma/client";
+import { getRequestIp, writeAuditLog } from "util/auditLogger";
 
 export interface DecodedToken {
   userId: number;
@@ -65,8 +66,29 @@ export default class AuthMiddleware {
       });
 
       if (!user || user.role !== UserRole.ADMIN) {
+        await writeAuditLog({
+          category: "ADMIN",
+          action: "ADMIN_ACCESS_DENIED",
+          success: false,
+          userId: String(userId),
+          ip: getRequestIp(req),
+          method: req.method,
+          path: req.originalUrl,
+          statusCode: 403,
+        });
         return Send.forbidden(res, { message: "Admin access required" });
       }
+
+      await writeAuditLog({
+        category: "ADMIN",
+        action: "ADMIN_ACCESS_GRANTED",
+        success: true,
+        userId: String(userId),
+        ip: getRequestIp(req),
+        method: req.method,
+        path: req.originalUrl,
+        statusCode: 200,
+      });
 
       next();
     } catch (error) {
