@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { usernameSchema, passwordSchema } from "auth/auth.schema";
 
-const roleSchema = z.enum(["CUSTOMER", "SELLER", "ADMIN"], "Invalid role");
+const roleSchema = z.enum(["STUDENT", "TEACHER", "ADMIN"], "Invalid role");
 
 const create = z.object({
   username: usernameSchema,

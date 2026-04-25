@@ -3,6 +3,7 @@ import MaterialsController from "./materials.controller";
 import { validateBody } from "util/validation";
 import { materialCreateSchema, materialUpdateSchema } from "./materials.schema";
 import AuthMiddleware from "auth/auth.middleware";
+import { enforceMaxUploadSize, MATERIAL_MAX_UPLOAD_BYTES } from "middlewares/fileSizeLimit";
 
 /**
  * @swagger
@@ -151,6 +152,7 @@ class MaterialsRoutes extends BaseRouter {
         middlewares: [
           AuthMiddleware.authenticateUser,
           AuthMiddleware.requireTeacher,
+          enforceMaxUploadSize(MATERIAL_MAX_UPLOAD_BYTES, "Material"),
           validateBody(materialCreateSchema),
         ],
         controller: MaterialsController.createMaterial,
@@ -161,6 +163,7 @@ class MaterialsRoutes extends BaseRouter {
         middlewares: [
           AuthMiddleware.authenticateUser,
           AuthMiddleware.requireTeacher,
+          enforceMaxUploadSize(MATERIAL_MAX_UPLOAD_BYTES, "Material"),
           validateBody(materialUpdateSchema),
         ],
         controller: MaterialsController.updateMaterial,

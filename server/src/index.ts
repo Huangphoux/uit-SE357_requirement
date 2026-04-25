@@ -1,6 +1,20 @@
-import "tsconfig-paths/register.js";
-import "dotenv/config";
+if (process.env.NODE_ENV !== "production") {
+	require("tsconfig-paths/register");
+}
 
-import App from "app";
-const app = new App();
-app.start();
+require("dotenv/config");
+
+async function bootstrap() {
+	const { default: App } = require("app");
+	const { connectRedis } = require("middlewares/redis");
+
+	await connectRedis();
+
+	const app = new App();
+	app.start();
+}
+
+bootstrap().catch((error) => {
+	console.error("Failed to start application", error);
+	process.exit(1);
+});

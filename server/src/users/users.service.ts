@@ -2,34 +2,56 @@ import { prisma } from "util/db";
 import { hashPassword } from "util/hash";
 import { UserRole } from "@prisma/client";
 
+type UserRecord = {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+};
+
+function toUserDto(user: UserRecord) {
+  return {
+    id: user.id,
+    username: user.name,
+    email: user.email,
+    role: user.role,
+  };
+}
+
+const userSelect = {
+  id: true,
+  name: true,
+  email: true,
+  role: true,
+} as const;
+
 export default class UsersService {
   static async find(id?: string, q?: string, role?: string) {
     if (id) {
-      return await prisma.user.findUnique({
+      const user = await prisma.user.findUnique({
         where: { id },
         select: {
           id: true,
-          username: true,
+          name: true,
           email: true,
           role: true,
         },
       });
+
+      return user ? toUserDto(user) : null;
     }
 
-    return await prisma.user.findMany({
+    const users = await prisma.user.findMany({
       where: {
         OR: q
-          ? [{ username: { contains: q, mode: "insensitive" } }, { email: { contains: q, mode: "insensitive" } }]
+          ? [{ name: { contains: q, mode: "insensitive" } }, { email: { contains: q, mode: "insensitive" } }]
           : undefined,
         role: role as UserRole | undefined,
       },
-      select: {
-        id: true,
-        username: true,
-        email: true,
-        role: true,
-      },
+      select: userSelect,
     });
+
+    return users.map(toUserDto);
   }
 
   static async create(data: { username: string; email: string; password: string; role: UserRole }) {
@@ -40,36 +62,15 @@ export default class UsersService {
 
     const user = await prisma.user.create({
       data: {
-        username: data.username,
+        name: data.username,
         email: data.email,
         password: await hashPassword(data.password),
         role: data.role,
       },
-      select: {
-        id: true,
-        username: true,
-        email: true,
-        role: true,
-      },
+      select: userSelect,
     });
 
-    if (data.role === UserRole.CUSTOMER) {
-      await prisma.customer.create({
-        data: {
-          userId: user.id,
-        },
-      });
-    }
-
-    if (data.role === UserRole.SELLER) {
-      await prisma.seller.create({
-        data: {
-          userId: user.id,
-        },
-      });
-    }
-
-    return user;
+    return toUserDto(user);
   }
 
   static async update(
@@ -91,21 +92,36 @@ export default class UsersService {
       }
     }
 
-    const updateData = { ...data };
+    const updateData: {
+      name?: string;
+      email?: string;
+      password?: string;
+      role?: UserRole;
+    } = {};
+
+    if (data.username) {
+      updateData.name = data.username;
+    }
+
+    if (data.email) {
+      updateData.email = data.email;
+    }
+
     if (data.password) {
       updateData.password = await hashPassword(data.password);
     }
 
-    return await prisma.user.update({
+    if (data.role) {
+      updateData.role = data.role;
+    }
+
+    const user = await prisma.user.update({
       where: { id },
       data: updateData,
-      select: {
-        id: true,
-        username: true,
-        email: true,
-        role: true,
-      },
+      select: userSelect,
     });
+
+    return toUserDto(user);
   }
 
   static async delete(id: string) {

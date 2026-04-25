@@ -4,6 +4,7 @@ import { validateBody } from "util/validation";
 import { submissionCreateSchema, submissionUpdateSchema } from "./submissions.schema";
 import AuthMiddleware from "auth/auth.middleware";
 import { z } from "zod";
+import { enforceMaxUploadSize, SUBMISSION_MAX_UPLOAD_BYTES } from "middlewares/fileSizeLimit";
 
 /**
  * @swagger
@@ -118,6 +119,7 @@ class SubmissionsRoutes extends BaseRouter {
         middlewares: [
           AuthMiddleware.authenticateUser,
           AuthMiddleware.requireStudent,
+          enforceMaxUploadSize(SUBMISSION_MAX_UPLOAD_BYTES, "Submission"),
           validateBody(submissionCreateSchema),
         ],
         controller: SubmissionsController.createSubmission,
@@ -149,6 +151,7 @@ class SubmissionsRoutes extends BaseRouter {
         middlewares: [
           AuthMiddleware.authenticateUser,
           AuthMiddleware.requireStudent,
+          enforceMaxUploadSize(SUBMISSION_MAX_UPLOAD_BYTES, "Submission"),
           validateBody(submissionUpdateSchema),
         ],
         controller: SubmissionsController.updateSubmission,
