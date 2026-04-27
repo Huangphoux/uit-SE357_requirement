@@ -1,4 +1,9 @@
-:80 {
+http://localhost {
+  redir https://localhost{uri} permanent
+}
+
+https://localhost {
+  tls internal
   encode gzip zstd
 
   @backend path /api/* /docs* /error
