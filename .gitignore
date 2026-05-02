@@ -142,3 +142,4 @@ PATH.txt
 settings.txt
 
 *.pdf
+.env
