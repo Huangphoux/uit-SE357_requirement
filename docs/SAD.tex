@@ -1,0 +1,798 @@
+\documentclass[12pt,a4paper]{article}
+
+% ──────────────────────────── Packages ────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{lmodern}
+
+% ──────────────────────────── Page layout ─────────────────────────
+\geometry{
+  a4paper,
+  top=2.5cm, bottom=2.5cm,
+  left=2.5cm, right=2.5cm
+}
+
+% ──────────────────────────── Colours ─────────────────────────────
+\definecolor{ecblue}{RGB}{0,70,127}
+\definecolor{ecgray}{RGB}{89,89,89}
+\definecolor{lightgray}{RGB}{240,240,240}
+\definecolor{codegreen}{RGB}{0,128,0}
+\definecolor{codegray}{RGB}{128,128,128}
+
+% ──────────────────────────── Hyperref ────────────────────────────
+\hypersetup{
+  colorlinks=true,
+  linkcolor=ecblue,
+  urlcolor=ecblue,
+  citecolor=ecblue,
+  pdftitle={Software Architecture Document -- LMS},
+  pdfauthor={SE357 Team},
+  pdfsubject={Software Architecture},
+}
+
+% ──────────────────────────── Headers / Footers ───────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{ecgray}{Software Architecture Document}}
+\fancyhead[R]{\small\textcolor{ecgray}{UIT SE357 -- LMS v1.0}}
+\fancyfoot[C]{\small\textcolor{ecgray}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ──────────────────────────── Section styling ─────────────────────
+\titleformat{\section}
+  {\large\bfseries\color{ecblue}}
+  {\thesection}{1em}{}[\titlerule]
+
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{ecblue}}
+  {\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{ecgray}}
+  {\thesubsubsection}{1em}{}
+
+% ──────────────────────────── Listings ────────────────────────────
+\lstset{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{lightgray},
+  frame=single,
+  rulecolor=\color{ecgray},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=2,
+  showstringspaces=false,
+  commentstyle=\color{codegreen},
+  keywordstyle=\color{ecblue},
+  numberstyle=\tiny\color{codegray},
+}
+
+% ──────────────────────────── Table helpers ───────────────────────
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% ══════════════════════════════════════════════════════════════════
+%                         DOCUMENT BEGIN
+% ══════════════════════════════════════════════════════════════════
+\begin{document}
+
+% ────────────────────── Title Page ───────────────────────────────
+\begin{titlepage}
+  \centering
+  \vspace*{2cm}
+
+  {\Huge\bfseries\color{ecblue} Software Architecture Document}\\[0.5cm]
+  {\large\color{ecgray} (SAD)}\\[2cm]
+
+  {\LARGE\bfseries Learning Management System (LMS)}\\[0.5cm]
+  {\large UIT SE357 Course Project}\\[2cm]
+
+  \begin{tabular}{ll}
+    \textbf{Version:}  & 1.0 \\[4pt]
+    \textbf{Date:}     & 2026-05-04 \\[4pt]
+    \textbf{Authors:}  & SE357 Team \\[4pt]
+    \textbf{Status:}   & Released \\
+  \end{tabular}
+
+  \vfill
+
+  \rule{\linewidth}{0.4pt}\\[0.3cm]
+  {\small\color{ecgray}
+    University of Information Technology (UIT) \\
+    Vietnam National University Ho Chi Minh City
+  }
+\end{titlepage}
+
+% ────────────────────── Document History ────────────────────────
+\section*{Document History}
+\begin{tabularx}{\textwidth}{C{1.5cm} C{2.5cm} L{3cm} L{7cm}}
+  \toprule
+  \textbf{Ver.} & \textbf{Date} & \textbf{Author} & \textbf{Description} \\
+  \midrule
+  0.1 & 2026-04-20 & SE357 Team & Initial draft \\
+  0.9 & 2026-05-02 & SE357 Team & Review -- added ADRs and QA scenarios \\
+  1.0 & 2026-05-04 & SE357 Team & Final release \\
+  \bottomrule
+\end{tabularx}
+
+\clearpage
+\tableofcontents
+\clearpage
+
+% ══════════════════════════════════════════════════════════════════
+\section{Introduction}
+% ══════════════════════════════════════════════════════════════════
+
+\subsection{Purpose}
+
+This Software Architecture Document (SAD) describes the software architecture of the \textbf{Learning Management System (LMS)} developed as part of the UIT SE357 course project. It establishes the high-level structure of the system, documents key architectural decisions, and demonstrates how the design addresses the Architecturally Significant Requirements (ASRs) that have been implemented (Status = Done).
+
+The document is intended to serve as the authoritative reference for the current release and as a baseline for future evolution of the system.
+
+\subsection{Scope}
+
+This document covers the architecture of the LMS as deployed via Docker Compose, comprising:
+
+\begin{itemize}[noitemsep]
+  \item A \textbf{React SPA} (browser-based front end)
+  \item A \textbf{Node.js / Express REST API} (two identical instances for high availability)
+  \item A \textbf{PostgreSQL 16} relational database
+  \item A \textbf{Redis 7} in-memory data store
+  \item A \textbf{Caddy 2} reverse proxy (TLS termination, load balancing, static file serving)
+  \item A \textbf{File Storage volume} (uploaded materials and submissions)
+\end{itemize}
+
+The document does not cover the business processes the LMS supports; those are described in the BRD and SRS documents.
+
+\subsection{Audience}
+
+\begin{tabularx}{\textwidth}{L{4.5cm} L{9cm}}
+  \toprule
+  \textbf{Audience} & \textbf{Relevance} \\
+  \midrule
+  Software Architects / Developers & Primary audience; use the document to understand design rationale and constraints \\
+  Security Reviewers & Sections 4 (views), 6 (QA analysis), and 5 (ADRs) \\
+  Operations / DevOps & Section 4.3 (Deployment View) and the Docker Compose configuration \\
+  Project Supervisors / Assessors & Sections 3, 5, and 6 demonstrate how ASRs are addressed \\
+  \bottomrule
+\end{tabularx}
+
+\subsection{Definitions and Abbreviations}
+
+\begin{tabularx}{\textwidth}{L{3cm} L{10.5cm}}
+  \toprule
+  \textbf{Term / Abbr.} & \textbf{Definition} \\
+  \midrule
+  ASR     & Architecturally Significant Requirement \\
+  ADR     & Architecture Decision Record \\
+  SAD     & Software Architecture Document \\
+  LMS     & Learning Management System \\
+  SPA     & Single-Page Application \\
+  API     & Application Programming Interface \\
+  JWT     & JSON Web Token \\
+  RBAC    & Role-Based Access Control \\
+  TLS     & Transport Layer Security \\
+  ORM     & Object-Relational Mapper \\
+  CUID    & Collision-resistant Unique Identifier \\
+  MFA     & Multi-Factor Authentication \\
+  SMTP    & Simple Mail Transfer Protocol \\
+  TTL     & Time-To-Live \\
+  \bottomrule
+\end{tabularx}
+
+\subsection{Reference Documents}
+
+\begin{tabularx}{\textwidth}{C{1.5cm} L{4.5cm} L{7.5cm}}
+  \toprule
+  \textbf{ID} & \textbf{Title} & \textbf{Location} \\
+  \midrule
+  REF-01 & Business Requirements Document & \texttt{docs/1. BRD/} \\
+  REF-02 & Software Requirements Specification & \texttt{docs/10. SRS/} \\
+  REF-03 & Architecture Design Document (ADD) & \texttt{add-diagram/ADD.md} \\
+  REF-04 & ADR-001: Caddy LB \& TLS & \texttt{add-diagram/ADR/ADR-001-*.md} \\
+  REF-05 & ADR-002: JWT Auth Tokens & \texttt{add-diagram/ADR/ADR-002-*.md} \\
+  REF-06 & ADR-003: Redis Rate Limiting & \texttt{add-diagram/ADR/ADR-003-*.md} \\
+  REF-07 & ADR-004: PostgreSQL + Prisma & \texttt{add-diagram/ADR/ADR-004-*.md} \\
+  REF-08 & ADR-005: RBAC & \texttt{add-diagram/ADR/ADR-005-*.md} \\
+  REF-09 & ADR-006: Secure File Storage & \texttt{add-diagram/ADR/ADR-006-*.md} \\
+  REF-10 & ADR-007: Audit Logging & \texttt{add-diagram/ADR/ADR-007-*.md} \\
+  REF-11 & ASR Spreadsheet & \texttt{SE356-ASR.xlsx - ASR.csv} \\
+  REF-12 & Prisma Database Schema & \texttt{server/prisma/schema.prisma} \\
+  REF-13 & Docker Compose Configuration & \texttt{docker-compose.yml} \\
+  \bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════════════════════════════
+\section{System Overview}
+% ══════════════════════════════════════════════════════════════════
+
+\subsection{System Description}
+
+The \textbf{Learning Management System (LMS)} is a web-based platform for managing educational courses, classes, learning materials, assignments, and student submissions. It supports three distinct user roles --- Student, Teacher, and Admin --- each with differentiated capabilities.
+
+The system is deployed as a set of Docker containers orchestrated via Docker Compose, exposed to end-users through a Caddy reverse proxy that handles TLS termination and load balancing.
+
+\begin{lstlisting}[caption={System Context Diagram (C4 Level 1)}]
+                    +------------------------------+
+                    |  Learning Management System  |
+                    |       [Software System]      |
+                    +------+---------------+-------+
+            HTTPS          |               |        SMTP/TLS
+    +----------------------+     +--------------------+-----+
+    |            |         |     |         |                |
+[Student]   [Teacher]  [Admin]  [Email Service]
+(person)    (person)   (person)  (external)
+\end{lstlisting}
+
+\textbf{System boundaries:}
+\begin{itemize}[noitemsep]
+  \item Inbound: HTTPS on port 443 (served by Caddy)
+  \item Outbound: SMTP to an external email service for notifications
+  \item All data stored within the system boundary (PostgreSQL, Redis, file volumes)
+\end{itemize}
+
+\subsection{Actors and Roles}
+
+\begin{tabularx}{\textwidth}{L{2.2cm} L{1.8cm} L{9.5cm}}
+  \toprule
+  \textbf{Actor} & \textbf{Role} & \textbf{Key Capabilities} \\
+  \midrule
+  Student & \texttt{STUDENT} & Enrol in courses/classes; download learning materials; submit assignments (text or file); view feedback and grades \\
+  Teacher & \texttt{TEACHER} & Create and manage courses/classes; upload materials; create and grade assignments; provide feedback on submissions \\
+  Admin   & \texttt{ADMIN}   & Manage all users; view platform statistics; access audit logs; perform administrative operations (MFA required) \\
+  Email Service & External & Receives notification delivery requests via SMTP from the LMS \\
+  \bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════════════════════════════
+\section{Architectural Goals and Constraints}
+% ══════════════════════════════════════════════════════════════════
+
+\subsection{Quality Attribute Requirements (Done ASRs)}
+
+The following table lists all ASRs with \textbf{Status = Done} from the project's ASR register (\texttt{SE356-ASR.xlsx - ASR.csv}). These are the primary quality-attribute drivers for the current architecture.
+
+\begingroup
+\small
+\begin{longtable}{L{2.1cm} L{1.8cm} L{3.5cm} L{2.5cm} L{4cm}}
+  \toprule
+  \textbf{ASR ID} & \textbf{Quality} & \textbf{Scenario} & \textbf{Measure} & \textbf{Architectural Response} \\
+  \midrule
+  \endhead
+  \midrule
+  \multicolumn{5}{r}{\small\textit{Continued on next page\ldots}}\\
+  \endfoot
+  \bottomrule
+  \endlastfoot
+
+  ASR-PERF-01 & Performance & 500 concurrent users access the system & Response time $<$ 2\,s & Dual API instances behind Caddy; Redis caching \\
+  ASR-PERF-02 & Performance & Query 10\,000+ records & Response time $<$ 2\,s & PostgreSQL with Prisma indexes; pagination \\
+  ASR-AVAIL-01 & Availability & System access 24/7 & Uptime $\geq$ 99.9\,\% & Dual backend; Caddy failover every 10\,s \\
+  ASR-SEC-01 & Security & New account registration & bcrypt salt $\geq$ 10 & \texttt{bcrypt} in Auth Module \\
+  ASR-SEC-02 & Security & Login to system & JWT expiry = 1\,h; login $<$ 2\,s & JWT access + refresh token pair \\
+  ASR-SEC-03 & Security & Brute-force login attack & Block IP after 5 failures/15\,min & \texttt{LoginAttempt} (PostgreSQL) + Redis rate limiter \\
+  ASR-SEC-05 & Security & Resource access control & 100\,\% RBAC-checked & Auth Middleware enforces RBAC \\
+  ASR-SEC-06 & Security & Client--server transmission & 100\,\% HTTPS/TLS & Caddy TLS termination \\
+  ASR-SEC-07 & Security & Sensitive data storage & 100\,\% encrypted at rest & PostgreSQL encryption; bcrypt passwords \\
+  ASR-SEC-08 & Security & User input validation & 100\,\% inputs validated & Zod schema middleware on all routes \\
+  ASR-SEC-09 & Security & SQL injection attack & 100\,\% parameterized queries & Prisma ORM \\
+  ASR-SEC-10 & Security & Key action logging & 100\,\% actions logged & Audit Module (canonical wide events) \\
+  ASR-SEC-11 & Security & Historical audit log retention & Logs retained $\geq$ 1 year & \texttt{AUDIT\_RETENTION\_DAYS=365} + clean-up job \\
+  ASR-SEC-14 & Security & Large file upload & Materials $\leq$ 50\,MB; submissions $\leq$ 20\,MB & \texttt{fileSizeLimit} middleware; client-side guards \\
+  ASR-SEC-15 & Security & API rate limiting & Rate limit on all endpoints & Redis sliding-window \texttt{rateLimiter} \\
+\end{longtable}
+\endgroup
+
+\subsection{Technical Constraints}
+
+\begin{tabularx}{\textwidth}{L{3.5cm} L{10cm}}
+  \toprule
+  \textbf{Constraint} & \textbf{Description} \\
+  \midrule
+  Technology stack & Node.js 20 + Express + TypeScript (API); React 18 + TypeScript + Vite (SPA); PostgreSQL 16; Redis 7; Caddy 2 \\
+  Containerisation & All services deployed via Docker Compose; no Kubernetes or cloud orchestrator \\
+  Database ORM & Prisma is the sole database access layer; raw SQL queries are prohibited \\
+  Authentication & JWT-based; no external Identity Provider in scope \\
+  Network & HTTPS port 443 managed by Caddy; internal Docker network uses plain HTTP \\
+  File size limits & Materials: $\leq$ 50\,MB (ASR-SEC-14); Submissions: $\leq$ 20\,MB (ASR-SEC-14) \\
+  \bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════════════════════════════
+\section{Architecture Views}
+% ══════════════════════════════════════════════════════════════════
+
+\subsection{Logical View}
+
+\subsubsection{React SPA Components}
+
+\begin{tabularx}{\textwidth}{L{3.5cm} L{6.5cm} L{3.5cm}}
+  \toprule
+  \textbf{Component} & \textbf{Responsibility} & \textbf{ASR Coverage} \\
+  \midrule
+  Auth Context & Manages JWT access token (httpOnly cookie); drives refresh-token flow; exposes \texttt{useAuth()} hook & ASR-SEC-02 \\
+  Login Page & Client-side credential validation; calls \texttt{POST /api/auth/login}; surfaces lockout messages & ASR-SEC-08, ASR-SEC-03 \\
+  Student Dashboard & Aggregates enrolled classes, assignment deadlines, recent materials & --- \\
+  Teacher Dashboard & Entry point for class management, material upload, assignment creation, and grading & --- \\
+  Admin Dashboard & Displays cached statistics, user management, audit log viewer & ASR-SEC-10, ASR-SEC-11 \\
+  Course / Class Pages & Enrolment workflows (students); class-management forms (teachers) & --- \\
+  Assignment Pages & Assignment list; submission form; graded feedback display & ASR-SEC-14 \\
+  Material Pages & Material listing and streaming; teacher upload with 50\,MB client-side guard & ASR-SEC-14 \\
+  Notification Hub & Polls \texttt{/api/notifications}; renders unread-notification badge and drawer & --- \\
+  File Upload Component & Validates MIME type against whitelist; enforces max-size before upload & ASR-SEC-14 \\
+  \bottomrule
+\end{tabularx}
+
+\subsubsection{Node.js API Components}
+
+\begingroup
+\small
+\begin{longtable}{L{3cm} L{2.5cm} L{5cm} L{3cm}}
+  \toprule
+  \textbf{Component} & \textbf{Route Prefix} & \textbf{Responsibility} & \textbf{ASR Coverage} \\
+  \midrule
+  \endhead
+  \midrule
+  \multicolumn{4}{r}{\small\textit{Continued on next page\ldots}}\\
+  \endfoot
+  \bottomrule
+  \endlastfoot
+
+  Auth Module & \texttt{/api/auth} & Register (bcrypt $\geq$ 10 rounds), login, logout, token refresh & ASR-SEC-01, ASR-SEC-02 \\
+  Auth Middleware & \textit{all protected routes} & Verifies JWT; extracts userId and role; enforces RBAC & ASR-SEC-05 \\
+  Rate-Limit Middleware & \texttt{/api/*} & Redis sliding-window counter; returns HTTP 429 on threshold & ASR-SEC-15 \\
+  Login-Lockout Module & \textit{part of Auth} & Writes \texttt{LoginAttempt} records; blocks IP after 5 failures/15\,min & ASR-SEC-03 \\
+  Input Validation (Zod) & \textit{all routes} & Rejects malformed requests before reaching controllers & ASR-SEC-08 \\
+  User Module & \texttt{/api/users} & CRUD for user profiles; role-based permissions & ASR-SEC-05 \\
+  Courses Module & \texttt{/api/courses} & Course CRUD with pagination; indexed columns & ASR-PERF-02 \\
+  Classes Module & \texttt{/api/classes} & Class management, teacher assignment, enrolment & --- \\
+  Materials Module & \texttt{/api/materials} & Upload pipeline: validate MIME + size; store outside web root & ASR-SEC-14 \\
+  Assignments Module & \texttt{/api/assignments} & Teacher: create/update/delete; Student: view & --- \\
+  Submissions Module & \texttt{/api/submissions} & Student submissions ($\leq$ 20\,MB); file streaming & ASR-SEC-14 \\
+  Feedback Module & \texttt{/api/feedback} & Teacher comment + score on a submission & --- \\
+  Audit Module & \texttt{/api/audit} & Admin-only log viewer; writes wide-event entries & ASR-SEC-10, ASR-SEC-11 \\
+  Health Module & \texttt{/api/health} & Returns HTTP 200; polled by Caddy and Docker & ASR-AVAIL-01 \\
+\end{longtable}
+\endgroup
+
+\subsection{Process View}
+
+\subsubsection{User Authentication Flow (ASR-SEC-01, ASR-SEC-02, ASR-SEC-03)}
+
+\begin{lstlisting}[caption={Authentication Sequence}]
+Client       Caddy       Node.js API      PostgreSQL   Redis
+  |            |               |               |         |
+  |--POST /api/auth/login ----->|               |         |
+  |            |               |               |         |
+  |            |               |--SELECT LoginAttempt(ip)|
+  |            |               |               |         |
+  |            |  [if blocked: 429 Too Many Requests]     |
+  |            |               |               |         |
+  |            |               | bcrypt.compare(pwd,hash)|
+  |            |               | sign accessToken(1h)    |
+  |            |               | sign refreshToken       |
+  |            |               |--UPDATE User.refreshToken|
+  |            |               |--DELETE LoginAttempt(ip)|
+  |            |               |               |         |
+  |<-- 200 + httpOnly cookies --|               |         |
+\end{lstlisting}
+
+\subsubsection{Rate-Limited API Request (ASR-SEC-15)}
+
+\begin{lstlisting}[caption={Rate-Limit Middleware Sequence}]
+Client       Caddy       Node.js API           Redis
+  |            |               |                  |
+  |--GET /api/courses--------->|                  |
+  |            |           rateLimiter            |
+  |            |               |--INCR key(ip)--->|
+  |            |               |<-----------------|
+  |            |   [if count > limit: 429]        |
+  |            |               | authMiddleware (JWT verify)
+  |            |               | controller logic |
+  |<-- 200 JSON response ------|                  |
+\end{lstlisting}
+
+\subsubsection{File Upload Flow (ASR-SEC-14)}
+
+\begin{lstlisting}[caption={Material Upload Sequence}]
+Client (Teacher)   File Upload Component   Node.js API   File Volume
+       |                   |                    |              |
+       |--select file------>|                    |              |
+       |                   | validate MIME type |              |
+       |                   | check size <= 50MB |              |
+       |                   | [if invalid: show error]         |
+       |                   |--POST /api/materials>|            |
+       |                   |                    | multer check |
+       |                   |                    | store to     |
+       |                   |                    | /app/uploads |
+       |                   |                    |>------------>|
+       |                   |                    | INSERT Material
+       |<-- 201 Created ----|<-------------------|              |
+\end{lstlisting}
+
+\subsubsection{Audit Log Write (ASR-SEC-10)}
+
+\begin{lstlisting}[caption={Audit Log Emission}]
+Request Handler      Audit Module      server-logs volume
+       |                  |                    |
+       | [after key action]|                    |
+       |--auditLog({       |                    |
+       |    userId,        |                    |
+       |    action,        |                    |
+       |    resource,      |                    |
+       |    outcome })     |                    |
+       |                  |--append JSON line-->|
+       |                  |                    |
+       |<-----------------|                    |
+\end{lstlisting}
+
+\subsection{Deployment View}
+
+All services are orchestrated by \textbf{Docker Compose} (\texttt{docker-compose.yml}).
+
+\begin{lstlisting}[caption={Container Topology}]
+Internet
+   | HTTPS :443
+   v
++-----------------------------------------------+
+|  Caddy 2                                      |
+|  TLS termination | LB | gzip/zstd | SPA serve |
++-------+-------------------+-------------------+
+        |         /api/*    |
+   active/passive failover
+        |                   |
+        v                   v
++-------------------+ +-------------------+
+| backend-primary   | | backend-secondary |
+| Node.js 20 :8000  | | Node.js 20 :8000  |
++--------+----------+ +----------+--------+
+         |                       |
+         +----------+------------+
+                    | shared services
+          +---------+---------+-----------+
+          |                   |           |
+          v                   v           v
+  +---------------+  +-----------+  +-----------+
+  | PostgreSQL 16 |  |  Redis 7  |  |  File     |
+  | postgres-data |  | (rate-lim |  |  Storage  |
+  | volume        |  |  cache)   |  |  volume   |
+  +---------------+  +-----------+  +-----------+
+\end{lstlisting}
+
+\begin{tabularx}{\textwidth}{L{3cm} L{2.5cm} L{2cm} L{3cm} L{3cm}}
+  \toprule
+  \textbf{Container} & \textbf{Image} & \textbf{Port} & \textbf{Volumes} & \textbf{Health Check} \\
+  \midrule
+  \texttt{caddy} & caddy:2 & 443, 80 & \texttt{/srv} (SPA) & --- \\
+  \texttt{backend-primary} & Node.js 20 & 8000 (int.) & server-logs, uploads & \texttt{GET /api/health} / 10\,s \\
+  \texttt{backend-secondary} & Node.js 20 & 8000 (int.) & server-logs, uploads & \texttt{GET /api/health} / 10\,s \\
+  \texttt{postgres} & postgres:16 & 5432 (int.) & postgres-data & \texttt{pg\_isready} / 10\,s \\
+  \texttt{redis} & redis:7 & 6379 (int.) & --- & \texttt{redis-cli ping} / 10\,s \\
+  \bottomrule
+\end{tabularx}
+
+\textbf{Start-up dependency chain:}
+\begin{enumerate}[noitemsep]
+  \item \texttt{postgres} becomes healthy (\texttt{pg\_isready} passes)
+  \item \texttt{redis} becomes healthy (\texttt{redis-cli ping} passes)
+  \item \texttt{backend-primary} and \texttt{backend-secondary} start after (1) and (2)
+  \item \texttt{caddy} starts after both backends are healthy; polls \texttt{/api/health} every 10\,s
+  \item On \texttt{backend-primary} health failure: Caddy promotes \texttt{backend-secondary} (ASR-AVAIL-01)
+\end{enumerate}
+
+\subsection{Data View}
+
+\subsubsection{Entity-Relationship Overview}
+
+The data model is defined in \texttt{server/prisma/schema.prisma} and managed exclusively via Prisma migrations.
+
+\begin{lstlisting}[caption={Simplified E-R Diagram}]
+User (id, email, password[bcrypt], name, role, refreshToken)
+ |
+ +--< Enrollment >--+      <- unique(userId, classId)
+ |                  |
+ |           Class (id, courseId, title, teacherId)
+ |           @@index(teacherId)
+ |                  |
+ |            Course (id, title, description)
+ |
+ +--< Submission >--+      <- unique(assignmentId, userId)
+                    |
+              Assignment (id, title, classId, createdBy, dueDate, maxScore)
+              @@index(createdBy)
+                    |
+              Feedback (id, submissionId, createdBy, comment, score)
+              @@index(createdBy)
+
+Material (id, title, type, url, classId, createdBy)
+@@index(classId), @@index(createdBy)
+
+LoginAttempt (ip[PK], attempts, lastTry, blockedUntil)
+\end{lstlisting}
+
+\subsubsection{Model Descriptions}
+
+\begingroup
+\small
+\begin{longtable}{L{2.5cm} L{4.5cm} L{6.5cm}}
+  \toprule
+  \textbf{Model} & \textbf{Purpose} & \textbf{Key Constraints} \\
+  \midrule
+  \endhead
+  \bottomrule
+  \endlastfoot
+
+  \texttt{User} & Accounts for all roles & \texttt{email} unique; \texttt{password} bcrypt-hashed (ASR-SEC-01) \\
+  \texttt{LoginAttempt} & IP-keyed brute-force counter & \texttt{ip} is PK; \texttt{blockedUntil} enforces lockout (ASR-SEC-03) \\
+  \texttt{Course} & Top-level catalogue entry & Cascade deletes to \texttt{Class} \\
+  \texttt{Class} & Session of a course & \texttt{@@index(teacherId)} for fast teacher queries (ASR-PERF-02) \\
+  \texttt{Enrollment} & Student $\leftrightarrow$ Class M:M join & \texttt{@@unique([userId, classId])} prevents duplicates \\
+  \texttt{Assignment} & Teacher-created task & \texttt{@@index(createdBy)}; \texttt{dueDate} and \texttt{maxScore} \\
+  \texttt{Submission} & Student answer & \texttt{@@unique([assignmentId, userId])}; status enum \\
+  \texttt{Feedback} & Teacher score + comment & \texttt{@@index(createdBy)} \\
+  \texttt{Material} & Learning resource & \texttt{@@index(classId)}, \texttt{@@index(createdBy)} (ASR-PERF-02) \\
+\end{longtable}
+\endgroup
+
+\subsubsection{Audit Log Storage}
+
+Audit log entries are stored as \textbf{JSON lines in daily files} under the \texttt{AUDIT\_LOG\_DIR} path, mounted via the \texttt{server-logs} Docker volume. They are \emph{not} stored in PostgreSQL tables. The \texttt{GET /api/audit/logs} endpoint (ADMIN only) reads and returns entries from these files.
+
+Each entry follows the canonical wide-event format:
+
+\begin{lstlisting}[language={}]
+{
+  "timestamp": "2026-05-04T08:00:00.000Z",
+  "userId":    "clv1abc123",
+  "action":    "LOGIN_SUCCESS",
+  "resource":  "auth",
+  "ip":        "192.168.1.10",
+  "outcome":   "SUCCESS",
+  "metadata":  { "role": "STUDENT" }
+}
+\end{lstlisting}
+
+% ══════════════════════════════════════════════════════════════════
+\section{Architecture Decisions}
+% ══════════════════════════════════════════════════════════════════
+
+\begin{tabularx}{\textwidth}{L{1.8cm} L{5cm} L{1.8cm} L{5cm}}
+  \toprule
+  \textbf{ADR} & \textbf{Title} & \textbf{Status} & \textbf{Addressed ASRs} \\
+  \midrule
+  ADR-001 & Caddy as Reverse Proxy, Load Balancer \& TLS Terminator & Accepted & ASR-PERF-01, ASR-AVAIL-01, ASR-SEC-06 \\
+  ADR-002 & JWT Access + Refresh Token Authentication & Accepted & ASR-SEC-01, ASR-SEC-02 \\
+  ADR-003 & Redis-Backed Rate Limiting \& Login Lockout & Accepted & ASR-SEC-03, ASR-SEC-15 \\
+  ADR-004 & PostgreSQL + Prisma ORM as Primary Data Store & Accepted & ASR-PERF-02, ASR-SEC-07, ASR-SEC-09 \\
+  ADR-005 & Role-Based Access Control with JWT Role Claims & Accepted & ASR-SEC-05 \\
+  ADR-006 & Secure File Storage Outside Web Root & Accepted & ASR-SEC-14 \\
+  ADR-007 & Canonical Audit Logging with 1-Year Retention & Accepted & ASR-SEC-10, ASR-SEC-11 \\
+  \bottomrule
+\end{tabularx}
+
+\subsection{ADR-001: Caddy as Entry Point}
+
+Caddy 2 serves as the single entry point for all inbound HTTPS traffic. It performs TLS termination, active/passive load balancing between \texttt{backend-primary} and \texttt{backend-secondary}, gzip/zstd compression, static SPA serving, and API health checking every 10 seconds. This single decision simultaneously satisfies ASR-PERF-01 (throughput), ASR-AVAIL-01 (failover), and ASR-SEC-06 (HTTPS).
+
+\subsection{ADR-002: JWT Authentication}
+
+Passwords are hashed with bcrypt ($\geq$ 10 salt rounds). Authentication issues a short-lived JWT access token (1\,h, stored in an \texttt{httpOnly} cookie) and a long-lived refresh token. The stateless access-token design allows both API instances to validate tokens independently without shared session state.
+
+\subsection{ADR-003: Redis Rate Limiting}
+
+Redis \texttt{INCR}/\texttt{EXPIRE} sliding-window counters back the \texttt{rateLimiter} middleware, providing accurate cross-instance rate counting. Login lockout state is persisted in PostgreSQL \texttt{LoginAttempt} for durability. This separates ephemeral rate data (Redis) from durable lockout state (PostgreSQL).
+
+\subsection{ADR-004: PostgreSQL + Prisma}
+
+PostgreSQL 16 is the sole relational store. Prisma ORM enforces parameterized queries throughout, eliminating SQL injection risk (ASR-SEC-09). Explicit \texttt{@@index} directives on \texttt{teacherId}, \texttt{classId}, and \texttt{createdBy} columns support sub-2-second paginated queries on 10\,000+ records (ASR-PERF-02).
+
+\subsection{ADR-005: RBAC}
+
+Three roles (\texttt{STUDENT}, \texttt{TEACHER}, \texttt{ADMIN}) are encoded in the JWT payload. Auth Middleware verifies role claims on every protected route, ensuring 100\,\% RBAC coverage (ASR-SEC-05).
+
+\subsection{ADR-006: Secure File Storage}
+
+Uploaded files are stored in a Docker volume at \texttt{/app/uploads}, outside the Caddy web root. Files are served through the API only (never via direct HTTP). MIME type and file size are validated both client-side and server-side (ASR-SEC-14).
+
+\subsection{ADR-007: Audit Logging}
+
+All security-sensitive actions emit a canonical wide-event log entry. Entries are written as JSON lines to daily files on the \texttt{server-logs} volume. \texttt{AUDIT\_RETENTION\_DAYS=365} governs a scheduled clean-up job satisfying the 1-year retention requirement (ASR-SEC-11).
+
+% ══════════════════════════════════════════════════════════════════
+\section{Quality Attribute Analysis}
+% ══════════════════════════════════════════════════════════════════
+
+\subsection{Performance}
+
+\subsubsection{ASR-PERF-01 -- 500 Concurrent Users, $<$ 2\,s Response}
+
+\textbf{Tactic:} Horizontal scale + load balancing.
+
+\begin{tabularx}{\textwidth}{L{4cm} L{9.5cm}}
+  \toprule
+  \textbf{Layer} & \textbf{Mechanism} \\
+  \midrule
+  Caddy & Active/passive load balancer; routes to \texttt{backend-secondary} on failure \\
+  Response compression & \texttt{encode gzip zstd} reduces payload size, freeing network bandwidth \\
+  Stateless API & No shared in-process state; either instance handles any request \\
+  Redis cache & Aggregation results cached with 5-minute TTL \\
+  \bottomrule
+\end{tabularx}
+
+Benchmark results are recorded in \texttt{docs/asr-perf-01-results.csv}: response time $<$ 2\,s under 500 concurrent simulated users validated.
+
+\subsubsection{ASR-PERF-02 -- Paginated Queries on 10\,000+ Records, $<$ 2\,s}
+
+\textbf{Tactic:} Database indexing + pagination.
+
+\begin{tabularx}{\textwidth}{L{4cm} L{9.5cm}}
+  \toprule
+  \textbf{Index} & \textbf{Purpose} \\
+  \midrule
+  \texttt{@@index(teacherId)} & Fast class-by-teacher queries \\
+  \texttt{@@index(createdBy)} & Fast assignment / material / feedback-by-teacher queries \\
+  \texttt{@@index(classId)} & Fast material-by-class queries \\
+  Pagination & All list endpoints expose \texttt{page} / \texttt{limit} query parameters \\
+  \bottomrule
+\end{tabularx}
+
+Benchmark results are recorded in \texttt{docs/asr-perf-02-results.csv}.
+
+\subsection{Availability}
+
+\subsubsection{ASR-AVAIL-01 -- $\geq$ 99.9\,\% Uptime (24/7)}
+
+\textbf{Tactic:} Redundancy + automatic failover.
+
+\begin{tabularx}{\textwidth}{L{4.5cm} L{9cm}}
+  \toprule
+  \textbf{Mechanism} & \textbf{Detail} \\
+  \midrule
+  Dual backend instances & \texttt{backend-primary} and \texttt{backend-secondary} run identically \\
+  Caddy health checking & Polls \texttt{/api/health} every 10\,s; removes failed instance from rotation \\
+  Docker \texttt{restart: unless-stopped} & Containers auto-restart after crashes \\
+  \texttt{service\_healthy} depends\_on & Backends start only after DB and Redis are healthy \\
+  \bottomrule
+\end{tabularx}
+
+\subsection{Security}
+
+\subsubsection{ASR-SEC-01 \& ASR-SEC-02 -- Authentication}
+
+Passwords are hashed using \texttt{bcrypt} with a minimum of 10 salt rounds at registration. Authentication returns a JWT access token (1\,h expiry) and a refresh token, both stored in \texttt{httpOnly} cookies to prevent JavaScript XSS theft. The stateless access-token design requires no cross-instance session synchronisation.
+
+\subsubsection{ASR-SEC-03 -- Brute-Force Protection}
+
+The \texttt{LoginAttempt} PostgreSQL table records per-IP failure counts. After 5 failures within 15 minutes, the IP is blocked for the remainder of the lockout window (\texttt{LOCKOUT\_TIME\_MS = 900\,000\,ms}). On successful login, the record is deleted. Lockout state survives API restarts because it is database-persisted.
+
+\subsubsection{ASR-SEC-05 -- Role-Based Access Control}
+
+Every protected API route passes through Auth Middleware, which verifies the JWT signature and extracts the \texttt{role} claim. Endpoint-specific guards (\texttt{requireStudent}, \texttt{requireTeacher}, \texttt{requireAdmin}) enforce RBAC before any business logic executes, guaranteeing 100\,\% coverage.
+
+\subsubsection{ASR-SEC-06 -- HTTPS/TLS}
+
+Caddy terminates TLS for all inbound connections. For local development, \texttt{tls internal} generates a self-signed certificate. For production, Caddy automatically obtains and renews a certificate via ACME (Let's Encrypt). All inter-service traffic within the Docker network uses plain HTTP on the trusted internal network.
+
+\subsubsection{ASR-SEC-07 -- Encryption at Rest}
+
+PostgreSQL data-at-rest encryption is enabled at the volume level. Passwords are additionally protected by bcrypt hashing in the application layer --- even if the database is compromised, passwords remain computationally infeasible to recover.
+
+\subsubsection{ASR-SEC-08 -- Input Validation}
+
+Every API endpoint is guarded by a Zod schema middleware layer. Requests with invalid or missing fields are rejected with HTTP 400 before reaching the controller, preventing malformed data from entering business logic or the database.
+
+\subsubsection{ASR-SEC-09 -- SQL Injection Prevention}
+
+Prisma ORM is the exclusive database access layer. Prisma compiles all queries to parameterized statements; no raw string interpolation of user input into SQL is permitted. This provides structural protection independent of application-layer input validation.
+
+\subsubsection{ASR-SEC-10 \& ASR-SEC-11 -- Audit Logging and Retention}
+
+The Audit Module writes a canonical wide-event log entry for every security-sensitive action. Entries are append-only JSON lines stored in daily files on the \texttt{server-logs} volume. \texttt{AUDIT\_RETENTION\_DAYS=365} drives a scheduled clean-up job that removes entries older than one year.
+
+\subsubsection{ASR-SEC-14 -- File Upload Size Limits}
+
+Uploaded materials are limited to 50\,MB and submissions to 20\,MB. Limits are enforced at two layers:
+\begin{enumerate}[noitemsep]
+  \item \textbf{Client-side}: The File Upload Component checks size before initiating the HTTP request.
+  \item \textbf{Server-side}: The \texttt{fileSizeLimit} middleware (Multer) rejects oversized payloads with HTTP 413.
+\end{enumerate}
+
+\subsubsection{ASR-SEC-15 -- API Rate Limiting}
+
+The \texttt{rateLimiter} middleware intercepts every request to \texttt{/api/*}. It uses a Redis \texttt{INCR}/\texttt{EXPIRE} sliding-window counter keyed by \texttt{<endpoint>/<client-IP>}. Requests exceeding \texttt{RATE\_LIMIT\_MAX} receive HTTP 429. Because Redis counters are shared across both API instances, the limit is accurate even under load balancing.
+
+% ══════════════════════════════════════════════════════════════════
+\section{Risks and Technical Debt}
+% ══════════════════════════════════════════════════════════════════
+
+\begin{longtable}{C{0.6cm} L{4cm} C{1.5cm} L{7.5cm}}
+  \toprule
+  \textbf{\#} & \textbf{Risk / Debt} & \textbf{Severity} & \textbf{Mitigation / Recommendation} \\
+  \midrule
+  \endhead
+  \bottomrule
+  \endlastfoot
+
+  R-01 & Caddy is a single point of failure for all inbound traffic & High & Consider clustering Caddy or placing it behind a managed cloud load balancer in production \\
+  R-02 & \texttt{lb\_policy first} means one backend handles steady-state traffic; peak load may exceed one instance's capacity & Medium & Switch to \texttt{lb\_policy round\_robin} for active/active distribution \\
+  R-03 & Redis failure causes \texttt{rateLimiter} to fail open (all traffic allowed) & Medium & Implement a circuit-breaker with graceful degradation \\
+  R-04 & JWT access tokens cannot be revoked before expiry (no blacklist) & Medium & Introduce a token blacklist in Redis for immediate revocation on logout/password change \\
+  R-05 & Audit logs stored on a local Docker volume; no off-site backup & Medium & Implement periodic export to append-only remote storage (S3, object store) \\
+  R-06 & MFA for Admin accounts (ASR-SEC-04) not yet implemented & High & Implement TOTP-based MFA (e.g.\ via \texttt{speakeasy}) for the ADMIN role \\
+  R-07 & File malware scanning (ASR-SEC-12) and out-of-web-root (ASR-SEC-13) not yet implemented & High & Integrate a virus-scan step (e.g.\ ClamAV sidecar) before production deployment \\
+\end{longtable}
+
+% ══════════════════════════════════════════════════════════════════
+\appendix
+\section{Glossary}
+% ══════════════════════════════════════════════════════════════════
+
+\begin{tabularx}{\textwidth}{L{3.5cm} L{10cm}}
+  \toprule
+  \textbf{Term} & \textbf{Definition} \\
+  \midrule
+  Access Token & A short-lived JWT (1\,h) authorising individual API requests \\
+  Audit Log & An immutable, append-only record of security-sensitive system events \\
+  bcrypt & A password-hashing algorithm based on the Blowfish cipher, resistant to brute-force attacks \\
+  Caddy & An open-source HTTP server with automatic HTTPS, used as reverse proxy and load balancer \\
+  CUID & Collision-resistant Unique Identifier, used as primary keys throughout the schema \\
+  Docker Compose & A tool for defining and running multi-container Docker applications \\
+  Enrollment & Student $\leftrightarrow$ Class relationship, with status \texttt{ACTIVE / COMPLETED / DROPPED} \\
+  httpOnly Cookie & A cookie inaccessible to JavaScript, protecting tokens from XSS theft \\
+  Prisma & A TypeScript ORM that generates type-safe database clients from a schema file \\
+  Rate Limiting & Throttling requests from a single source within a time window \\
+  Refresh Token & A long-lived token used to obtain new access tokens without re-authentication \\
+  RBAC & Role-Based Access Control --- permissions assigned to roles rather than individual users \\
+  Redis & An in-memory data structure store used for rate-limit counters and caching \\
+  Zod & A TypeScript-first schema validation library used for API input validation \\
+  \bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════════════════════════════
+\section{ASR Traceability Matrix}
+% ══════════════════════════════════════════════════════════════════
+
+\begingroup
+\small
+\begin{longtable}{L{2cm} L{2cm} L{3.5cm} L{3.5cm} L{2.5cm}}
+  \toprule
+  \textbf{ASR ID} & \textbf{Quality} & \textbf{Container(s)} & \textbf{Component(s)} & \textbf{ADR(s)} \\
+  \midrule
+  \endhead
+  \bottomrule
+  \endlastfoot
+
+  ASR-PERF-01 & Performance & Caddy, Node.js API $\times$2 & Rate-Limit Middleware & ADR-001 \\
+  ASR-PERF-02 & Performance & PostgreSQL & Courses, Classes, Materials & ADR-004 \\
+  ASR-AVAIL-01 & Availability & Caddy, Node.js API $\times$2 & Health Module & ADR-001 \\
+  ASR-SEC-01 & Security & Node.js API & Auth Module & ADR-002 \\
+  ASR-SEC-02 & Security & Node.js API & Auth Module & ADR-002 \\
+  ASR-SEC-03 & Security & API, Redis, PostgreSQL & Login-Lockout, Rate-Limit & ADR-003 \\
+  ASR-SEC-05 & Security & Node.js API & Auth Middleware & ADR-005 \\
+  ASR-SEC-06 & Security & Caddy & --- & ADR-001 \\
+  ASR-SEC-07 & Security & PostgreSQL & --- & ADR-004 \\
+  ASR-SEC-08 & Security & Node.js API & Input Validation (Zod) & --- \\
+  ASR-SEC-09 & Security & API, PostgreSQL & All DB-touching modules & ADR-004 \\
+  ASR-SEC-10 & Security & API, File Storage & Audit Module & ADR-007 \\
+  ASR-SEC-11 & Security & API, File Storage & Audit Module & ADR-007 \\
+  ASR-SEC-14 & Security & API, File Storage & Materials, Submissions, File Upload Component & ADR-006 \\
+  ASR-SEC-15 & Security & Node.js API, Redis & Rate-Limit Middleware & ADR-003 \\
+\end{longtable}
+\endgroup
+
+\end{document}
