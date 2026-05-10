@@ -31,6 +31,7 @@ services:
     build:
       context: ./server
     restart: unless-stopped
+    command: ["sh", "-c", "npx prisma db push && node dist/index.js"]
     environment:
       NODE_ENV: production
       APP_HOST: ${APP_HOST}
@@ -72,6 +73,7 @@ services:
     build:
       context: ./server
     restart: unless-stopped
+    command: ["sh", "-c", "npx prisma db push && node dist/index.js"]
     environment:
       NODE_ENV: production
       APP_HOST: ${APP_HOST}

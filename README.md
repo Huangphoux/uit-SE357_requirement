@@ -26,3 +26,12 @@
 - Use `docker compose up --build` rebuild the containers.
 - After developing, run `docker compose down` to stop and remove the containers.
 - Use `docker system prune -a --volumes` to remove all Docker-related data (containers, images, volumes).
+
+## Getting Started with Kubernetes
+
+- Kubernetes manifests are in `k8s/base`.
+- Read `k8s/README.md` for full instructions.
+- Create `k8s/base/secret.yaml` from `k8s/base/secret.example.yaml` and set real secrets.
+- Build images for backend/frontend and ensure your cluster can pull them.
+- Deploy with `kubectl apply -k .\k8s\base`.
+- Run database schema sync once per release with `kubectl apply -f .\k8s\base\migration-job.yaml -n uit-se357`.
