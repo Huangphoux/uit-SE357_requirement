@@ -19,7 +19,7 @@ workspace "ASR-AVAIL-01 - High Availability" "C4 views for active/passive API fa
             autoLayout lr
         }
 
-        component backendPrimary "ASR_AVAIL_01_Health_Component" "ASR-AVAIL-01: /api/health validates database and Redis readiness for failover decisions." {
+        component backendPrimary "ASR_AVAIL_01_Failover_Health" "ASR-AVAIL-01: both API instances expose /api/health checks against PostgreSQL and Redis to support failover decisions." {
             include backendPrimary.healthRouterPrimary
             include backendSecondary.healthRouterSecondary
             include postgres

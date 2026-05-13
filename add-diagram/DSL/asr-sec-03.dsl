@@ -1,4 +1,4 @@
-workspace "ASR-SEC-03 - Brute-force Protection" "C4 views for login lockout and API rate limiting." {
+workspace "ASR-SEC-03 - Brute-force Protection" "C4 views for login lockout and related brute-force mitigation controls." {
     !identifiers hierarchical
 
     model {
@@ -17,7 +17,7 @@ workspace "ASR-SEC-03 - Brute-force Protection" "C4 views for login lockout and 
             autoLayout lr
         }
 
-        component backendPrimary "ASR_SEC_03_AuthRate_Component" "ASR-SEC-03: Auth Controller + Auth Service enforce per-IP lockout, while middleware enforces global /api rate limiting." {
+        component backendPrimary "ASR_SEC_03_AuthLockout_Component" "ASR-SEC-03: Auth Controller + Auth Service enforce per-IP login lockout using LoginAttempt records." {
             include backendPrimary.authController
             include backendPrimary.authService
             include backendPrimary.rateLimitMiddleware
