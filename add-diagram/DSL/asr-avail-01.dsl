@@ -1,0 +1,33 @@
+workspace "ASR-AVAIL-01 - High Availability" "C4 views for active/passive API failover and health checks." {
+    !identifiers hierarchical
+
+    model {
+        !include model.dsl
+    }
+
+    views {
+        container lms "ASR_AVAIL_01_Containers" "ASR-AVAIL-01: Caddy routes traffic to backend-primary and fails over to backend-secondary based on health checks." {
+            include student
+            include teacher
+            include admin
+            include caddy
+            include backendPrimary
+            include backendSecondary
+            include spa
+            include postgres
+            include redis
+            autoLayout lr
+        }
+
+        component backendPrimary "ASR_AVAIL_01_Health_Component" "ASR-AVAIL-01: /api/health validates database and Redis readiness for failover decisions." {
+            include backendPrimary.healthRouter
+            include postgres
+            include redis
+            include caddy
+            autoLayout tb
+        }
+
+        !include styles.dsl
+        theme default
+    }
+}
