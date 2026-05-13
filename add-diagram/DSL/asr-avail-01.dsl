@@ -37,6 +37,16 @@ workspace "ASR-AVAIL-01 - High Availability" "C4 views for active/passive API fa
             autoLayout tb
         }
 
+        dynamic lms "ASR_AVAIL_01_Code_Dynamic" "Level 4 - ASR-AVAIL-01 runtime flow for health-probe-driven failover." {
+            caddy -> backendPrimary.healthRouterPrimary "GET /api/health (primary)"
+            backendPrimary.healthRouterPrimary -> postgres "SELECT 1"
+            backendPrimary.healthRouterPrimary -> redis "PING"
+            caddy -> backendSecondary.healthRouterSecondary "Failover probe /api/health (secondary)"
+            backendSecondary.healthRouterSecondary -> postgres "SELECT 1"
+            backendSecondary.healthRouterSecondary -> redis "PING"
+            autoLayout lr
+        }
+
         !include styles.dsl
         theme default
     }

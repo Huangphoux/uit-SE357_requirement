@@ -35,6 +35,15 @@ workspace "ASR-SEC-03 - Brute-force Protection" "C4 views for login lockout and 
             autoLayout lr
         }
 
+        dynamic lms "ASR_SEC_03_Code_Dynamic" "Level 4 - ASR-SEC-03 runtime flow for lockout and rate-limit enforcement." {
+            student -> caddy "Submit login request"
+            caddy -> backendPrimary "Forward /api/auth/login"
+            backendPrimary.authController -> backendPrimary.authService "Validate credentials and attempt window"
+            backendPrimary.authService -> postgres.loginAttemptTable "Read/Update failed attempts + blockedUntil"
+            backendPrimary.rateLimitMiddleware -> redis "INCR + EXPIRE per IP/endpoint"
+            autoLayout lr
+        }
+
         !include styles.dsl
         theme default
     }

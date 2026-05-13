@@ -31,6 +31,13 @@ workspace "ASR-SEC-15 - API Rate Limiting" "C4 views for Redis-backed request th
             autoLayout tb
         }
 
+        dynamic lms "ASR_SEC_15_Code_Dynamic" "Level 4 - ASR-SEC-15 runtime flow for Redis-backed API throttling." {
+            student -> caddy "Invoke /api endpoint"
+            caddy -> backendPrimary "Forward API request"
+            backendPrimary.rateLimitMiddleware -> redis "INCR + EXPIRE key"
+            autoLayout lr
+        }
+
         !include styles.dsl
         theme default
     }

@@ -29,6 +29,14 @@ workspace "ASR-SEC-11 - Audit Log Retention" "C4 views for audit log retention a
             autoLayout tb
         }
 
+        dynamic lms "ASR_SEC_11_Code_Dynamic" "Level 4 - ASR-SEC-11 runtime flow for admin audit-log retrieval and retention cleanup." {
+            admin -> caddy "Request GET /api/audit/logs"
+            caddy -> backendPrimary "Forward admin audit request"
+            backendPrimary.auditRoute -> backendPrimary.auditLogger "Fetch logs for response"
+            backendPrimary.auditLogger -> auditLogStorage "Read JSONL files + purge expired files"
+            autoLayout lr
+        }
+
         !include styles.dsl
         theme default
     }
