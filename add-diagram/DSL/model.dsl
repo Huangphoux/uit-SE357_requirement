@@ -10,7 +10,7 @@ lms = softwareSystem "Learning Management System" "Node.js + React LMS deployed 
     }
 
     backendPrimary = container "Node.js API (backend-primary)" "Primary API instance." "Node.js 20 + Express + TypeScript" {
-        healthRouter = component "Health Router" "GET /api/health checks PostgreSQL (SELECT 1) and Redis (PING)."
+        healthRouter = component "Health Router (Primary)" "GET /api/health checks PostgreSQL (SELECT 1) and Redis (PING)."
         rateLimitMiddleware = component "Rate-Limit Middleware" "Global /api limiter. Uses Redis INCR + EXPIRE and returns HTTP 429 when threshold is exceeded."
         authController = component "Auth Controller" "Handles login/register/refresh/logout endpoints."
         authService = component "Auth Service" "Tracks failed login attempts per IP and blocks after configured threshold/time window."
@@ -22,7 +22,7 @@ lms = softwareSystem "Learning Management System" "Node.js + React LMS deployed 
     }
 
     backendSecondary = container "Node.js API (backend-secondary)" "Secondary API instance. Same image and configuration as backend-primary for failover." "Node.js 20 + Express + TypeScript" {
-        healthRouter = component "Health Router" "GET /api/health checks PostgreSQL (SELECT 1) and Redis (PING)."
+        healthRouter = component "Health Router (Secondary)" "GET /api/health checks PostgreSQL (SELECT 1) and Redis (PING)."
     }
 
     postgres = container "PostgreSQL 16" "Primary relational database." "PostgreSQL" {
@@ -31,7 +31,7 @@ lms = softwareSystem "Learning Management System" "Node.js + React LMS deployed 
 
     redis = container "Redis 7" "Stores rate-limit counters and supports health checks." "Redis"
 
-    auditLogStorage = container "Audit Log Files" "Daily JSONL log files stored under configurable AUDIT_LOG_DIR (for example /app/logs/audit)." "Docker volume / filesystem"
+    auditLogStorage = container "Audit Log Files" "Daily JSONL log files stored under configurable AUDIT_LOG_DIR (for example /app/logs/audit)." "Docker volume mount"
 }
 
 student -> caddy "Uses LMS" "HTTPS"
