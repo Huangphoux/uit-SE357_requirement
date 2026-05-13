@@ -31,7 +31,7 @@ lms = softwareSystem "Learning Management System" "Node.js + React LMS deployed 
 
     redis = container "Redis 7" "Stores rate-limit counters and supports health checks." "Redis"
 
-    auditLogStorage = container "Audit Log Files" "Daily JSONL log files stored under configurable AUDIT_LOG_DIR (for example /app/logs/audit)." "Docker volume mount"
+    auditLogStorage = container "Audit Log Files" "Daily JSONL log files stored under configurable AUDIT_LOG_DIR (e.g., /app/logs/audit)." "Docker volume mount"
 }
 
 student -> caddy "Uses LMS" "HTTPS"
