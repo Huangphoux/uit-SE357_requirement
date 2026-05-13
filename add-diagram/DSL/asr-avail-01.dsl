@@ -6,6 +6,15 @@ workspace "ASR-AVAIL-01 - High Availability" "C4 views for active/passive API fa
     }
 
     views {
+        systemContext lms "ASR_AVAIL_01_SystemContext" "Level 1 - ASR-AVAIL-01 context for LMS availability expectations." {
+            include student
+            include teacher
+            include admin
+            include lms
+            include emailService
+            autoLayout lr
+        }
+
         container lms "ASR_AVAIL_01_Containers" "ASR-AVAIL-01: Caddy routes traffic to backend-primary and fails over to backend-secondary based on health checks." {
             include student
             include teacher

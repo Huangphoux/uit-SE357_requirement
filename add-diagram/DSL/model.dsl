@@ -1,6 +1,7 @@
 student = person "Student" "Uses LMS features through HTTPS via the SPA and API."
 teacher = person "Teacher" "Creates learning content and grades submissions via the LMS."
 admin = person "Admin" "Monitors system health and reads audit logs through protected admin endpoints."
+emailService = softwareSystem "Email Service (SMTP)" "External SMTP service used by LMS notifications." "External"
 
 lms = softwareSystem "Learning Management System" "Node.js + React LMS deployed with Caddy, PostgreSQL, Redis, and audit log files." {
     caddy = container "Caddy Reverse Proxy" "Terminates TLS and reverse-proxies /api requests to backend-primary then backend-secondary using health checks." "Caddy"
@@ -37,6 +38,10 @@ lms = softwareSystem "Learning Management System" "Node.js + React LMS deployed 
 student -> caddy "Uses LMS" "HTTPS"
 teacher -> caddy "Uses LMS" "HTTPS"
 admin -> caddy "Uses LMS" "HTTPS"
+student -> lms "Uses LMS capabilities" "HTTPS"
+teacher -> lms "Uses LMS capabilities" "HTTPS"
+admin -> lms "Administers LMS" "HTTPS"
+lms -> emailService "Sends notification emails" "SMTP/TLS"
 
 caddy -> spa "Serves frontend assets"
 caddy -> backendPrimary "Reverse proxy /api (primary first)"

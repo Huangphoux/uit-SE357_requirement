@@ -6,6 +6,12 @@ workspace "ASR-SEC-11 - Audit Log Retention" "C4 views for audit log retention a
     }
 
     views {
+        systemContext lms "ASR_SEC_11_SystemContext" "Level 1 - ASR-SEC-11 context for audit retention and admin access." {
+            include admin
+            include lms
+            autoLayout lr
+        }
+
         container lms "ASR_SEC_11_Containers" "ASR-SEC-11: Audit logs are retained as daily files in AUDIT_LOG_DIR and accessed via admin-only API route." {
             include admin
             include caddy

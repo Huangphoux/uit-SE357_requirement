@@ -6,6 +6,13 @@ workspace "ASR-SEC-14 - Upload Size Limits" "C4 views for 50MB material and 20MB
     }
 
     views {
+        systemContext lms "ASR_SEC_14_SystemContext" "Level 1 - ASR-SEC-14 context for secure upload size control." {
+            include student
+            include teacher
+            include lms
+            autoLayout lr
+        }
+
         container lms "ASR_SEC_14_Containers" "ASR-SEC-14: Upload requests flow from React SPA to API routes protected by explicit size-limit middleware." {
             include student
             include teacher
