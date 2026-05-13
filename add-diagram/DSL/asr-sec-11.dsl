@@ -14,7 +14,7 @@ workspace "ASR-SEC-11 - Audit Log Retention" "C4 views for audit log retention a
             autoLayout lr
         }
 
-        component backendPrimary "ASR_SEC_11_Audit_Component" "ASR-SEC-11: Audit Route queries Audit Logger, which stores JSONL files and removes entries older than AUDIT_RETENTION_DAYS." {
+        component backendPrimary "ASR_SEC_11_Audit_Component" "ASR-SEC-11: Audit Route queries Audit Logger, which stores JSONL files and removes files older than AUDIT_RETENTION_DAYS." {
             include backendPrimary.auditRoute
             include backendPrimary.auditLogger
             include auditLogStorage

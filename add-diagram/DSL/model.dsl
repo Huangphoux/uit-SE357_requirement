@@ -21,7 +21,9 @@ lms = softwareSystem "Learning Management System" "Node.js + React LMS deployed 
         auditLogger = component "Audit Logger" "Writes JSONL audit entries to daily files and removes files older than configured retention days."
     }
 
-    backendSecondary = container "Node.js API (backend-secondary)" "Secondary API instance. Same image and configuration as backend-primary for failover." "Node.js 20 + Express + TypeScript"
+    backendSecondary = container "Node.js API (backend-secondary)" "Secondary API instance. Same image and configuration as backend-primary for failover." "Node.js 20 + Express + TypeScript" {
+        healthRouter = component "Health Router" "GET /api/health checks PostgreSQL (SELECT 1) and Redis (PING)."
+    }
 
     postgres = container "PostgreSQL 16" "Primary relational database." "PostgreSQL" {
         loginAttemptTable = component "LoginAttempt table" "Stores attempts, blockedUntil, and lastTry by source IP for lockout enforcement."
@@ -29,7 +31,7 @@ lms = softwareSystem "Learning Management System" "Node.js + React LMS deployed 
 
     redis = container "Redis 7" "Stores rate-limit counters and supports health checks." "Redis"
 
-    auditLogStorage = container "Audit Log Files" "Daily JSONL log files stored under AUDIT_LOG_DIR (for example /app/logs/audit)." "Docker volume / filesystem"
+    auditLogStorage = container "Audit Log Files" "Daily JSONL log files stored under configurable AUDIT_LOG_DIR (for example /app/logs/audit)." "Docker volume / filesystem"
 }
 
 student -> caddy "Uses LMS" "HTTPS"
@@ -40,7 +42,7 @@ caddy -> spa "Serves frontend assets"
 caddy -> backendPrimary "Reverse proxy /api (primary first)"
 caddy -> backendSecondary "Failover target for /api when primary is unhealthy"
 caddy -> backendPrimary.healthRouter "Health probe /api/health every 10s"
-caddy -> backendSecondary "Health probe /api/health every 10s"
+caddy -> backendSecondary.healthRouter "Health probe /api/health every 10s"
 
 spa.fileUploadUi -> caddy "Calls /api/materials and /api/submissions" "HTTPS"
 
