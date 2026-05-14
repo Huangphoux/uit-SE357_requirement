@@ -1,0 +1,38 @@
+@startuml ASR-PERF-02
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-PERF-02: Large Dataset Queries with Pagination\nQuerying 10000+ Records with Pagination and Indexing
+
+Person(user, "User", "Requests lists of courses, students, or assignments")
+
+System_Boundary(lms, "LMS System") {
+
+    Container(clientApp, "Client Application", "React + TypeScript", "Displays paginated results to users")
+
+    Container_Boundary(apiServer, "API Server [Express.js + Node.js]") {
+        Component(paginationHandler, "Pagination Handler", "Service", "Calculates offset/limit and validates page parameters")
+        Component(queryOptimizer, "Query Optimizer", "Service", "Builds optimized queries with proper filters and sorting")
+        Component(resultSerializer, "Result Serializer", "Service", "Converts database results to JSON response with metadata (total, page, hasNext)")
+    }
+
+    ContainerDb_Boundary(database, "Database [PostgreSQL with Indexes]") {
+        Component(indexManager, "Index Manager", "DB", "Maintains indexes on course_id, student_id, assignment_id, created_at")
+        Component(queryExecutor, "Query Executor", "DB", "Executes queries using indexes for fast retrieval")
+        Component(resultFetcher, "Result Fetcher", "DB", "Fetches paginated rows from database")
+    }
+
+    Container(cache, "Query Cache", "Redis", "Caches frequently accessed paginated results")
+}
+
+Rel(user, clientApp, "Browse courses/students/assignments")
+Rel(paginationHandler, queryOptimizer, "Page size and offset")
+Rel(queryOptimizer, resultSerializer, "Query results")
+Rel(indexManager, queryExecutor, "Use index for lookup")
+Rel(queryExecutor, resultFetcher, "Fetch paginated results")
+Rel(clientApp, apiServer, "Request: GET /courses?page=1&limit=20")
+Rel(apiServer, database, "SELECT * FROM courses LIMIT 20 OFFSET 0")
+Rel(apiServer, cache, "Check cached results")
+Rel(database, apiServer, "Return paginated rows")
+Rel(apiServer, clientApp, "Response: [{...}, {...}] + metadata")
+
+@enduml

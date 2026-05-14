@@ -1,0 +1,92 @@
+@startuml ASR-AGGR-01
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-AGGR-01: Platform Statistics Dashboard\nAdmin Dashboard with 5-Second Aggregation Response Time
+
+Person(admin, "Admin", "Views platform statistics and metrics")
+
+System_Boundary(lms, "LMS System") {
+
+    Container_Boundary(clientApp, "Admin Dashboard [React + TypeScript]") {
+        Component(statsUI, "Statistics Dashboard UI", "WebBrowser", "Statistics dashboard UI with charts")
+    }
+
+    Container_Boundary(apiServer, "API Server [Express.js + Node.js]") {
+        Component(statsRequestHandler, "Stats Request Handler", "Service", "Receives requests for aggregated data")
+        Component(cacheValidator, "Cache Validator", "Service", "Checks if cached data is fresh (< 5 min old)")
+        Component(queryCoordinator, "Query Coordinator", "Service", "Orchestrates aggregation queries")
+    }
+
+    Container_Boundary(cacheLayer, "Cache Layer [Redis]") {
+        Component(aggregationCache, "Aggregation Cache", "Service", "Stores: user_count, course_count, enrollment_stats, grades")
+        Component(cacheTTL, "Cache TTL Manager", "Service", "Expires cache after 5 minutes, forces refresh")
+        Component(cacheKeyGen, "Cache Key Generator", "Service", "Generates cache keys by aggregation type and filter")
+    }
+
+    Container_Boundary(aggregationEngine, "Aggregation Engine [Data Processing]") {
+        Component(dataFetcher, "Data Fetcher", "Service", "Queries 10000+ records efficiently from database")
+        Component(aggregator, "Aggregator", "Service", "Groups, counts, sums, averages (GROUP BY, COUNT, SUM, AVG)")
+        Component(filterEngine, "Filter Engine", "Service", "Applies date range, course, user filters")
+        Component(resultProcessor, "Result Processor", "Service", "Formats results for chart consumption")
+        Component(perfOptimizer, "Performance Optimizer", "Service", "Uses database indexes to stay < 5 sec")
+    }
+
+    Container_Boundary(database, "Database [PostgreSQL with Indexes]") {
+        Component(enrollmentsTable, "Enrollments Table", "DB", "student_id, course_id, enrollment_date")
+        Component(gradesTable, "Grades Table", "DB", "student_id, course_id, assignment_id, score")
+        Component(activityTable, "Activity Table", "DB", "user_id, action, timestamp, resource_type")
+        Component(indexManager, "Index Manager", "DB", "Indexes on: course_id, enrollment_date, created_at")
+    }
+
+    Container_Boundary(chartGenerator, "Chart Generator [Chart Library]") {
+        Component(barChart, "Bar Chart Builder", "Service", "Builds bar charts (courses vs enrollments)")
+        Component(lineChart, "Line Chart Builder", "Service", "Builds line charts (trends over time)")
+        Component(pieChart, "Pie Chart Builder", "Service", "Builds pie charts (distribution by role)")
+        Component(dataFormatter, "Data Formatter", "Service", "Formats aggregated data for D3/Chart.js")
+    }
+
+    Container_Boundary(monitoringService, "Monitoring Service [Prometheus + Grafana]") {
+        Component(respTimeMonitor, "Response Time Monitor", "Service", "Tracks p50, p95, p99 response times")
+        Component(queryPerfMonitor, "Query Performance Monitor", "Service", "Tracks database query execution time")
+        Component(cacheHitMonitor, "Cache Hit Rate Monitor", "Service", "Tracks cache effectiveness (target: 80%+ hit rate)")
+        Component(alerting, "Alerting", "Service", "Alerts if response time exceeds 5 seconds")
+    }
+
+    Container_Boundary(auditLog, "Audit Log [Database]") {
+        Component(statsQueryLog, "Stats Query Log", "DB", "admin_id, query_type, filters, timestamp, response_time")
+    }
+}
+
+Rel(admin, statsUI, "View admin dashboard")
+Rel(statsUI, statsRequestHandler, "GET /api/stats/dashboard")
+Rel(statsRequestHandler, cacheValidator, "Check cache")
+Rel(cacheValidator, queryCoordinator, "Coordinate query")
+Rel(cacheTTL, aggregationCache, "Manage expiry")
+Rel(cacheKeyGen, aggregationCache, "Key management")
+Rel(dataFetcher, aggregator, "Fetch data")
+Rel(aggregator, filterEngine, "Apply filters")
+Rel(filterEngine, perfOptimizer, "Optimize query")
+Rel(perfOptimizer, resultProcessor, "Process result")
+Rel(indexManager, enrollmentsTable, "Index enrollments")
+Rel(indexManager, gradesTable, "Index grades")
+Rel(indexManager, activityTable, "Index activity")
+Rel(barChart, dataFormatter, "Format data")
+Rel(lineChart, dataFormatter, "Format data")
+Rel(pieChart, dataFormatter, "Format data")
+Rel(respTimeMonitor, queryPerfMonitor, "Monitor queries")
+Rel(queryPerfMonitor, cacheHitMonitor, "Track cache")
+Rel(cacheHitMonitor, alerting, "Alert on SLA breach")
+Rel(statsUI, apiServer, "GET /api/stats/dashboard")
+Rel(apiServer, cacheLayer, "Check cache (key: dashboard_stats)")
+Rel(cacheLayer, apiServer, "Cache HIT or MISS")
+Rel(apiServer, aggregationEngine, "Query if cache expired")
+Rel(aggregationEngine, database, "Query 10000+ records")
+Rel(database, aggregationEngine, "Return raw data")
+Rel(aggregationEngine, chartGenerator, "Format for charts")
+Rel(chartGenerator, cacheLayer, "Store in cache (5-min TTL)")
+Rel(cacheLayer, apiServer, "Return aggregated data")
+Rel(apiServer, statsUI, "Return stats + charts (< 5 sec)")
+Rel(apiServer, monitoringService, "Track response time")
+Rel(apiServer, auditLog, "Log stats query")
+
+@enduml

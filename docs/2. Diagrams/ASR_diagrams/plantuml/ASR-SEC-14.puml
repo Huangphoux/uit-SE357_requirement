@@ -1,0 +1,74 @@
+@startuml ASR-SEC-14
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-SEC-14: File Size Validation and Limits\nEnforcing File Size Limits (50MB Materials, 20MB Submissions)
+
+Person(teacher, "Teacher", "Uploads course materials")
+Person(student, "Student", "Submits assignments")
+Person(attacker, "Attacker", "Attempts to upload oversized files")
+
+System_Boundary(lms, "LMS System") {
+
+    Container_Boundary(clientApp, "Client Application [React + TypeScript]") {
+        Component(sizeIndicator, "Size Indicator", "UI", "Shows file size before upload (client-side check)")
+        Component(preUploadValidator, "Pre-Upload Validator", "UI", "Rejects files exceeding limits before sending")
+    }
+
+    Container_Boundary(apiServer, "API Server [Express.js + Node.js]") {
+        Component(uploadRouter, "Upload Router", "Service", "Routes to materials or submissions endpoint")
+        Component(contentLengthChecker, "Content-Length Checker", "Service", "Reads Content-Length header (first defense)")
+        Component(streamLimiter, "Stream Limiter", "Service", "Limits bytes received to avoid memory exhaustion")
+        Component(chunkValidator, "Chunk Validator", "Service", "Validates each uploaded chunk within limits")
+    }
+
+    Container_Boundary(sizeLimitConfig, "Size Limit Configuration [Settings]") {
+        Component(materialLimit, "Material Limit", "Service", "50MB (52,428,800 bytes) for course materials")
+        Component(submissionLimit, "Submission Limit", "Service", "20MB (20,971,520 bytes) for student submissions")
+        Component(totalStorageQuota, "Total Storage Quota", "Service", "Per-user quota to prevent storage exhaustion")
+    }
+
+    Container_Boundary(validationLogic, "Validation Logic [Enforcement Engine]") {
+        Component(headerValidation, "Header Validation", "Service", "Rejects request if Content-Length exceeds limit")
+        Component(streamTimeoutHandler, "Stream Timeout Handler", "Service", "Aborts upload if exceeds limit mid-stream")
+        Component(quotaChecker, "Quota Checker", "Service", "Checks if user storage quota would be exceeded")
+        Component(errorResponder, "Error Responder", "Service", "Returns 413 (Payload Too Large) with limit info")
+    }
+
+    Container(fileStorage, "File Storage", "Secure Storage", "Only stores files within limits")
+
+    Container_Boundary(auditLog, "Audit Log [Database]") {
+        Component(uploadAttemptLog, "Upload Attempt Log", "DB", "user_id, file_name, file_size, upload_type, timestamp")
+        Component(rejectionLog, "Rejection Log", "DB", "Logs rejections: reason (size exceeded, quota exceeded), requested size")
+    }
+
+    Container_Boundary(metricsCollector, "Metrics Collector [Monitoring]") {
+        Component(sizeDistribution, "Size Distribution", "Service", "Tracks median, p95, p99 file sizes")
+        Component(quotaUtilization, "Quota Utilization", "Service", "Tracks per-user storage usage")
+        Component(rejectionRate, "Rejection Rate", "Service", "Tracks percentage of uploads rejected for size")
+    }
+}
+
+Rel(sizeIndicator, preUploadValidator, "Check size")
+Rel(uploadRouter, contentLengthChecker, "Check header")
+Rel(contentLengthChecker, streamLimiter, "Limit stream")
+Rel(streamLimiter, chunkValidator, "Validate chunks")
+Rel(materialLimit, submissionLimit, "Define limits")
+Rel(submissionLimit, totalStorageQuota, "Set quotas")
+Rel(headerValidation, streamTimeoutHandler, "Validate header")
+Rel(streamTimeoutHandler, quotaChecker, "Check quota")
+Rel(quotaChecker, errorResponder, "Return error")
+Rel(rejectionLog, uploadAttemptLog, "Log rejections")
+Rel(sizeDistribution, quotaUtilization, "Monitor usage")
+Rel(quotaUtilization, rejectionRate, "Track rejections")
+Rel(teacher, clientApp, "Upload material (30MB PDF)")
+Rel(clientApp, apiServer, "POST /upload/material {file: 30MB}")
+Rel(apiServer, sizeLimitConfig, "Check material limit (50MB)")
+Rel(apiServer, validationLogic, "Validate: 30MB < 50MB = OK")
+Rel(validationLogic, fileStorage, "Store file")
+Rel(apiServer, auditLog, "Log successful upload")
+Rel(student, clientApp, "Upload assignment (15MB ZIP)")
+Rel(attacker, clientApp, "Upload oversized file (100MB)")
+Rel(validationLogic, auditLog, "Log rejection: size exceeded")
+Rel(apiServer, metricsCollector, "Track rejection")
+
+@enduml

@@ -1,0 +1,58 @@
+@startuml ASR-PERF-03
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-PERF-03: Annual Data Growth Scalability\nHandling 20% Yearly Data Growth with Flexible Architecture
+
+Person(admin, "Platform Admin", "Monitors data growth and scales resources")
+Person(user, "User", "Uses the system as data grows")
+
+System_Boundary(lms, "LMS System") {
+
+    Container_Boundary(loadBalancer, "Load Balancer [Caddy + Auto-scaling]") {
+        Component(scalingController, "Scaling Controller", "Service", "Monitors CPU/memory usage and triggers auto-scaling")
+        Component(requestDistributor, "Request Distributor", "Service", "Distributes requests to available API instances")
+    }
+
+    Container_Boundary(apiServerPool, "API Server Pool [Express.js - Horizontal]") {
+        Component(apiInstanceMgr, "Instance Manager", "Service", "Manages lifecycle of API server instances")
+        Component(healthMonitor, "Health Monitor", "Service", "Tracks instance health and removes failing instances")
+    }
+
+    Container_Boundary(cacheCluster, "Cache Cluster [Redis - Distributed]") {
+        Component(cacheNodeCoord, "Cache Node Coordinator", "Service", "Manages cache nodes and data distribution")
+        Component(dataPartitioner, "Data Partitioner", "Service", "Partitions cache entries across nodes (sharding)")
+    }
+
+    Container_Boundary(dbCluster, "Database Cluster [PostgreSQL - Replication + Sharding]") {
+        Component(primaryReplica, "Primary Replica", "DB", "Master database for writes")
+        Component(secondaryReplicas, "Secondary Replicas", "DB", "Read-only replicas for scaling reads")
+        Component(shardManager, "Shard Manager", "DB", "Routes queries to appropriate shards by data key")
+        Component(archiveStorage, "Archive Storage", "DB", "Cold storage for historical/inactive data")
+    }
+
+    Container_Boundary(monitoringSystem, "Monitoring System [Prometheus + Grafana]") {
+        Component(metricsCollector, "Metrics Collector", "Service", "Collects CPU, memory, query latency metrics")
+        Component(predictiveAnalyzer, "Predictive Analyzer", "Service", "Analyzes growth trends and predicts future scaling")
+        Component(alerting, "Alerting", "Service", "Alerts admins when thresholds approached")
+    }
+}
+
+Rel(user, lms, "Use system over time")
+Rel(admin, monitoringSystem, "Monitor growth trends")
+Rel(scalingController, requestDistributor, "Scale decision")
+Rel(apiInstanceMgr, healthMonitor, "Monitor instances")
+Rel(cacheNodeCoord, dataPartitioner, "Partition cache data")
+Rel(shardManager, primaryReplica, "Write queries")
+Rel(shardManager, secondaryReplicas, "Read queries")
+Rel(primaryReplica, secondaryReplicas, "Replication")
+Rel(archiveStorage, primaryReplica, "Archive old data")
+Rel(metricsCollector, predictiveAnalyzer, "Growth metrics")
+Rel(predictiveAnalyzer, alerting, "Scaling predictions")
+Rel(loadBalancer, apiServerPool, "Route requests to scalable pool")
+Rel(apiServerPool, cacheCluster, "Query distributed cache")
+Rel(apiServerPool, dbCluster, "Query database cluster")
+Rel(monitoringSystem, loadBalancer, "Monitor and auto-scale")
+Rel(monitoringSystem, apiServerPool, "Monitor instances")
+Rel(monitoringSystem, dbCluster, "Monitor database growth")
+
+@enduml

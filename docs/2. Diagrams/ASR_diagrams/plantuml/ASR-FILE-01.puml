@@ -1,0 +1,94 @@
+@startuml ASR-FILE-01
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-FILE-01: Concurrent Material Downloads\n500 Concurrent Downloads with 24/7 Availability
+
+Person(students, "Students", "Download course materials concurrently")
+
+System_Boundary(lms, "LMS System") {
+
+    Container_Boundary(cdnGlobal, "Global CDN [Cloudflare / CloudFront]") {
+        Component(edgeCache, "Edge Cache", "Service", "Caches materials at edge locations")
+        Component(geoRouter, "Geo Router", "Service", "Routes to nearest edge server")
+    }
+
+    Container_Boundary(loadBalancer, "Load Balancer [Caddy / HAProxy]") {
+        Component(connDistributor, "Connection Distributor", "Service", "Distributes TCP connections round-robin")
+        Component(healthMon, "Health Monitor", "Service", "Checks backend server health")
+        Component(connRateLimiter, "Connection Rate Limiter", "Service", "Limits per-IP concurrent connections (10-20 per user)")
+    }
+
+    Container_Boundary(apiServers, "API Server Cluster [Node.js + Express]") {
+        Component(streamHandler1, "Stream Handler 1", "Service", "Handles 100 concurrent streams")
+        Component(streamHandler2, "Stream Handler 2", "Service", "Handles 100 concurrent streams")
+        Component(streamHandler3, "Stream Handler 3", "Service", "Handles 100 concurrent streams")
+        Component(streamHandler4, "Stream Handler 4", "Service", "Handles 100 concurrent streams")
+        Component(streamHandler5, "Stream Handler 5", "Service", "Handles 100 concurrent streams")
+    }
+
+    Container_Boundary(fileStorage, "File Storage (Optimized) [S3 / Local NFS]") {
+        Component(storageCluster, "Storage Cluster", "Service", "Multiple storage nodes (NFS or S3)")
+        Component(compressionCache, "Compression Cache", "Service", "Pre-compressed versions of materials (gzip, brotli)")
+        Component(partialContent, "Partial Content Support", "Service", "Supports HTTP 206 Range requests for resume")
+    }
+
+    Container_Boundary(cacheLayer, "Cache Layer [Redis + Memcached]") {
+        Component(metadataCache, "Metadata Cache", "Service", "Caches file size, MIME type, checksum (1-day TTL)")
+        Component(hotMaterialCache, "Hot Material Cache", "Service", "Caches frequently accessed materials in memory")
+        Component(compressionInfoCache, "Compression Info Cache", "Service", "Caches which compression is best for each file")
+    }
+
+    Container_Boundary(streamingOpt, "Streaming Optimization [Compression + Delivery]") {
+        Component(onDemandCompressor, "On-Demand Compressor", "Service", "Compresses files in real-time if requested")
+        Component(bandwidthThrottler, "Bandwidth Throttler", "Service", "Throttles per-user bandwidth to fair-share (1-10 Mbps)")
+        Component(adaptiveBitrate, "Adaptive Bitrate", "Service", "Adjusts quality based on client bandwidth")
+    }
+
+    ContainerDb(database, "Database", "PostgreSQL", "Stores material metadata and download logs")
+
+    Container_Boundary(connPool, "Connection Pool [Database Connection Management]") {
+        Component(dbConnPool, "DB Connection Pool", "Service", "Max 50-100 connections per server")
+        Component(idleConnReaper, "Idle Connection Reaper", "Service", "Closes idle connections after 5 min")
+    }
+
+    Container_Boundary(monitoringService, "Monitoring Service [Prometheus + Grafana]") {
+        Component(concurrencyMon, "Concurrency Monitor", "Service", "Tracks current concurrent downloads")
+        Component(latencyMon, "Latency Monitor", "Service", "Tracks download time (p50, p95, p99)")
+        Component(bandwidthMon, "Bandwidth Monitor", "Service", "Tracks total bandwidth usage")
+        Component(availabilityMon, "Availability Monitor", "Service", "Ensures 24/7 uptime (99.9%+)")
+    }
+
+    ContainerDb_Boundary(auditLog, "Audit Log [Database]") {
+        Component(downloadLog, "Download Log", "DB", "user_id, file_id, timestamp, bytes_transferred, duration")
+        Component(perfLog, "Performance Log", "DB", "Tracks download latency and completion rates")
+    }
+}
+
+Rel(geoRouter, edgeCache, "Serve from edge")
+Rel(healthMon, connDistributor, "Route to healthy")
+Rel(connDistributor, connRateLimiter, "Rate limit")
+Rel(streamHandler1, streamHandler2, "Distribute load")
+Rel(compressionCache, storageCluster, "Store versions")
+Rel(partialContent, storageCluster, "Support resume")
+Rel(metadataCache, hotMaterialCache, "Manage cache")
+Rel(onDemandCompressor, bandwidthThrottler, "Optimize delivery")
+Rel(bandwidthThrottler, adaptiveBitrate, "Adaptive rate")
+Rel(idleConnReaper, dbConnPool, "Manage connections")
+Rel(concurrencyMon, latencyMon, "Monitor performance")
+Rel(latencyMon, bandwidthMon, "Track usage")
+Rel(bandwidthMon, availabilityMon, "Availability")
+Rel(perfLog, downloadLog, "Log downloads")
+Rel(students, cdnGlobal, "Request material download")
+Rel(cdnGlobal, loadBalancer, "Route to load balancer if not cached")
+Rel(loadBalancer, apiServers, "Distribute concurrent requests (500 total)")
+Rel(apiServers, cacheLayer, "Check metadata cache")
+Rel(cacheLayer, fileStorage, "If not cached, fetch from storage")
+Rel(fileStorage, streamingOpt, "Optimize for streaming (compress, throttle)")
+Rel(streamingOpt, apiServers, "Stream to client")
+Rel(apiServers, students, "HTTP stream with 206 Range support")
+Rel(apiServers, database, "Fetch material info")
+Rel(apiServers, auditLog, "Log download event")
+Rel(monitoringService, apiServers, "Monitor concurrent connections")
+Rel(monitoringService, loadBalancer, "Monitor load balancer")
+
+@enduml

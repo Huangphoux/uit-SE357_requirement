@@ -1,0 +1,82 @@
+@startuml ASR-SEC-10
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-SEC-10: Comprehensive Audit Logging\n100% Audit Logging of Critical Actions
+
+Person(user, "User", "Performs actions (login, file access)")
+Person(admin, "Admin", "Performs admin actions")
+Person(auditor, "Auditor/Compliance Officer", "Reviews audit logs")
+
+System_Boundary(lms, "LMS System") {
+
+    Container(clientApp, "Client Application", "React + TypeScript", "User interface")
+
+    Container_Boundary(apiServer, "API Server [Express.js + Node.js]") {
+        Component(authHandler, "Authentication Handler", "Service", "Logs: login attempts, logouts, token generation")
+        Component(adminActionHandler, "Admin Action Handler", "Service", "Logs: user creation, role changes, system config updates")
+        Component(fileAccessHandler, "File Access Handler", "Service", "Logs: file downloads, uploads, deletions, access attempts")
+        Component(dataModHandler, "Data Modification Handler", "Service", "Logs: course creation, grade changes, enrollment updates")
+    }
+
+    Container_Boundary(auditEventCollector, "Audit Event Collector [Event Streaming Service]") {
+        Component(eventReceiver, "Event Receiver", "Service", "Receives audit events from application")
+        Component(eventEnricher, "Event Enricher", "Service", "Adds context: IP address, user agent, request ID")
+        Component(eventFormatter, "Event Formatter", "Service", "Formats to canonical log line format (JSON or structured)")
+        Component(eventRouter, "Event Router", "Service", "Routes events to storage and real-time monitoring")
+    }
+
+    Container_Boundary(auditLogStorage, "Audit Log Storage [Database + Archive]") {
+        Component(hotstoreDB, "Hotstore Database", "DB", "Recent logs (< 3 months) in PostgreSQL for quick queries")
+        Component(coldstoreLT, "Coldstore Long-Term", "DB", "Archived logs (> 3 months) in S3 Glacier for compliance")
+        Component(logIndexing, "Log Indexing", "DB", "Indexes on user_id, timestamp, action_type for fast search")
+    }
+
+    Container_Boundary(auditLogQuery, "Audit Log Query Service [Query Interface]") {
+        Component(auditSearchEngine, "Audit Search Engine", "Service", "Full-text and structured search on logs")
+        Component(auditReportGen, "Audit Report Generator", "Service", "Generates compliance reports (ISO 27001, SOC2)")
+        Component(logViewer, "Log Viewer", "UI", "UI for viewing audit logs")
+    }
+
+    Container_Boundary(realTimeMonitoring, "Real-Time Monitoring [Streaming + Alerting]") {
+        Component(eventStream, "Event Stream", "Service", "Kafka/Redis stream of audit events")
+        Component(anomalyDetector, "Anomaly Detector", "Service", "Detects suspicious patterns (brute force, mass deletion)")
+        Component(alerting, "Alerting", "Service", "Sends alerts to security team on critical events")
+    }
+
+    Container_Boundary(canonicalLogFormat, "Canonical Log Format [Structured Logging]") {
+        Component(jsonSchema, "JSON Schema", "Service", "timestamp, user_id, action, resource, result, ip, user_agent, request_id")
+        Component(logValidator, "Log Validator", "Service", "Validates logs conform to schema")
+    }
+
+    Container_Boundary(adminAuditInterface, "Admin Audit Interface [Admin Portal]") {
+        Component(logSearch, "Log Search", "UI", "Search logs by user, action, date range")
+        Component(userActivityTrail, "User Activity Trail", "UI", "View all actions by specific user")
+        Component(complianceReport, "Compliance Report", "UI", "Generate compliance reports")
+        Component(exportTool, "Export Tool", "UI", "Export logs to CSV/JSON for external audit")
+    }
+}
+
+Rel(eventReceiver, eventEnricher, "Add context")
+Rel(eventEnricher, eventFormatter, "Format event")
+Rel(eventFormatter, eventRouter, "Route to destinations")
+Rel(logIndexing, hotstoreDB, "Index recent logs")
+Rel(logIndexing, coldstoreLT, "Archive old logs")
+Rel(auditSearchEngine, auditReportGen, "Generate reports")
+Rel(auditSearchEngine, logViewer, "Display results")
+Rel(eventStream, anomalyDetector, "Analyze events")
+Rel(anomalyDetector, alerting, "Alert on anomalies")
+Rel(jsonSchema, logValidator, "Validate format")
+Rel(logSearch, userActivityTrail, "Track user")
+Rel(userActivityTrail, complianceReport, "Generate report")
+Rel(complianceReport, exportTool, "Export data")
+Rel(user, clientApp, "Perform action (login, access file)")
+Rel(clientApp, apiServer, "Request")
+Rel(apiServer, auditEventCollector, "Send audit event")
+Rel(auditEventCollector, auditLogStorage, "Store log")
+Rel(auditEventCollector, realTimeMonitoring, "Stream event")
+Rel(admin, clientApp, "Perform admin action")
+Rel(auditor, adminAuditInterface, "Search and review logs")
+Rel(adminAuditInterface, auditLogQuery, "Query logs")
+Rel(auditLogQuery, auditLogStorage, "Retrieve logs")
+
+@enduml

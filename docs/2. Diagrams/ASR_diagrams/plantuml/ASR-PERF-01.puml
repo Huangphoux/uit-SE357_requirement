@@ -1,0 +1,49 @@
+@startuml ASR-PERF-01
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-PERF-01: 500 Concurrent Users Performance\nHigh Concurrency with Load Balancing and Caching
+
+Person(users, "500 Concurrent Users", "Users accessing the system simultaneously")
+
+System_Boundary(lms, "LMS System") {
+
+    Container_Boundary(loadBalancer, "Load Balancer [Caddy]") {
+        Component(requestRouter, "Request Router", "Service", "Routes incoming requests to available API servers using round-robin")
+        Component(healthChecker, "Health Checker", "Service", "Monitors API server health and removes unhealthy instances")
+        Component(rateLimiter, "Rate Limiter", "Service", "Prevents single user from overwhelming the system")
+    }
+
+    Container(apiServer1, "API Server Instance 1", "Express.js + Node.js", "Processes business logic for a portion of concurrent requests")
+    Container(apiServer2, "API Server Instance 2", "Express.js + Node.js", "Processes business logic for a portion of concurrent requests")
+    Container(apiServer3, "API Server Instance 3", "Express.js + Node.js", "Processes business logic for a portion of concurrent requests")
+
+    Container_Boundary(cache, "Cache Layer [Redis]") {
+        Component(cacheManager, "Cache Manager", "Service", "Manages cache entries and expiration")
+        Component(cacheStore, "Cache Store", "Service", "In-memory Redis data store")
+        Component(cacheEviction, "Cache Eviction", "Service", "LRU policy to manage memory")
+    }
+
+    ContainerDb(database, "Database", "PostgreSQL", "Persistent data store for all application data")
+    Container(fileServer, "File Server", "Local/Cloud Storage", "Stores and serves course materials and submissions")
+}
+
+Rel(users, lms, "Send 500 concurrent requests")
+Rel(requestRouter, healthChecker, "Check server status")
+Rel(rateLimiter, requestRouter, "Pass through if within limits")
+Rel(cacheManager, cacheStore, "Store/retrieve cached data")
+Rel(cacheManager, cacheEviction, "Evict expired entries")
+Rel(loadBalancer, apiServer1, "Routes ~167 requests/sec")
+Rel(loadBalancer, apiServer2, "Routes ~167 requests/sec")
+Rel(loadBalancer, apiServer3, "Routes ~167 requests/sec")
+Rel(apiServer1, cache, "Query cache first")
+Rel(apiServer2, cache, "Query cache first")
+Rel(apiServer3, cache, "Query cache first")
+Rel(cache, database, "Cache miss: fetch from DB")
+Rel(apiServer1, database, "Direct queries for non-cached data")
+Rel(apiServer2, database, "Direct queries for non-cached data")
+Rel(apiServer3, database, "Direct queries for non-cached data")
+Rel(apiServer1, fileServer, "Fetch materials/files")
+Rel(apiServer2, fileServer, "Fetch materials/files")
+Rel(apiServer3, fileServer, "Fetch materials/files")
+
+@enduml

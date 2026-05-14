@@ -1,0 +1,94 @@
+@startuml ASR-SEC-15
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-SEC-15: API Rate Limiting\nRate Limiting on Login and API Endpoints
+
+Person(legitimateUser, "Legitimate User", "Makes normal API requests")
+Person(attacker, "Attacker", "Attempts brute force or DoS attack")
+
+System_Boundary(lms, "LMS System") {
+
+    Container(clientApp, "Client Application", "React + TypeScript", "Makes API requests")
+
+    Container_Boundary(apiGateway, "API Gateway [Express Middleware + Rate Limiter]") {
+        Component(ipExtractor, "IP Extractor", "Service", "Extracts client IP from request")
+        Component(endpointRouter, "Endpoint Router", "Service", "Routes to appropriate rate limiter based on endpoint")
+        Component(rateLimiterMiddleware, "Rate Limiter Middleware", "Service", "Applies rate limiting rules")
+        Component(requestCounter, "Request Counter", "Service", "Counts requests per IP/user")
+    }
+
+    Container_Boundary(rateLimitConfig, "Rate Limit Configuration [Settings Service]") {
+        Component(loginLimit, "Login Limit", "Service", "5 attempts per IP per 15 minutes")
+        Component(apiEndpointLimit, "API Endpoint Limit", "Service", "100 requests per IP per 1 minute (general endpoints)")
+        Component(searchLimit, "Search Limit", "Service", "50 requests per IP per 1 minute (expensive endpoints)")
+        Component(downloadLimit, "Download Limit", "Service", "20 downloads per IP per 1 hour (file endpoints)")
+        Component(authUserLimit, "Authenticated User Limit", "Service", "500 requests per user per 1 minute (higher for logged-in)")
+    }
+
+    Container_Boundary(redisStore, "Redis Rate Limit Store [Distributed Cache]") {
+        Component(counterStore, "Counter Store", "Service", "ip:{ip}:endpoint -> count, ttl")
+        Component(distributedSync, "Distributed Sync", "Service", "Syncs counts across multiple API server instances")
+        Component(ttlManager, "TTL Manager", "Service", "Manages counter expiration (1 min, 15 min, 1 hour)")
+    }
+
+    Container_Boundary(apiServer, "API Server Instances [Express.js + Node.js]") {
+        Component(loginHandler, "Login Handler", "Service", "Receives requests rate-limited to 5/15min")
+        Component(apiHandler, "API Handler", "Service", "Receives requests rate-limited to 100/min")
+        Component(searchHandler, "Search Handler", "Service", "Receives requests rate-limited to 50/min")
+    }
+
+    Container_Boundary(responseHandler, "Response Handler [Rate Limit Responses]") {
+        Component(allowedResponse, "Allowed Response", "Service", "Returns 200 with RateLimit headers (remaining, reset time)")
+        Component(blockedResponse, "Blocked Response", "Service", "Returns 429 Too Many Requests with retry-after header")
+    }
+
+    Container_Boundary(auditLog, "Audit Log [Database]") {
+        Component(rateLimitViolationLog, "Rate Limit Violation Log", "DB", "ip, endpoint, attempts, timestamp")
+        Component(attackDetectionLog, "Attack Detection Log", "DB", "Logs suspected attacks (10+ violations from same IP)")
+    }
+
+    Container_Boundary(alertingService, "Alerting Service [Monitoring + Notifications]") {
+        Component(bruteForceDetector, "Brute Force Detector", "Service", "Detects brute force (100+ login attempts in 15 min)")
+        Component(dosDetector, "DoS Detector", "Service", "Detects DoS patterns (1000+ requests from single IP in 1 min)")
+        Component(adminAlert, "Admin Alert", "Service", "Sends alerts to security team")
+        Component(clientNotification, "Client Notification", "Service", "Notifies user when rate limited")
+    }
+
+    Container_Boundary(blacklist, "IP Blacklist [Temporary/Permanent]") {
+        Component(temporaryBlacklist, "Temporary Blacklist", "Service", "IPs blocked for 1-24 hours (auto-lift)")
+        Component(permanentBlacklist, "Permanent Blacklist", "Service", "IPs blocked until admin intervention")
+    }
+}
+
+Rel(ipExtractor, endpointRouter, "Extract IP")
+Rel(endpointRouter, rateLimiterMiddleware, "Apply limit")
+Rel(rateLimiterMiddleware, requestCounter, "Track count")
+Rel(loginLimit, apiEndpointLimit, "Define limits")
+Rel(counterStore, distributedSync, "Sync across servers")
+Rel(ttlManager, counterStore, "Manage expiry")
+Rel(loginHandler, apiHandler, "Route request")
+Rel(blockedResponse, allowedResponse, "Send response")
+Rel(attackDetectionLog, rateLimitViolationLog, "Log violations")
+Rel(bruteForceDetector, dosDetector, "Detect attacks")
+Rel(dosDetector, adminAlert, "Alert admins")
+Rel(adminAlert, clientNotification, "Notify client")
+Rel(temporaryBlacklist, permanentBlacklist, "Escalate if repeated")
+Rel(legitimateUser, clientApp, "Make API request (login)")
+Rel(clientApp, apiGateway, "POST /auth/login {credentials}")
+Rel(apiGateway, rateLimitConfig, "Check login limit")
+Rel(apiGateway, redisStore, "Get counter for IP")
+Rel(redisStore, apiGateway, "Count: 1/5")
+Rel(apiGateway, apiServer, "Pass request (within limit)")
+Rel(apiServer, responseHandler, "Return 200 + RateLimit headers")
+Rel(responseHandler, clientApp, "Response + remaining requests info")
+Rel(attacker, clientApp, "Attempt 100 login requests in 1 minute")
+Rel(apiGateway, redisStore, "Increment counter")
+Rel(redisStore, apiGateway, "Count: 6/5 (EXCEEDED)")
+Rel(apiGateway, responseHandler, "Block request")
+Rel(responseHandler, clientApp, "429 Too Many Requests (retry after 15 min)")
+Rel(apiGateway, auditLog, "Log rate limit violation")
+Rel(auditLog, alertingService, "Detect brute force pattern")
+Rel(alertingService, blacklist, "Add IP to temporary blacklist")
+Rel(alertingService, clientApp, "Notify: account temporarily locked")
+
+@enduml

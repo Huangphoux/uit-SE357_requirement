@@ -1,0 +1,63 @@
+@startuml ASR-SEC-02
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-SEC-02: Secure Login with JWT Token\nJWT-based Authentication with 1-Hour Token Expiry
+
+Person(user, "User", "Logs in with email and password")
+
+System_Boundary(lms, "LMS System") {
+
+    Container_Boundary(clientApp, "Client Application [React + TypeScript]") {
+        Component(loginForm, "Login Form", "UI", "Captures email and password")
+        Component(tokenStorage, "Token Storage", "UI", "Stores JWT tokens (localStorage/sessionStorage)")
+    }
+
+    Container_Boundary(apiServer, "API Server [Express.js + Node.js]") {
+        Component(loginHandler, "Login Handler", "Service", "Receives login request and coordinates verification")
+        Component(emailValidator, "Email Validator", "Service", "Validates email format and existence")
+        Component(passwordVerifier, "Password Verifier", "Service", "Compares provided password hash with stored bcrypt hash")
+        Component(tokenGenerator, "Token Generator", "Service", "Generates access token (1-hour) and refresh token (7-day)")
+        Component(rateLimiter, "Rate Limiter", "Service", "Enforces login attempt limits (5 attempts / 15 min)")
+        Component(auditLogger, "Audit Logger", "Service", "Logs login attempts (success/failure)")
+    }
+
+    ContainerDb_Boundary(database, "Database [PostgreSQL]") {
+        Component(userTable, "User Table", "DB", "user_id, email, password_hash, created_at")
+        Component(loginAuditLog, "Login Audit Log", "DB", "Logs all login attempts with timestamp, ip, status")
+    }
+
+    Container_Boundary(tokenValidator, "Token Middleware [Express Middleware]") {
+        Component(tokenVerifier, "Token Verifier", "Service", "Verifies JWT signature and expiry")
+        Component(payloadDecoder, "Payload Decoder", "Service", "Decodes token to extract user_id")
+        Component(expiryChecker, "Expiry Checker", "Service", "Checks if token is within 1-hour window")
+    }
+
+    Container_Boundary(refreshTokenService, "Refresh Token Service [Express Endpoint]") {
+        Component(refreshValidator, "Refresh Validator", "Service", "Validates refresh token (7-day expiry)")
+        Component(newAccessTokenIssuer, "New Access Token Issuer", "Service", "Issues new 1-hour access token")
+    }
+
+    Container(cache, "Token Blacklist Cache", "Redis", "Stores blacklisted tokens (for logout)")
+}
+
+Rel(loginForm, tokenStorage, "Store tokens after login")
+Rel(loginHandler, rateLimiter, "Check rate limit")
+Rel(rateLimiter, emailValidator, "Validate email")
+Rel(emailValidator, passwordVerifier, "Verify password hash")
+Rel(passwordVerifier, tokenGenerator, "Generate tokens (if valid)")
+Rel(tokenGenerator, auditLogger, "Log successful login")
+Rel(userTable, loginAuditLog, "Log login event")
+Rel(tokenVerifier, expiryChecker, "Check expiration")
+Rel(expiryChecker, payloadDecoder, "Extract user ID")
+Rel(refreshValidator, newAccessTokenIssuer, "Issue new access token")
+Rel(user, clientApp, "Enter email + password")
+Rel(clientApp, apiServer, "POST /auth/login {email, password}")
+Rel(apiServer, database, "Query user and verify password")
+Rel(apiServer, clientApp, "Response: {accessToken, refreshToken} < 2 sec")
+Rel(clientApp, tokenValidator, "Include token in Authorization header")
+Rel(tokenValidator, apiServer, "Token valid, process request")
+Rel(clientApp, refreshTokenService, "POST /auth/refresh {refreshToken}")
+Rel(refreshTokenService, apiServer, "New access token issued")
+Rel(apiServer, cache, "Blacklist token on logout")
+
+@enduml

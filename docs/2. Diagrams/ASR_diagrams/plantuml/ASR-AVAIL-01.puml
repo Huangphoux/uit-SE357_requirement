@@ -1,0 +1,79 @@
+@startuml ASR-AVAIL-01
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-AVAIL-01: 99.9% Uptime 24/7 Availability\nHigh Availability with Redundancy and Load Balancing
+
+Person(users, "Users", "Access system 24/7 at any time")
+
+System_Boundary(lms, "LMS System") {
+
+    Container_Boundary(cdnEdge, "CDN Edge Servers [Cloudflare/Global CDN]") {
+        Component(edgeCache, "Edge Cache", "Service", "Caches static assets (CSS, JS, images)")
+        Component(geoRouter, "Geo Router", "Service", "Routes users to nearest CDN edge")
+    }
+
+    Container_Boundary(lbPrimary, "Load Balancer (Primary) [Caddy]") {
+        Component(healthMon1, "Health Monitor", "Service", "Checks API server health every 5 seconds")
+        Component(reqRouter1, "Request Router", "Service", "Routes requests to healthy servers")
+        Component(failoverChecker, "Failover Checker", "Service", "Detects primary LB failures")
+    }
+
+    Container_Boundary(lbSecondary, "Load Balancer (Secondary/Standby) [Caddy]") {
+        Component(healthMon2, "Health Monitor", "Service", "Monitors primary LB heartbeat")
+        Component(reqRouter2, "Request Router (Standby)", "Service", "Routes requests if primary fails")
+    }
+
+    Container_Boundary(apiPrimary, "API Servers (Primary DC) [Express.js + Node.js]") {
+        Component(apiInst1, "API Instance 1", "Service", "Handles portion of requests")
+        Component(apiInst2, "API Instance 2", "Service", "Handles portion of requests")
+        Component(apiInst3, "API Instance 3", "Service", "Handles portion of requests")
+    }
+
+    Container_Boundary(apiSecondary, "API Servers (Secondary DC) [Express.js + Node.js]") {
+        Component(apiBackup1, "API Instance Backup 1", "Service", "Hot standby")
+        Component(apiBackup2, "API Instance Backup 2", "Service", "Hot standby")
+    }
+
+    Container_Boundary(dbPrimary, "Database (Primary) [PostgreSQL]") {
+        Component(primaryNode, "Primary Node", "DB", "Handles read and write operations")
+        Component(replBuffer, "Replication Buffer", "DB", "Buffers changes for replication")
+    }
+
+    Container_Boundary(dbSecondary, "Database (Secondary/Standby) [PostgreSQL]") {
+        Component(standbyNode, "Standby Node", "DB", "Read-only replica, promotes on primary failure")
+        Component(recoveryMgr, "Recovery Manager", "DB", "Manages failover promotion")
+    }
+
+    Container_Boundary(monitoring, "Monitoring & Alerting [Prometheus + PagerDuty]") {
+        Component(metricsCollector, "Metrics Collector", "Service", "Collects uptime and availability metrics")
+        Component(incidentDetector, "Incident Detector", "Service", "Detects failures and anomalies")
+        Component(alertingService, "Alerting Service", "Service", "Sends alerts to on-call team")
+    }
+
+    Container(backupStorage, "Backup Storage", "S3/Cloud Storage", "Off-site backup for disaster recovery")
+}
+
+Rel(users, cdnEdge, "Request static content")
+Rel(geoRouter, edgeCache, "Serve cached content")
+Rel(cdnEdge, lbPrimary, "Route API requests")
+Rel(healthMon1, reqRouter1, "Health status")
+Rel(failoverChecker, reqRouter1, "Trigger failover")
+Rel(healthMon2, reqRouter2, "Primary LB status")
+Rel(apiInst1, apiInst2, "Share session state")
+Rel(apiInst2, apiInst3, "Share session state")
+Rel(apiBackup1, apiBackup2, "Share session state")
+Rel(primaryNode, replBuffer, "Stream replication logs")
+Rel(recoveryMgr, standbyNode, "Promote to primary")
+Rel(metricsCollector, incidentDetector, "System metrics")
+Rel(incidentDetector, alertingService, "Alert on failure")
+Rel(lbPrimary, apiPrimary, "Load balance across instances")
+Rel(lbSecondary, apiSecondary, "Route if primary LB fails")
+Rel(apiPrimary, dbPrimary, "Read/write queries")
+Rel(apiSecondary, dbSecondary, "Read from standby")
+Rel(dbPrimary, dbSecondary, "Stream replication")
+Rel(dbPrimary, backupStorage, "Daily backups")
+Rel(monitoring, lbPrimary, "Monitor health")
+Rel(monitoring, apiPrimary, "Monitor instances")
+Rel(monitoring, dbPrimary, "Monitor database")
+
+@enduml

@@ -1,0 +1,47 @@
+@startuml ASR-SEC-01
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-SEC-01: Secure Password Registration\nSecure User Registration with Password Validation and Bcrypt Hashing
+
+Person(newUser, "New User", "Registers account with password")
+
+System_Boundary(lms, "LMS System") {
+
+    Container_Boundary(clientApp, "Client Application [React + TypeScript]") {
+        Component(passwordInput, "Password Input", "UI", "Captures password from user")
+        Component(clientValidator, "Client Validator", "UI", "Real-time password strength feedback (>=8 chars, uppercase, lowercase, numbers)")
+    }
+
+    Container_Boundary(apiServer, "API Server [Express.js + Node.js]") {
+        Component(registrationHandler, "Registration Handler", "Service", "Receives registration request and orchestrates validation/storage")
+        Component(passwordValidator, "Password Validator", "Service", "Server-side validation: >=8 chars, uppercase, lowercase, digits, special chars")
+        Component(bcryptHasher, "Bcrypt Hasher", "Service", "Hashes password with bcrypt (salt rounds >=10)")
+        Component(userCreator, "User Creator", "Service", "Creates user record with hashed password")
+        Component(auditLogger, "Audit Logger", "Service", "Logs registration event for security audit")
+    }
+
+    ContainerDb_Boundary(database, "Database [PostgreSQL]") {
+        Component(userTable, "User Table", "DB", "Stores user_id, email, password_hash, created_at")
+        Component(pwdHashStorage, "Password Hash Storage", "DB", "Securely stores bcrypt hashes (never plain text)")
+    }
+
+    Container_Boundary(notifService, "Notification Service [Email Service]") {
+        Component(emailComposer, "Email Composer", "Service", "Generates registration confirmation email")
+        Component(emailSender, "Email Sender", "Service", "Sends email via SMTP/SendGrid")
+    }
+}
+
+Rel(passwordInput, clientValidator, "Validate on input")
+Rel(registrationHandler, passwordValidator, "Validate password")
+Rel(passwordValidator, bcryptHasher, "Hash password (if valid)")
+Rel(bcryptHasher, userCreator, "Store hashed password")
+Rel(userCreator, auditLogger, "Log successful registration")
+Rel(pwdHashStorage, userTable, "Link password to user")
+Rel(emailComposer, emailSender, "Send email")
+Rel(newUser, clientApp, "Register with email + password")
+Rel(clientApp, apiServer, "POST /auth/register {email, password}")
+Rel(apiServer, database, "Store user with hashed password")
+Rel(apiServer, notifService, "Send confirmation email")
+Rel(apiServer, clientApp, "Response: success/error")
+
+@enduml
