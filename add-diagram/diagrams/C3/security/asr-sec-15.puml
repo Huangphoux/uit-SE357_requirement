@@ -1,0 +1,26 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram: API Rate Limiting (Redis-based)
+
+Container_Boundary(api_app, "API Application") {
+    Component(app, "App Class", "Express", "Cấu hình trust proxy và đăng ký Middleware cho /api")
+    Component(middleware, "rateLimiter", "Middleware Function", "Trích xuất IP, tạo Redis ID và kiểm tra giới hạn")
+    Component(redis_client, "redisClient", "Redis SDK", "Thực hiện lệnh INCR và EXPIRE")
+}
+
+ContainerDb(redis_db, "Redis Server", "In-memory Store", "Key: {endpoint}/{ip}, Value: Counter")
+
+Container_Boundary(routes, "API Routes") {
+    Component(auth_route, "AuthRoute", "Router", "Xử lý /api/auth")
+    Component(health_route, "HealthRoute", "Router", "Xử lý /api/healthcheck")
+}
+
+Rel(app, middleware, "1. Gửi request qua middleware")
+Rel(middleware, redis_client, "2. incr(redisId)")
+Rel(redis_client, redis_db, "Tăng giá trị và lấy kết quả")
+Rel(middleware, redis_client, "3. Nếu requests == 1: expire(redisId, time)")
+Rel(middleware, app, "4a. Nếu requests > limit: Trả về 429 Error")
+Rel(middleware, auth_route, "4b. Nếu hợp lệ: next()")
+
+@enduml
