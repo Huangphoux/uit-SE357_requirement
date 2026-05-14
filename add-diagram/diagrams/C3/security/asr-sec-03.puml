@@ -1,0 +1,34 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram: IP Lockout Logic (Login Flow)
+
+Container_Boundary(api, "API Application") {
+    Component(router, "AuthRouter", "Express Router", "Định nghĩa route /login và validation")
+    Component(controller, "AuthController", "Express Controller", "Trích xuất IP, điều phối gọi Service")
+    Component(service, "AuthService", "TypeScript Class", "Logic kiểm tra mật khẩu & xử lý lockout")
+    Component(logger, "AuditLogger", "Utility", "Ghi log LOGIN_SUCCESS/FAILED")
+}
+
+ContainerDb(db, "Database", "Prisma/PostgreSQL", "Lưu Users & LoginAttempt records")
+
+Rel(router, controller, "Gửi login request (validated)")
+Rel(controller, service, "Gọi login(email, password, ip)")
+Rel(service, db, "Tìm LoginAttempt theo IP")
+Rel(db, service, "Trả về attempts & blockedUntil")
+
+Note right of service
+  **Logic Chặn IP:**
+  Nếu current_time < blockedUntil
+  => Quăng lỗi: "Too many failed attempts"
+End Note
+
+Rel(service, db, "Tìm User theo Email")
+Rel(service, service, "So khớp password (bcrypt)")
+
+Rel(service, db, "Nếu SAI: Tăng attempts, set blockedUntil nếu >= MAX_ATTEMPTS")
+Rel(service, db, "Nếu ĐÚNG: Xóa bản ghi LoginAttempt, cập nhật RefreshToken")
+Rel(service, controller, "Trả kết quả (User/Token hoặc Error)")
+Rel(controller, logger, "Ghi Audit Log & Trả response")
+
+@enduml

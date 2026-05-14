@@ -2,18 +2,35 @@ import Send from "util/response";
 import { Request, Response } from "express";
 import { logger } from "util/logger";
 import FeedbackService from "./feedback.service";
+import { getRequestIp, writeAuditLog } from "util/auditLogger";
 
 export default class FeedbackController {
   static async getFeedback(req: Request, res: Response) {
     try {
       const { id } = req.params;
       const { submissionId } = req.query;
+      const userId = (req as any).userId;
 
       const result = await FeedbackService.find(id, submissionId as string);
 
       if (!result) {
         return Send.notFound(res, {}, id ? "Feedback not found" : "Feedback not found");
       }
+
+      await writeAuditLog({
+        category: "FILE_ACCESS",
+        action: id ? "FEEDBACK_READ_ONE" : "FEEDBACK_READ_LIST",
+        success: true,
+        userId: userId ? String(userId) : undefined,
+        ip: getRequestIp(req),
+        method: req.method,
+        path: req.originalUrl,
+        statusCode: 200,
+        resourceType: "FEEDBACK",
+        resourceId: id,
+      });
+
+      logger.info({ userId, feedbackId: id }, "Feedback fetched successfully");
 
       const response = id ? { feedback: result } : { feedback: result };
       return Send.success(res, response);
@@ -39,6 +56,22 @@ export default class FeedbackController {
         score,
       });
 
+      await writeAuditLog({
+        category: "ADMIN",
+        action: "FEEDBACK_CREATE",
+        success: true,
+        userId: String(userId),
+        ip: getRequestIp(req),
+        method: req.method,
+        path: req.originalUrl,
+        statusCode: 200,
+        resourceType: "FEEDBACK",
+        resourceId: feedback.id,
+        metadata: { submissionId, score },
+      });
+
+      logger.info({ userId, feedbackId: feedback.id, submissionId }, "Feedback created successfully");
+
       return Send.success(res, { feedback }, "Feedback created successfully");
     } catch (error: any) {
       logger.error({ error }, "Error creating feedback");
@@ -49,12 +82,28 @@ export default class FeedbackController {
   static async updateFeedback(req: Request, res: Response) {
     try {
       const { id } = req.params;
+      const userId = (req as any).userId;
       const { comment, score } = req.body;
 
       const feedback = await FeedbackService.update(id, {
         comment,
         score,
       });
+
+      await writeAuditLog({
+        category: "ADMIN",
+        action: "FEEDBACK_UPDATE",
+        success: true,
+        userId: userId ? String(userId) : undefined,
+        ip: getRequestIp(req),
+        method: req.method,
+        path: req.originalUrl,
+        statusCode: 200,
+        resourceType: "FEEDBACK",
+        resourceId: id,
+      });
+
+      logger.info({ userId, feedbackId: id }, "Feedback updated successfully");
 
       return Send.success(res, { feedback }, "Feedback updated successfully");
     } catch (error: any) {
@@ -66,8 +115,24 @@ export default class FeedbackController {
   static async deleteFeedback(req: Request, res: Response) {
     try {
       const { id } = req.params;
+      const userId = (req as any).userId;
 
       await FeedbackService.delete(id);
+
+      await writeAuditLog({
+        category: "ADMIN",
+        action: "FEEDBACK_DELETE",
+        success: true,
+        userId: userId ? String(userId) : undefined,
+        ip: getRequestIp(req),
+        method: req.method,
+        path: req.originalUrl,
+        statusCode: 200,
+        resourceType: "FEEDBACK",
+        resourceId: id,
+      });
+
+      logger.info({ userId, feedbackId: id }, "Feedback deleted successfully");
 
       return Send.success(res, {}, "Feedback deleted successfully");
     } catch (error: any) {

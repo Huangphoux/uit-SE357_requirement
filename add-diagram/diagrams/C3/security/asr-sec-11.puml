@@ -1,0 +1,35 @@
+@startuml asr-sec-11-audit-retention
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram: Audit Logging Retention (ASR-SEC-11)
+
+Person(admin, "Admin", "Views and filters audit logs")
+
+Container_Boundary(api, "API Application") {
+  Component(audit_route, "Audit Routes", "Express Router", "Mounts GET /api/audit/logs and applies authentication plus admin checks")
+  Component(auth_middleware, "Auth Middleware", "JWT + RBAC Middleware", "Validates the access token and enforces ADMIN role access")
+  Component(audit_controller, "Audit Controller", "Express Controller", "Reads filter query parameters and returns audit log records")
+  Component(audit_logger, "Audit Logger", "Utility", "Appends canonical JSONL audit records and removes expired log files")
+  Component(audit_config, "Audit Config", "Config Module", "Resolves AUDIT_LOG_DIR and AUDIT_RETENTION_DAYS")
+  Component(app_logger, "App Logger", "Pino", "Reports write and cleanup failures")
+}
+
+ContainerDb(audit_store, "Audit Log Directory", "Filesystem", "Daily YYYY-MM-DD.log JSONL files under logs/audit")
+
+Rel(admin, audit_route, "Requests audit log view")
+Rel(audit_route, auth_middleware, "authenticateUser + requireAdmin")
+Rel(auth_middleware, audit_logger, "writeAuditLog(ADMIN_ACCESS_GRANTED / ADMIN_ACCESS_DENIED)")
+Rel(audit_route, audit_controller, "GET /logs")
+Rel(audit_controller, audit_logger, "queryAuditLogs(from, to, category, action, userId, limit)")
+Rel(audit_logger, audit_config, "Reads logDir and retentionDays")
+Rel(audit_logger, audit_store, "appendFile / readFile / unlink old files")
+Rel(audit_logger, app_logger, "Logs cleanup/write errors")
+
+Note right of audit_logger
+	Retention is enforced in the helper itself:
+	- ensure the audit directory exists
+	- clean files older than retentionDays once per day
+	- write each event as a JSONL line in a daily file
+End Note
+
+@enduml

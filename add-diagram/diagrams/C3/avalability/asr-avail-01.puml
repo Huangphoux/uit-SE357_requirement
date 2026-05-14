@@ -1,0 +1,25 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(Student, "Student")
+Person(Teacher, "Teacher")
+Person(Admin, "Admin")
+
+System_Boundary(c1, "Internal System"){
+  Container(spa, "SPA", "React", "The main interface that the customer interacts with", $sprite="react")
+  Container(webapi, "Web API", "Node.js", "Handles API requests from the SPA", $sprite="nodejs")
+  ContainerDb(db, "Database", "PostgreSQL", "Stores user data and application state", $sprite="postgresql")
+}
+
+System_Boundary(c1, "External Services"){
+  Container(smtp, "SMTP Server", "SMTP", "Sends emails for notifications and password resets", $sprite="email")
+}
+
+Rel(Student, spa, "Uses", "https")
+Rel(Teacher, spa, "Uses", "https")
+Rel(Admin, spa, "Uses", "https")
+Rel(spa, webapi, "Sends API requests to", "https")
+Rel(webapi, db, "Reads/Writes", "https")
+Rel(webapi, smtp, "Sends emails through", "https")
+
+@enduml
