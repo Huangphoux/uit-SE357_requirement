@@ -1,0 +1,21 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(Student, "Student")
+Person(Teacher, "Teacher")
+Person(Admin, "Admin")
+
+System_Boundary(c1_web_application, "Web Application"){
+  
+}
+
+System_Boundary(c1_external_services, "External Services"){
+  
+}
+
+Rel(Student, c1_web_application, "Uses", "https")
+Rel(Teacher, c1_web_application, "Uses", "https")
+Rel(Admin, c1_web_application, "Uses", "https")
+Rel(c1_web_application, c1_external_services, "Interacts with", "https")
+
+@enduml

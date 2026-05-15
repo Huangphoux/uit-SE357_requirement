@@ -1,0 +1,827 @@
+\documentclass[12pt,oneside,a4paper]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{titlesec}
+\usepackage{textcomp}
+
+% Set up page style
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{UIT-SE357 LMS}
+\lhead{Software Architecture Document}
+\cfoot{\thepage}
+
+% Code formatting
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    columns=fullflexible,
+    frame=single,
+    language=json,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+}
+
+% Title formatting
+\titleformat{\section}{\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries}{\thesubsection}{1em}{}
+
+\title{\textbf{Software Architecture Document}\\
+UIT-SE357: Learning Management System}
+\author{Le Minh Phat \& Team}
+\date{May 15, 2026}
+
+\begin{document}
+
+% ===== TITLE PAGE =====
+\begin{titlepage}
+    \begin{center}
+        \vspace*{2cm}
+        {\LARGE \textbf{SOFTWARE ARCHITECTURE DOCUMENT}}\\
+        \vspace{0.5cm}
+        {\large UIT-SE357: Learning Management System}\\
+        \vspace{3cm}
+        {\large Version 1.0}\\
+        \vspace{0.5cm}
+        {\large May 15, 2026}\\
+        \vspace{3cm}
+        Document Status: \textbf{Final}\\
+        \vspace{2cm}
+        \small
+        \begin{tabularx}{\textwidth}{lX}
+            \textbf{Prepared by:} & Le Minh Phat \\
+            \textbf{Reviewed by:} & UIT-SE357 Team \\
+            \textbf{Approved by:} & Project Manager \\
+        \end{tabularx}
+        \vfill
+    \end{center}
+\end{titlepage}
+
+% ===== DOCUMENT CONTROL =====
+\section*{Document Control}
+
+\subsection*{Distribution}
+This document is intended for stakeholders, architects, developers, and technical reviewers of the UIT-SE357 Learning Management System project.
+
+\subsection*{Confidentiality}
+This document contains technical information about the system architecture and is available to project team members.
+
+\subsection*{Version History}
+
+\begin{tabularx}{\textwidth}{|p{1.5cm}|p{2cm}|p{3cm}|X|}
+    \hline
+    \textbf{Version} & \textbf{Date} & \textbf{Author} & \textbf{Changes} \\
+    \hline
+    1.0 & 2026-05-15 & LeMinhPhat & Initial SAD document covering implemented ASRs \\
+    \hline
+\end{tabularx}
+
+\newpage
+
+% ===== TABLE OF CONTENTS =====
+\tableofcontents
+\newpage
+
+% ===== SECTION 1: INTRODUCTION =====
+\section{Introduction}
+
+\subsection{Purpose}
+This Software Architecture Document (SAD) provides a comprehensive description of the implemented architecture for the UIT-SE357 Learning Management System. It documents the architectural decisions, design patterns, and component interactions that support the system's key attributes and requirements.
+
+\subsection{Scope}
+This document covers the implemented Architectural Significant Requirements (ASRs) within the LMS, including:
+\begin{itemize}
+    \item Authentication and Authorization (ASR-SEC-02, ASR-SEC-03, ASR-ENROLL-01)
+    \item Audit Logging and Compliance (ASR-SEC-11)
+    \item Performance Optimization (ASR-PERF-01, ASR-PERF-03)
+    \item Availability and Reliability (ASR-AVAIL-01)
+\end{itemize}
+
+This document does not cover unimplemented ASRs or planned future capabilities.
+
+\subsection{Audience}
+\begin{itemize}
+    \item Software Architects and Senior Developers
+    \item DevOps and Infrastructure Teams
+    \item Security and Compliance Officers
+    \item Project Managers and Stakeholders
+\end{itemize}
+
+\newpage
+
+% ===== SECTION 2: SYSTEM OVERVIEW =====
+\section{System Overview}
+
+\subsection{System Context}
+The UIT-SE357 Learning Management System is a web-based platform designed to support educational institutions in managing courses, assignments, materials, and student evaluations. The system serves three primary user roles: students, instructors, and administrators.
+
+\subsection{Technology Stack}
+
+\begin{tabularx}{\textwidth}{|l|X|}
+    \hline
+    \textbf{Component} & \textbf{Technology} \\
+    \hline
+    Frontend & React.js + TypeScript + Vite \\
+    Backend & Express.js + Node.js + TypeScript \\
+    Database & PostgreSQL 16 \\
+    Cache Store & Redis 7 \\
+    Reverse Proxy & Caddy v2 \\
+    Container Runtime & Docker + Docker Compose \\
+    \hline
+\end{tabularx}
+
+\subsection{Deployment Architecture}
+The system is deployed using Docker Compose with the following components:
+\begin{itemize}
+    \item \textbf{Frontend (web)}: React SPA served via Nginx
+    \item \textbf{Backend Primary}: Express.js server instance
+    \item \textbf{Backend Secondary}: Express.js server instance (failover)
+    \item \textbf{Database}: PostgreSQL with persistent volume
+    \item \textbf{Cache}: Redis for session \& rate-limit storage
+    \item \textbf{Reverse Proxy}: Caddy for load balancing \& TLS termination
+\end{itemize}
+
+\newpage
+
+% ===== SECTION 3: ARCHITECTURAL OVERVIEW =====
+\section{Architectural Overview}
+
+\subsection{High-Level Architecture}
+The LMS follows a layered architecture pattern:
+
+\begin{lstlisting}
+┌─────────────────────────────────────┐
+│   Frontend (React SPA)               │
+└──────────────┬──────────────────────┘
+               │ HTTP/HTTPS (TLS)
+┌──────────────▼──────────────────────┐
+│   Caddy Reverse Proxy (Load Balancer)│
+│   - Health checks                    │
+│   - TLS termination                  │
+└──┬────────────────────────────────┬──┘
+   │                                │
+┌──▼──────────┐            ┌──────▼──┐
+│Backend      │            │Backend   │
+│Primary      │            │Secondary │
+└──┬──────────┘            └──────┬───┘
+   │                              │
+   └──────────────┬───────────────┘
+                  │ Shared State
+        ┌─────────▼────────────┐
+        │ PostgreSQL Database  │
+        │ Redis Cache          │
+        └──────────────────────┘
+\end{lstlisting}
+
+\subsection{Key Design Principles}
+\begin{itemize}
+    \item \textbf{Separation of Concerns}: Clear separation between authentication, business logic, and data access
+    \item \textbf{Defense in Depth}: Multiple security layers (authentication, authorization, rate limiting, audit logging)
+    \item \textbf{High Availability}: Redundant backend instances with automatic health-check based failover
+    \item \textbf{Performance}: Redis caching, response compression, and rate limiting
+    \item \textbf{Auditability}: Comprehensive audit logging for compliance and troubleshooting
+\end{itemize}
+
+\newpage
+
+% ===== SECTION 4: IMPLEMENTED ASRS =====
+\section{Implemented Architectural Significant Requirements}
+
+\subsection{ASR-SEC-02: JWT Authentication with Refresh Tokens}
+
+\subsubsection{Overview}
+This ASR implements stateless authentication using JSON Web Tokens (JWT) with short-lived access tokens and refresh tokens.
+
+\subsubsection{Components}
+\begin{itemize}
+    \item \textbf{Auth Controller} (\texttt{auth/auth.controller.ts})
+        \begin{itemize}
+            \item Handles POST /auth/login, /auth/register, /auth/refresh endpoints
+            \item Validates input and returns JWT tokens
+        \end{itemize}
+    \item \textbf{Auth Service} (\texttt{auth/auth.service.ts})
+        \begin{itemize}
+            \item User registration with password hashing
+            \item Login authentication with password verification
+            \item Token generation using Node's jsonwebtoken library
+        \end{itemize}
+    \item \textbf{Auth Middleware} (\texttt{auth/auth.middleware.ts})
+        \begin{itemize}
+            \item JWT token extraction from Authorization header
+            \item Token signature verification
+            \item User context injection into request object
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Implementation Details}
+\begin{lstlisting}
+# Environment Configuration
+AUTH_SECRET=<32-byte-key>
+AUTH_SECRET_EXPIRES_IN=15m
+AUTH_REFRESH_SECRET=<32-byte-key>
+AUTH_REFRESH_SECRET_EXPIRES_IN=7d
+\end{lstlisting}
+
+\subsubsection{Flow}
+\begin{enumerate}
+    \item User submits email and password via POST /auth/login
+    \item Service verifies password against stored hash (bcrypt)
+    \item JWT tokens (access + refresh) are generated with configured secrets
+    \item Client stores tokens in memory (access) and httpOnly cookie (refresh)
+    \item Subsequent requests include access token in Authorization header
+    \item Middleware validates token on each protected endpoint
+    \item When access token expires, client uses refresh token to obtain new access token
+\end{enumerate}
+
+\subsubsection{Security Considerations}
+\begin{itemize}
+    \item Access tokens are short-lived (15 minutes default)
+    \item Refresh tokens use separate, stronger secret and longer expiry (7 days default)
+    \item Tokens are signed with HS256 algorithm
+    \item Refresh tokens stored in httpOnly cookies (XSS resistant)
+    \item Password hashed with bcrypt (salted, adaptive)
+\end{itemize}
+
+\subsection{ASR-SEC-03: Login Attempt Lockout}
+
+\subsubsection{Overview}
+This ASR protects against brute-force attacks by tracking failed login attempts per IP and implementing a temporary account lockout.
+
+\subsubsection{Components}
+\begin{itemize}
+    \item \textbf{Login Attempt Tracker} (\texttt{auth/auth.service.ts})
+        \begin{itemize}
+            \item Queries login attempt history from database
+            \item Records each failed attempt with timestamp
+            \item Enforces lockout period when threshold exceeded
+        \end{itemize}
+    \item \textbf{LoginAttempt Table} (PostgreSQL)
+        \begin{itemize}
+            \item Stores: \texttt{ip}, \texttt{attempts}, \texttt{lastTry}, \texttt{blockedUntil}
+            \item Primary key: \texttt{ip}
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Configuration}
+\begin{lstlisting}
+# Environment Configuration
+MAX_LOGIN_ATTEMPTS=5
+LOCKOUT_TIME_MS=900000  # 15 minutes
+\end{lstlisting}
+
+\subsubsection{Algorithm}
+\begin{enumerate}
+    \item On login attempt, query LoginAttempt table for the client's IP
+    \item Check if \texttt{blockedUntil} timestamp is in the future
+    \item If blocked, return 429 "Too many attempts"
+    \item If password incorrect, increment \texttt{attempts} counter
+    \item If \texttt{attempts} >= MAX\_LOGIN\_ATTEMPTS, set \texttt{blockedUntil} to now + LOCKOUT\_TIME\_MS
+    \item On successful login, reset \texttt{attempts} to 0
+\end{enumerate}
+
+\subsubsection{Security Considerations}
+\begin{itemize}
+    \item IP-based tracking: Effective for typical scenarios but vulnerable to distributed attacks
+    \item Lockout duration: 15 minutes default balances security vs. user convenience
+    \item Reset on success: Encourages legitimate users to avoid lockout
+    \item Database-backed: Persists across server restarts
+\end{itemize}
+
+\subsection{ASR-SEC-11: Audit Log Retention}
+
+\subsubsection{Overview}
+This ASR implements comprehensive audit logging with configurable retention policies to support compliance requirements.
+
+\subsubsection{Components}
+\begin{itemize}
+    \item \textbf{Audit Middleware} (\texttt{middlewares/audit.middleware.ts})
+        \begin{itemize}
+            \item Intercepts all HTTP requests
+            \item Captures: user, action, resource, method, IP, timestamp, response status
+        \end{itemize}
+    \item \textbf{Audit Logger} (\texttt{util/auditLogger.ts})
+        \begin{itemize}
+            \item Formats audit events as JSON
+            \item Writes to JSONL (JSON Lines) files
+            \item Files organized by date: \texttt{audit\_YYYY-MM-DD.jsonl}
+        \end{itemize}
+    \item \textbf{Audit Query Service} (\texttt{audit/audit.controller.ts})
+        \begin{itemize}
+            \item GET /api/audit endpoint with filtering
+            \item Supports: date range, user ID, action, category
+        \end{itemize}
+    \item \textbf{Retention Scheduler}
+        \begin{itemize}
+            \item Cron job to delete logs older than AUDIT\_RETENTION\_DAYS
+            \item Runs daily to maintain compliance window
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Storage Format}
+\begin{lstlisting}
+# JSONL Format (one JSON object per line)
+{
+  "timestamp": "2026-05-15T10:30:45.123Z",
+  "user_id": "user-uuid",
+  "action": "GET",
+  "resource": "/api/courses/course-id",
+  "method": "GET",
+  "status_code": 200,
+  "ip_address": "192.168.1.1",
+  "duration_ms": 45
+}
+\end{lstlisting}
+
+\subsubsection{Configuration}
+\begin{lstlisting}
+# Environment Configuration
+AUDIT_LOG_DIR=/app/logs/audit
+AUDIT_RETENTION_DAYS=90
+\end{lstlisting}
+
+\subsubsection{Query Interface}
+\begin{lstlisting}
+GET /api/audit?from=2026-05-01&to=2026-05-15&action=DELETE&user_id=user-uuid&limit=100
+\end{lstlisting}
+
+\subsubsection{Security Considerations}
+\begin{itemize}
+    \item File-based storage: Simple, auditable, no database dependency
+    \item JSONL format: Line-based parsing prevents partial read corruption
+    \item Configurable retention: Supports regulatory requirements (e.g., 90-day minimum)
+    \item Read-only query interface: Logs cannot be modified post-creation
+    \item Timestamp immutability: Event timestamp is set at capture time
+\end{itemize}
+
+\subsection{ASR-AVAIL-01: Load Balancing with Health Checks}
+
+\subsubsection{Overview}
+This ASR provides high availability through redundant backend instances and health-check based failover.
+
+\subsubsection{Components}
+\begin{itemize}
+    \item \textbf{Caddy Reverse Proxy}
+        \begin{itemize}
+            \item Listens on :80 (HTTP) and :443 (HTTPS)
+            \item Terminates TLS connections
+            \item Routes /api/* to backend, / to frontend
+        \end{itemize}
+    \item \textbf{Load Balancer}
+        \begin{itemize}
+            \item Policy: 'first' (tries primary, falls back to secondary)
+            \item Distributes across backend-primary and backend-secondary
+        \end{itemize}
+    \item \textbf{Health Check}
+        \begin{itemize}
+            \item Probes /api/health endpoint every 10 seconds
+            \item Marks instance down after 1 failed check
+            \item Marks instance up after 1 successful check
+        \end{itemize}
+    \item \textbf{Health Endpoint} (\texttt{health/health.route.ts})
+        \begin{itemize}
+            \item Returns 200 OK if system is healthy
+            \item Checks: database connectivity, Redis connectivity
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Configuration (Caddyfile)}
+\begin{lstlisting}
+reverse_proxy backend-primary:8000 backend-secondary:8000 {
+  lb_policy first
+  health_uri /api/health
+  health_interval 10s
+  health_timeout 3s
+  health_fails 1
+  health_passes 1
+}
+\end{lstlisting}
+
+\subsubsection{Failover Behavior}
+\begin{itemize}
+    \item Primary instance is preferred (first policy)
+    \item If primary fails health check, traffic switches to secondary
+    \item When primary recovers, traffic returns to primary
+    \item Both instances share PostgreSQL database and Redis cache
+    \item No session state on instances (stateless design)
+\end{itemize}
+
+\subsubsection{Availability Considerations}
+\begin{itemize}
+    \item RPO (Recovery Point Objective): 0 (no data loss due to stateless design)
+    \item RTO (Recovery Time Objective): \textasciitilde 15 seconds (health check interval + detection)
+    \item Single point of failure: PostgreSQL database (requires separate replication strategy)
+    \item Single point of failure: Caddy proxy (requires separate load balancer or HA setup)
+\end{itemize}
+
+\subsection{ASR-PERF-01: Rate Limiting}
+
+\subsubsection{Overview}
+This ASR protects the system from resource exhaustion through request rate limiting, backed by Redis for distributed rate limit state.
+
+\subsubsection{Components}
+\begin{itemize}
+    \item \textbf{Rate Limit Middleware} (\texttt{middlewares/rateLimit.ts})
+        \begin{itemize}
+            \item Intercepts all requests before route handlers
+            \item Uses client IP as identifier (or user ID for authenticated requests)
+        \end{itemize}
+    \item \textbf{Redis Store}
+        \begin{itemize}
+            \item Stores: \texttt{client-id:request-count:window}
+            \item Enables distributed rate limiting across instances
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Configuration}
+\begin{lstlisting}
+# Environment Configuration
+RATE_LIMIT_WINDOW_MS=60000  # 1 minute
+RATE_LIMIT_MAX=100          # 100 requests per minute
+\end{lstlisting}
+
+\subsubsection{Algorithm}
+\begin{enumerate}
+    \item Extract client identifier (IP or user ID)
+    \item Query Redis for request count in current time window
+    \item If count >= RATE_LIMIT_MAX, return 429 "Too Many Requests"
+    \item Otherwise, increment counter and set TTL equal to window duration
+    \item Proceed with request
+\end{enumerate}
+
+\subsubsection{Response Headers}
+\begin{lstlisting}
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 87
+X-RateLimit-Reset: 1684159845
+\end{lstlisting}
+
+\subsubsection{Performance Considerations}
+\begin{itemize}
+    \item Redis-backed: Adds \textasciitilde 5-10ms latency per request
+    \item Sliding window: More accurate than fixed window
+    \item Per-IP vs. per-user: IP-based for unauthenticated, user-based for authenticated
+    \item Threshold tuning: 100 req/min balances between protection and legitimate usage
+\end{itemize}
+
+\subsection{ASR-PERF-03: Response Caching and Compression}
+
+\subsubsection{Overview}
+This ASR improves response times through Redis-backed caching and automatic response compression.
+
+\subsubsection{Components}
+\begin{itemize}
+    \item \textbf{Compression Middleware}
+        \begin{itemize}
+            \item Automatically gzips/zstd compresses responses
+            \item Respects Content-Type for selective compression
+        \end{itemize}
+    \item \textbf{Cache Middleware}
+        \begin{itemize}
+            \item Intercepts responses for caching
+            \item Cache key: \texttt{method:path:query-string}
+        \end{itemize}
+    \item \textbf{Redis Cache}
+        \begin{itemize}
+            \item Stores serialized JSON responses
+            \item TTL per resource type (courses: 5min, materials: 5min, etc.)
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Configuration}
+Cache TTLs are set per endpoint:
+\begin{lstlisting}
+GET /api/courses       -> TTL: 5 minutes
+GET /api/materials     -> TTL: 5 minutes
+POST /api/courses      -> Cache invalidation
+DELETE /api/courses/:id -> Cache invalidation
+\end{lstlisting}
+
+\subsubsection{Compression Ratios}
+\begin{itemize}
+    \item JSON responses: \textasciitilde 70-80\% compression ratio
+    \item HTML: \textasciitilde 80-85\% compression ratio
+    \item Uncompressed response: \textasciitilde 50-100KB for typical course list
+    \item Compressed response: \textasciitilde 10-20KB
+\end{itemize}
+
+\subsubsection{Cache Invalidation Strategy}
+\begin{itemize}
+    \item Explicit invalidation: POST/PUT/DELETE operations clear related cache entries
+    \item TTL-based expiration: Automatic expiration after configured duration
+    \item No cache stamping: Simple invalidation (could add stampeding prevention if needed)
+\end{itemize}
+
+\subsection{ASR-ENROLL-01: Role-Based Access Control}
+
+\subsubsection{Overview}
+This ASR implements role-based access control to protect sensitive resources and enforce enrollment requirements.
+
+\subsubsection{Roles}
+\begin{itemize}
+    \item \textbf{STUDENT}: Can view own materials, submit assignments, view own feedback
+    \item \textbf{INSTRUCTOR}: Can manage materials, grade submissions, view all enrolled students
+    \item \textbf{ADMIN}: Full system access (user management, configuration, audit logs)
+\end{itemize}
+
+\subsubsection{Components}
+\begin{itemize}
+    \item \textbf{Role Extractor}
+        \begin{itemize}
+            \item Extracts role from JWT token (or database lookup)
+            \item Stores in request context
+        \end{itemize}
+    \item \textbf{Enrollment Checker}
+        \begin{itemize}
+            \item Verifies user is enrolled in requested class
+            \item Checks Enrollment table: \texttt{user\_id, class\_id, role}
+        \end{itemize}
+    \item \textbf{RBAC Policy Engine}
+        \begin{itemize}
+            \item Evaluates permissions: (user\_role, resource, action)
+            \item Returns allow/deny decision
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{Access Control Matrix}
+
+\begin{tabularx}{\textwidth}{|l|c|c|c|}
+    \hline
+    \textbf{Resource} & \textbf{Student} & \textbf{Instructor} & \textbf{Admin} \\
+    \hline
+    View course materials & Y (enrolled) & Y & Y \\
+    Create materials & N & Y & Y \\
+    Grade submissions & N & Y & Y \\
+    View audit logs & N & N & Y \\
+    Manage users & N & N & Y \\
+    \hline
+\end{tabularx}
+
+\subsubsection{Implementation Locations}
+\begin{itemize}
+    \item \texttt{materials/materials.service.ts}: Enrollment check before returning materials
+    \item \texttt{submissions/submissions.service.ts}: RBAC check for viewing/grading
+    \item \texttt{feedback/feedback.service.ts}: Enrollment verification
+    \item \texttt{audit/audit.controller.ts}: Admin-only check
+\end{itemize}
+
+\newpage
+
+% ===== SECTION 5: DEPLOYMENT =====
+\section{Deployment Architecture}
+
+\subsection{Development Environment}
+\begin{lstlisting}
+docker-compose up -d
+# Services available at:
+# Frontend: http://localhost:5173
+# Backend: http://localhost:8000
+# Database: localhost:5432
+# Redis: localhost:6379
+\end{lstlisting}
+
+\subsection{Production Deployment}
+\begin{itemize}
+    \item Docker Compose for container orchestration
+    \item Two backend instances for redundancy
+    \item Shared PostgreSQL database
+    \item Shared Redis cache
+    \item Caddy reverse proxy with TLS
+    \item Log volume mount at /app/logs for audit logs
+\end{itemize}
+
+\subsection{Database Schema}
+Key tables:
+\begin{itemize}
+    \item \texttt{User}: user\_id, email, password\_hash, role, created\_at
+    \item \texttt{LoginAttempt}: ip, attempts, lastTry, blockedUntil
+    \item \texttt{Enrollment}: user\_id, class\_id, role, enrolled\_at
+    \item \texttt{Material}: id, class\_id, title, content, created\_at
+    \item \texttt{Submission}: id, assignment\_id, user\_id, content, submitted\_at
+    \item \texttt{Feedback}: id, submission\_id, user\_id, comment, created\_at
+\end{itemize}
+
+\newpage
+
+% ===== SECTION 6: QUALITY ATTRIBUTES =====
+\section{Quality Attributes}
+
+\subsection{Security}
+\begin{itemize}
+    \item \textbf{Authentication}: JWT-based, stateless, XSS/CSRF resistant
+    \item \textbf{Authorization}: Role-based with enrollment validation
+    \item \textbf{Audit}: Comprehensive logging of all user actions
+    \item \textbf{Rate Limiting}: Protects against denial-of-service attacks
+    \item \textbf{Password Security}: Bcrypt hashing with random salt
+\end{itemize}
+
+\subsection{Availability}
+\begin{itemize}
+    \item \textbf{RTO}: \textasciitilde 15 seconds (automatic failover via health checks)
+    \item \textbf{RPO}: 0 (stateless design with shared database)
+    \item \textbf{Uptime}: Target 99.5\% (with single points of failure)
+    \item \textbf{Health Checks}: Every 10 seconds on all instances
+\end{itemize}
+
+\subsection{Performance}
+\begin{itemize}
+    \item \textbf{Response Compression}: 70-80\% reduction in bandwidth
+    \item \textbf{Caching}: 5-minute TTL on read-heavy endpoints
+    \item \textbf{Rate Limiting}: 100 req/min per client
+    \item \textbf{Load Balancing}: Distributes traffic across instances
+    \item \textbf{Database Indexing}: Indexes on common query fields
+\end{itemize}
+
+\subsection{Maintainability}
+\begin{itemize}
+    \item \textbf{Code Organization}: Modular service structure (auth, courses, materials, etc.)
+    \item \textbf{Logging}: Structured logging for debugging and monitoring
+    \item \textbf{Documentation}: SAD documents architectural decisions
+    \item \textbf{Configuration}: Environment-based configuration (no hardcoded secrets)
+\end{itemize}
+
+\newpage
+
+% ===== SECTION 7: UNIMPLEMENTED ASRS =====
+\section{Unimplemented ASRs}
+
+The following ASRs are defined in the requirements but not yet implemented:
+
+\begin{itemize}
+    \item \textbf{ASR-AGGR-01}: Data aggregation and reporting
+    \item \textbf{ASR-AVAIL-02}: Database replication and backup strategy
+    \item \textbf{ASR-PERF-02}: Database query optimization and indexing strategy
+    \item \textbf{ASR-NOTIF-01}: Real-time notifications and event streaming
+    \item \textbf{ASR-FILE-01}: File storage and CDN integration (materials handled in DB for now)
+    \item \textbf{ASR-SEC-01}: TLS/HTTPS encryption (partially implemented via Caddy)
+    \item \textbf{ASR-SEC-04 through ASR-SEC-10}: Additional security requirements
+    \item \textbf{ASR-SEC-12 through ASR-SEC-15}: Additional compliance requirements
+\end{itemize}
+
+These will be addressed in future phases of development.
+
+\newpage
+
+% ===== SECTION 8: RISKS AND MITIGATIONS =====
+\section{Risks and Mitigations}
+
+\subsection{Single Point of Failure: Database}
+\textbf{Risk}: PostgreSQL instance is not replicated. Database failure causes complete system downtime.
+\newline\textbf{Mitigation}: Implement PostgreSQL streaming replication or managed database service with automatic failover.
+
+\subsection{Single Point of Failure: Caddy Load Balancer}
+\textbf{Risk}: Caddy instance failure removes request routing capability.
+\newline\textbf{Mitigation}: Deploy Caddy in HA configuration with Keepalived or similar VIP manager.
+
+\subsection{Audit Log Storage on Shared Volume}
+\textbf{Risk}: Audit logs stored on shared volume; if volume fails, audit trail is lost.
+\newline\textbf{Mitigation}: Implement audit log replication to dedicated storage or centralized logging service.
+
+\subsection{Rate Limiting via IP}
+\textbf{Risk}: IP-based rate limiting vulnerable to distributed attacks and proxy scenarios.
+\newline\textbf{Mitigation}: Supplement with user-based rate limiting for authenticated requests.
+
+\subsection{JWT Secret Rotation}
+\textbf{Risk}: JWT secrets stored in environment variables; rotation requires deployment.
+\newline\textbf{Mitigation}: Implement key rotation mechanism with algorithm versioning in JWT header.
+
+\newpage
+
+% ===== SECTION 9: RECOMMENDATIONS =====
+\section{Recommendations}
+
+\subsection{Short-term (1-3 months)}
+\begin{enumerate}
+    \item Implement database backup and restore procedures
+    \item Add centralized logging aggregation (ELK stack or CloudWatch)
+    \item Implement security scanning in CI/CD pipeline
+    \item Add integration tests for audit logging
+    \item Document operational runbooks for common scenarios
+\end{enumerate}
+
+\subsection{Medium-term (3-6 months)}
+\begin{enumerate}
+    \item Implement database replication for high availability
+    \item Migrate to managed database service (AWS RDS, Azure Database)
+    \item Implement distributed tracing for performance analysis
+    \item Add automated performance testing and benchmarking
+    \item Implement API versioning strategy
+\end{enumerate}
+
+\subsection{Long-term (6-12 months)}
+\begin{enumerate}
+    \item Migrate to Kubernetes for container orchestration
+    \item Implement service mesh (Istio) for advanced traffic management
+    \item Add machine learning-based anomaly detection for security
+    \item Implement advanced caching strategies (cache warming, predictive)
+    \item Multi-region deployment with geo-failover
+\end{enumerate}
+
+\newpage
+
+% ===== SECTION 10: REFERENCES =====
+\section{References}
+
+\subsection{External Standards}
+\begin{itemize}
+    \item RFC 7519: JSON Web Token (JWT) Specification
+    \item OWASP Top 10: Web Application Security Risks
+    \item NIST Cybersecurity Framework
+    \item ISO/IEC 27001: Information Security Management
+\end{itemize}
+
+\subsection{Project Documentation}
+\begin{itemize}
+    \item \texttt{README.md}: Quick start guide
+    \item \texttt{docker-compose.yml}: Deployment configuration
+    \item \texttt{.env.example}: Environment variables
+    \item \texttt{Caddyfile}: Load balancer configuration
+\end{itemize}
+
+\subsection{Architecture Diagrams}
+\begin{itemize}
+    \item ASR-SEC-02-L4.puml: JWT Authentication (C4 Level 4)
+    \item ASR-SEC-03-L4.puml: Login Lockout (C4 Level 4)
+    \item ASR-SEC-11-L4.puml: Audit Logging (C4 Level 4)
+    \item ASR-AVAIL-01-L4.puml: Load Balancing (C4 Level 4)
+    \item ASR-PERF-01-L4.puml: Rate Limiting (C4 Level 4)
+    \item ASR-PERF-03-L4.puml: Caching \& Compression (C4 Level 4)
+    \item ASR-ENROLL-01-L4.puml: Role-Based Access Control (C4 Level 4)
+\end{itemize}
+
+\newpage
+
+% ===== APPENDIX A =====
+\section*{Appendix A: Configuration Reference}
+
+\subsection*{Environment Variables}
+
+\begin{lstlisting}
+# Application
+NODE_ENV=production
+APP_HOST=0.0.0.0
+APP_PORT=8000
+
+# Database
+DATABASE_URL=postgresql://user:pass@db:5432/uit_se357
+
+# Authentication
+AUTH_SECRET=<32-byte-random-string>
+AUTH_SECRET_EXPIRES_IN=15m
+AUTH_REFRESH_SECRET=<32-byte-random-string>
+AUTH_REFRESH_SECRET_EXPIRES_IN=7d
+
+# Security
+MAX_LOGIN_ATTEMPTS=5
+LOCKOUT_TIME_MS=900000
+
+# Performance
+RATE_LIMIT_WINDOW_MS=60000
+RATE_LIMIT_MAX=100
+
+# Audit
+AUDIT_LOG_DIR=/app/logs/audit
+AUDIT_RETENTION_DAYS=90
+
+# Cache
+REDIS_HOST=redis
+REDIS_PORT=6379
+
+# Email (optional)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASSWORD=your-app-password
+\end{lstlisting}
+
+\newpage
+
+% ===== APPENDIX B =====
+\section*{Appendix B: Component File Mapping}
+
+\begin{tabularx}{\textwidth}{|l|X|}
+    \hline
+    \textbf{Component} & \textbf{File Path} \\
+    \hline
+    Auth Controller & \texttt{server/src/auth/auth.controller.ts} \\
+    Auth Service & \texttt{server/src/auth/auth.service.ts} \\
+    Auth Middleware & \texttt{server/src/auth/auth.middleware.ts} \\
+    Auth Config & \texttt{server/src/config/auth.config.ts} \\
+    Audit Middleware & \texttt{server/src/middlewares/audit.middleware.ts} \\
+    Audit Logger & \texttt{server/src/util/auditLogger.ts} \\
+    Audit Controller & \texttt{server/src/audit/audit.controller.ts} \\
+    Rate Limit Middleware & \texttt{server/src/middlewares/rateLimit.ts} \\
+    Health Route & \texttt{server/src/health/health.route.ts} \\
+    Compression Middleware & \texttt{server/src/app.ts} (compression package) \\
+    Materials Service & \texttt{server/src/materials/materials.service.ts} \\
+    \hline
+\end{tabularx}
+
+\end{document}

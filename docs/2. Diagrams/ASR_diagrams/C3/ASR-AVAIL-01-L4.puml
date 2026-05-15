@@ -1,0 +1,60 @@
+@startuml ASR-AVAIL-01-L4-Component
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title ASR-AVAIL-01: Load Balancing with Health Checks (C4 Level 4 - Component)
+
+Person(client, "Client", "Accesses application")
+
+System_Boundary(lms, "LMS System") {
+    Container_Boundary(caddyProxy, "Caddy Reverse Proxy") {
+        Component(httpListener, "HTTP/HTTPS Listener", "Network", "Listens on :80 (HTTP) and :443 (HTTPS)")
+        Component(tlsHandler, "TLS Handler", "Security", "Handles TLS termination & internal cert generation")
+        Component(requestRouter, "Request Router", "Routing", "Routes /api/* to backend, / to frontend")
+        Component(loadBalancer, "Load Balancer", "Network", "Round-robin using 'first' policy")
+        Component(healthChecker, "Health Checker", "Monitoring", "Periodically probes /api/health endpoints")
+    }
+
+    Container_Boundary(backendPrimary, "Backend Primary Instance") {
+        Component(primaryApp, "Express App (Primary)", "Application Server", "Processes requests, runs business logic")
+        Component(primaryHealth, "Health Endpoint", "HTTP", "Returns 200 OK if healthy")
+    }
+
+    Container_Boundary(backendSecondary, "Backend Secondary Instance") {
+        Component(secondaryApp, "Express App (Secondary)", "Application Server", "Processes requests, runs business logic")
+        Component(secondaryHealth, "Health Endpoint", "HTTP", "Returns 200 OK if healthy")
+    }
+
+    Container_Boundary(frontend, "Frontend (SPA)") {
+        Component(bundledApp, "React App Bundle", "Static SPA", "index.html, JS, CSS assets")
+    }
+
+    Container_Boundary(sharedServices, "Shared Services") {
+        Component(database, "PostgreSQL Database", "Persistent Store", "Shared by both backend instances")
+        Component(redis, "Redis Cache", "In-Memory Store", "Shared by both backend instances")
+    }
+}
+
+Rel(client, httpListener, "HTTP/HTTPS request")
+Rel(httpListener, tlsHandler, "Decrypt/Encrypt traffic")
+Rel(tlsHandler, requestRouter, "Route based on path")
+Rel(requestRouter, loadBalancer, "Distribute API requests")
+Rel(loadBalancer, primaryApp, "Forward to primary (if healthy)")
+Rel(loadBalancer, secondaryApp, "Forward to secondary (fallback)")
+Rel(requestRouter, bundledApp, "Serve static files")
+
+Rel(healthChecker, primaryHealth, "GET /api/health (every 10s)")
+Rel(healthChecker, secondaryHealth, "GET /api/health (every 10s)")
+Rel(primaryHealth, primaryApp, "Check app status")
+Rel(secondaryHealth, secondaryApp, "Check app status")
+
+Rel(primaryApp, database, "Query/Write")
+Rel(secondaryApp, database, "Query/Write")
+Rel(primaryApp, redis, "Cache operations")
+Rel(secondaryApp, redis, "Cache operations")
+
+Rel(client, frontend, "SPA interactions")
+Rel(frontend, primaryApp, "API calls to backend")
+Rel(frontend, secondaryApp, "API calls to backend")
+
+@enduml

@@ -1,0 +1,57 @@
+@startuml ASR-SEC-11-L4-Component
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title ASR-SEC-11: Audit Log Retention (C4 Level 4 - Component)
+
+Person(admin, "Admin", "Views audit logs & configures retention")
+Person(auditor, "Auditor", "Queries historical audit logs")
+
+System_Boundary(lms, "LMS System") {
+    Container_Boundary(auditCollection, "Audit Log Collection") {
+        Component(auditMiddleware, "Audit Middleware", "Express", "Intercepts all requests, captures metadata")
+        Component(auditLogger, "Audit Logger", "Service", "Formats and routes audit events")
+        Component(eventBuffer, "Event Buffer", "In-Memory", "Buffers events before writing to disk")
+    }
+
+    Container_Boundary(fileSystem, "File System Storage") {
+        Component(jsonlWriter, "JSONL Writer", "File I/O", "Writes audit events as JSONL to /app/logs/audit/")
+        Component(auditLogFiles, "Audit Log Files", "File System", "audit_YYYY-MM-DD.jsonl files")
+    }
+
+    Container_Boundary(auditQueryService, "Audit Query Service") {
+        Component(auditController, "Audit Controller", "Express", "GET /api/audit endpoint")
+        Component(queryEngine, "Query Engine", "Business Logic", "Filters by user, date, category, action")
+        Component(fileReader, "File Reader", "I/O", "Reads & parses JSONL files")
+    }
+
+    Container_Boundary(retentionService, "Retention Management") {
+        Component(retentionScheduler, "Retention Scheduler", "Cron Job", "Scheduled cleanup task")
+        Component(retentionPolicy, "Retention Policy", "Business Logic", "Checks AUDIT_RETENTION_DAYS config")
+        Component(fileCleanup, "File Cleanup", "File Operations", "Deletes aged log files")
+    }
+
+    Container_Boundary(config, "Audit Configuration") {
+        Component(auditConfig, "Audit Config", "Environment", "AUDIT_LOG_DIR, AUDIT_RETENTION_DAYS")
+    }
+}
+
+Rel(auditMiddleware, auditLogger, "Log event (user, action, resource)")
+Rel(auditLogger, eventBuffer, "Buffer event")
+Rel(eventBuffer, jsonlWriter, "Flush buffered events")
+Rel(jsonlWriter, auditLogFiles, "Write JSONL lines")
+Rel(auditLogFiles, fileReader, "Read file contents")
+
+Rel(admin, auditController, "GET /api/audit?from=X&to=Y&action=Z")
+Rel(auditor, auditController, "Query historical logs")
+Rel(auditController, queryEngine, "Execute query")
+Rel(queryEngine, fileReader, "Read matching files")
+Rel(fileReader, auditLogFiles, "Parse JSONL records")
+Rel(queryEngine, auditController, "Return filtered results")
+
+Rel(retentionScheduler, retentionPolicy, "Check retention rules")
+Rel(retentionPolicy, auditConfig, "Read AUDIT_RETENTION_DAYS")
+Rel(retentionPolicy, fileCleanup, "Schedule cleanup")
+Rel(fileCleanup, auditLogFiles, "Delete aged files")
+
+@enduml

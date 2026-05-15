@@ -1,0 +1,44 @@
+@startuml ASR-SEC-03-L4-Component
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title ASR-SEC-03: Login Attempt Lockout (C4 Level 4 - Component)
+
+Person(attacker, "Attacker", "Attempts multiple failed logins")
+Person(user, "User", "Legitimate user")
+
+System_Boundary(lms, "LMS System") {
+    Container_Boundary(authService, "Auth Service") {
+        Component(authController, "Auth Controller", "Express", "Handles /auth/login endpoint")
+        Component(loginService, "Login Service", "Business Logic", "Orchestrates login flow with lockout checks")
+        Component(lockoutManager, "Lockout Manager", "Security Logic", "Tracks failed attempts per IP, enforces lockout")
+        Component(passwordVerifier, "Password Verifier", "Security", "Compares provided & stored passwords")
+    }
+
+    Container_Boundary(database, "PostgreSQL") {
+        Component(userTable, "User Table", "DB", "user_id, email, password_hash")
+        Component(loginAttemptsTable, "Login Attempts Table", "DB", "ip, attempts, lastTry, blockedUntil")
+    }
+
+    Container_Boundary(config, "Lockout Configuration") {
+        Component(lockoutConfig, "Lockout Config", "Environment", "MAX_LOGIN_ATTEMPTS, LOCKOUT_TIME_MS")
+    }
+}
+
+Rel(user, authController, "POST /auth/login")
+Rel(attacker, authController, "Multiple failed POST /auth/login")
+
+Rel(authController, loginService, "Process login")
+Rel(loginService, lockoutManager, "Check IP lockout status")
+Rel(lockoutManager, loginAttemptsTable, "Query attempt history")
+Rel(lockoutManager, lockoutConfig, "Read MAX_ATTEMPTS, LOCKOUT_TIME")
+
+Rel(loginService, passwordVerifier, "Verify password")
+Rel(passwordVerifier, userTable, "Get user password_hash")
+
+Rel(loginService, loginAttemptsTable, "Increment attempts counter")
+Rel(loginService, loginAttemptsTable, "Update blockedUntil timestamp if max exceeded")
+Rel(loginService, authController, "Return locked_out or authenticate")
+Rel(authController, attacker, "403 Too many attempts")
+
+@enduml

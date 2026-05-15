@@ -1,0 +1,59 @@
+@startuml ASR-ENROLL-01-L4-Component
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title ASR-ENROLL-01: Role-Based Access Control (C4 Level 4 - Component)
+
+Person(student, "Student", "Views own materials & submissions")
+Person(teacher, "Teacher", "Manages materials & grades")
+Person(unenrolledUser, "Unenrolled User", "Attempts unauthorized access")
+
+System_Boundary(lms, "LMS System") {
+    Container_Boundary(authService, "Authentication Service") {
+        Component(tokenValidator, "Token Validator", "Middleware", "Validates JWT & extracts user info")
+        Component(roleExtractor, "Role Extractor", "Logic", "Extracts user role from token/database")
+    }
+
+    Container_Boundary(enrollmentService, "Enrollment Service") {
+        Component(enrollmentChecker, "Enrollment Checker", "Business Logic", "Verifies user is enrolled in class")
+        Component(enrollmentRepository, "Enrollment Repository", "Data Access", "Queries enrollment records")
+    }
+
+    Container_Boundary(accessControl, "Access Control Layer") {
+        Component(rbacPolicy, "RBAC Policy Engine", "Authorization", "Defines role-based permissions")
+        Component(permission, "Permission Evaluator", "Logic", "Evaluates user permissions for resource")
+    }
+
+    Container_Boundary(materialsService, "Materials Service") {
+        Component(materialsController, "Materials Controller", "Express", "GET /api/materials/:id")
+        Component(materialsLogic, "Materials Logic", "Business Logic", "Retrieves material data")
+    }
+
+    Container_Boundary(database, "PostgreSQL") {
+        Component(enrollmentTable, "Enrollment Table", "DB", "user_id, class_id, role, enrolled_at")
+        Component(materialTable, "Material Table", "DB", "id, class_id, title, content")
+    }
+}
+
+Rel(student, materialsController, "GET /api/materials/m123")
+Rel(teacher, materialsController, "GET /api/materials/m123")
+Rel(unenrolledUser, materialsController, "GET /api/materials/m123")
+
+Rel(materialsController, tokenValidator, "Validate token")
+Rel(tokenValidator, roleExtractor, "Extract user role")
+
+Rel(materialsController, enrollmentChecker, "Verify enrollment")
+Rel(enrollmentChecker, enrollmentRepository, "Query enrollment")
+Rel(enrollmentRepository, enrollmentTable, "Get enrollment record")
+
+Rel(materialsController, rbacPolicy, "Check permissions")
+Rel(rbacPolicy, permission, "Evaluate user role + resource")
+
+Rel(permission, materialsLogic, "Authorize & proceed")
+Rel(materialsLogic, materialTable, "Fetch material")
+Rel(materialsLogic, materialsController, "Return data")
+Rel(materialsController, student, "200 OK (enrolled)")
+Rel(materialsController, teacher, "200 OK (enrolled)")
+Rel(materialsController, unenrolledUser, "403 Forbidden (not enrolled)")
+
+@enduml
