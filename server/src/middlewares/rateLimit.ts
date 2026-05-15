@@ -18,7 +18,7 @@ export const rateLimiter = (rule : RateLimitRule) => {
     const requests = await redisClient.incr(redisId);
 
     if (requests === 1) {
-      await redisClient.expire(redisId, rate_limit.time);
+      await redisClient.pExpire(redisId, rate_limit.time);
     }
 
     if (requests > rate_limit.limit) {
