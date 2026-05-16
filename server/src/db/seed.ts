@@ -13,49 +13,47 @@ export async function seedDatabase() {
   const hash = async (pwd: string) => bcrypt.hash(pwd, 10);
 
   // Users
-  const [_admin, t1, t2, s1, s2, s3, s4] = await Promise.all([
-    prisma.user.create({
-      data: { name: "Admin", email: "admin@example.com", password: await hash("Admin123!"), role: "ADMIN" },
-    }),
-    prisma.user.create({
+  const _admin = await prisma.user.create({
+    data: { name: "Admin", email: "admin@example.com", password: await hash("Admin123!"), role: "ADMIN" },
+  });
+
+  const t1 = await prisma.user.create({
+    data: {
+      name: "Dr. John Smith",
+      email: "teacher1@example.com",
+      password: await hash("Teacher123!"),
+      role: "TEACHER",
+    },
+  });
+
+  const t2 = await prisma.user.create({
+    data: {
+      name: "Prof. Sarah Johnson",
+      email: "teacher2@example.com",
+      password: await hash("Teacher123!"),
+      role: "TEACHER",
+    },
+  });
+
+  // Create 500 student accounts
+  const students = [];
+  for (let i = 1; i <= 500; i++) {
+    const student = await prisma.user.create({
       data: {
-        name: "Dr. John Smith",
-        email: "teacher1@example.com",
-        password: await hash("Teacher123!"),
-        role: "TEACHER",
-      },
-    }),
-    prisma.user.create({
-      data: {
-        name: "Prof. Sarah Johnson",
-        email: "teacher2@example.com",
-        password: await hash("Teacher123!"),
-        role: "TEACHER",
-      },
-    }),
-    prisma.user.create({
-      data: {
-        name: "Alice Nguyen",
-        email: "student1@example.com",
+        name: `Student ${i}`,
+        email: `user${i}@example.com`,
         password: await hash("Student123!"),
         role: "STUDENT",
       },
-    }),
-    prisma.user.create({
-      data: { name: "Bob Tran", email: "student2@example.com", password: await hash("Student123!"), role: "STUDENT" },
-    }),
-    prisma.user.create({
-      data: {
-        name: "Charlie Lee",
-        email: "student3@example.com",
-        password: await hash("Student123!"),
-        role: "STUDENT",
-      },
-    }),
-    prisma.user.create({
-      data: { name: "Diana Pham", email: "student4@example.com", password: await hash("Student123!"), role: "STUDENT" },
-    }),
-  ]);
+    });
+    students.push(student);
+  }
+
+  // Use first 4 for initial enrollments
+  const s1 = students[0];
+  const s2 = students[1];
+  const s3 = students[2];
+  const s4 = students[3];
 
   // Courses
   const [web, db, algo] = await Promise.all([
@@ -243,7 +241,7 @@ export async function seedDatabase() {
 
   console.log("✅ Seeding finished!");
   console.log(
-    "📊 Data: 7 users, 3 courses, 4 classes, 6 enrollments, 4 materials, 4 assignments, 4 submissions, 2 feedback"
+    "📊 Data: 502 users (1 admin, 1 teacher, 500 students), 3 courses, 4 classes, 6 enrollments, 4 materials, 4 assignments, 4 submissions, 2 feedback"
   );
 }
 
