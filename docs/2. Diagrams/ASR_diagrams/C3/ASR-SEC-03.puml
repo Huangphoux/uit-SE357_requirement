@@ -1,0 +1,85 @@
+@startuml ASR-SEC-03
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-SEC-03: Brute Force Attack Prevention\nIP-Based Rate Limiting and Account Lockout
+
+Person(attacker, "Attacker", "Attempts multiple failed logins")
+Person(legitimateUser, "Legitimate User", "Normal login")
+Person(admin, "Admin", "Monitors and manages blocked IPs")
+
+System_Boundary(lms, "LMS System") {
+
+    Container(clientApp, "Client Application", "React + TypeScript", "Login form UI")
+
+    Container_Boundary(loginGateway, "Login Gateway [Express Middleware]") {
+        Component(ipExtractor, "IP Extractor", "Service", "Extracts client IP from request headers")
+        Component(failureTracker, "Failure Tracker", "Service", "Counts failed login attempts per IP")
+        Component(ipBlocker, "IP Blocker", "Service", "Checks if IP is in blacklist")
+    }
+
+    Container_Boundary(failureCache, "Failure Attempt Cache [Redis]") {
+        Component(attemptCounter, "Attempt Counter", "Service", "Stores: IP -> attempt_count (resets after 15 min)")
+        Component(ttlManager, "TTL Manager", "Service", "Manages 15-minute expiry window for each IP")
+    }
+
+    Container_Boundary(ipBlocklist, "IP Blocklist [Database + Redis]") {
+        Component(blocklistStore, "Blocklist Store", "DB", "Persistent list of blocked IPs with reason")
+        Component(blocklistCache, "Blocklist Cache", "Service", "Redis cache for fast lookup")
+        Component(blocklistPruner, "Blocklist Pruner", "Service", "Removes temporary blocks after cooldown period (1-24 hours)")
+    }
+
+    Container_Boundary(apiServer, "API Server [Express.js + Node.js]") {
+        Component(authHandler, "Auth Handler", "Service", "Processes login request if IP is not blocked")
+        Component(loginValidator, "Login Validator", "Service", "Validates credentials")
+        Component(failureRecorder, "Failure Recorder", "Service", "Increments failure count on auth failure")
+        Component(lockoutDetector, "Lockout Detector", "Service", "Detects when 5 failures reached in 15 min")
+    }
+
+    Container_Boundary(notifService, "Notification Service [Email + SMS]") {
+        Component(blockNotifier, "Block Notifier", "Service", "Sends email to account owner when IP is blocked")
+        Component(alertComposer, "Alert Composer", "Service", "Composes alert message with blocked IP, time, failed attempts")
+        Component(emailSender, "Email Sender", "Service", "Sends email via SMTP")
+    }
+
+    Container_Boundary(adminDashboard, "Admin Dashboard [Admin Portal]") {
+        Component(blockedIpViewer, "Blocked IP Viewer", "UI", "Lists all currently blocked IPs with attempt history")
+        Component(whitelistManager, "Whitelist Manager", "UI", "Adds trusted IPs to permanent whitelist")
+        Component(blocklistManager, "Blocklist Manager", "UI", "Manually blocks/unblocks IPs")
+        Component(ipAnalytics, "IP Analytics", "UI", "Shows attack patterns, geographic distribution, timing")
+    }
+
+    Container_Boundary(auditLog, "Audit Log [Database]") {
+        Component(attemptLog, "Attempt Log", "DB", "Stores: ip, email, timestamp, success/failure, reason")
+        Component(blockLog, "Block Log", "DB", "Stores: ip, block_time, reason, unblock_time")
+    }
+}
+
+Rel(ipExtractor, failureTracker, "Track by IP")
+Rel(failureTracker, ipBlocker, "Check if blocked")
+Rel(ttlManager, attemptCounter, "Track attempts")
+Rel(blocklistStore, blocklistCache, "Sync blocklist")
+Rel(blocklistPruner, blocklistStore, "Clean expired blocks")
+Rel(authHandler, loginValidator, "Validate credentials")
+Rel(loginValidator, failureRecorder, "Record if failed")
+Rel(failureRecorder, lockoutDetector, "Check if locked")
+Rel(blockNotifier, alertComposer, "Compose alert")
+Rel(alertComposer, emailSender, "Send email")
+Rel(blockedIpViewer, ipAnalytics, "View attack analytics")
+Rel(whitelistManager, blocklistStore, "Update whitelist")
+Rel(blocklistManager, blocklistStore, "Manage blocks")
+Rel(attemptLog, blockLog, "Log blocking events")
+Rel(attacker, clientApp, "Attempt login (multiple times from same IP)")
+Rel(clientApp, loginGateway, "POST /auth/login {email, password}")
+Rel(loginGateway, failureCache, "Check attempt count")
+Rel(loginGateway, ipBlocklist, "Check if IP is blocked")
+Rel(loginGateway, apiServer, "If not blocked, attempt auth")
+Rel(apiServer, auditLog, "Log all attempts")
+Rel(apiServer, failureCache, "Track failures")
+Rel(lockoutDetector, ipBlocklist, "Add IP to blocklist (5 failures in 15 min)")
+Rel(ipBlocklist, notifService, "Notify user: IP blocked")
+Rel(notifService, auditLog, "Log notification")
+Rel(admin, adminDashboard, "Monitor and manage blocked IPs")
+Rel(adminDashboard, blocklistStore, "Update blocklist")
+Rel(legitimateUser, clientApp, "Normal login attempt")
+
+@enduml

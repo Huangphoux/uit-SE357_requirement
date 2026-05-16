@@ -1,0 +1,68 @@
+@startuml ASR-SEC-06
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-SEC-06: HTTPS/TLS Data Encryption in Transit\n100% Encrypted Traffic with HTTPS/TLS
+
+Person(users, "Users", "Access system securely")
+
+System_Boundary(lms, "LMS System") {
+
+    Container(clientApp, "Client Application", "React + TypeScript", "Web application running in browser")
+
+    Container_Boundary(caddy, "Caddy Reverse Proxy [Caddy Web Server]") {
+        Component(certManager, "Certificate Manager", "Service", "Manages SSL/TLS certificates (auto-renewal with Let's Encrypt)")
+        Component(tlsTerminator, "TLS Terminator", "Service", "Performs TLS handshake, decrypts incoming HTTPS traffic")
+        Component(hstsEnforcer, "HSTS Enforcer", "Service", "Sends Strict-Transport-Security headers to enforce HTTPS")
+        Component(httpRedirector, "HTTP Redirector", "Service", "Redirects all HTTP requests to HTTPS (301 redirect)")
+    }
+
+    Container_Boundary(apiServer, "API Server [Express.js + Node.js]") {
+        Component(requestHandler, "Request Handler", "Service", "Processes decrypted requests")
+        Component(responsePreparer, "Response Preparer", "Service", "Prepares responses for Caddy to encrypt")
+    }
+
+    ContainerDb(database, "Database", "PostgreSQL", "Persistent data store")
+
+    Container(certAuthority, "Certificate Authority", "Let's Encrypt", "Issues and renews SSL/TLS certificates")
+
+    Container_Boundary(cipherSuite, "Cipher Suite Configuration [TLS 1.2+]") {
+        Component(tlsVersionEnforcer, "TLS Version Enforcer", "Service", "Enforces TLS 1.2 minimum (TLS 1.3 preferred)")
+        Component(cipherSelector, "Cipher Selector", "Service", "Uses only modern, strong ciphers (ECDHE, ChaCha20, AES-GCM)")
+        Component(weakCipherBlocker, "Weak Cipher Blocker", "Service", "Blocks deprecated/weak ciphers (3DES, RC4, MD5)")
+    }
+
+    Container_Boundary(securityHeaders, "Security Headers [HTTP Headers]") {
+        Component(hstsHeader, "HSTS Header", "Service", "Strict-Transport-Security: max-age=31536000")
+        Component(cspHeader, "CSP Header", "Service", "Content-Security-Policy for client-side protection")
+        Component(xFrameOptions, "X-Frame-Options", "Service", "Prevents clickjacking")
+    }
+
+    Container_Boundary(monitoringService, "Monitoring Service [Prometheus + Grafana]") {
+        Component(certExpiryMonitor, "Certificate Expiry Monitor", "Service", "Alerts when cert expires in <30 days")
+        Component(tlsVersionMonitor, "TLS Version Monitor", "Service", "Ensures only TLS 1.2+ connections accepted")
+        Component(cipherMonitor, "Cipher Monitor", "Service", "Tracks ciphers used, blocks non-compliant clients")
+    }
+}
+
+Rel(certManager, tlsTerminator, "Provide certificates")
+Rel(tlsTerminator, hstsEnforcer, "Add HSTS headers")
+Rel(httpRedirector, hstsEnforcer, "Enforce HTTPS")
+Rel(requestHandler, responsePreparer, "Prepare response")
+Rel(tlsVersionEnforcer, cipherSelector, "Select strong ciphers")
+Rel(cipherSelector, weakCipherBlocker, "Block weak ciphers")
+Rel(hstsHeader, cspHeader, "Apply headers")
+Rel(cspHeader, xFrameOptions, "Layer protection")
+Rel(certExpiryMonitor, tlsVersionMonitor, "Monitor TLS health")
+Rel(tlsVersionMonitor, cipherMonitor, "Track cipher usage")
+Rel(users, clientApp, "User initiates HTTPS request")
+Rel(clientApp, caddy, "HTTPS encrypted request")
+Rel(caddy, cipherSuite, "Negotiate cipher suite with TLS 1.2+")
+Rel(caddy, apiServer, "Decrypted request (internal network)")
+Rel(apiServer, database, "Query database")
+Rel(database, apiServer, "Return data")
+Rel(apiServer, caddy, "Response")
+Rel(caddy, clientApp, "HTTPS encrypted response")
+Rel(monitoringService, caddy, "Monitor certificate and TLS")
+Rel(certAuthority, caddy, "Issue/renew SSL certificate")
+
+@enduml

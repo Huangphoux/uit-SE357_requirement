@@ -6,8 +6,13 @@ COPY package*.json ./
 RUN npm install
 
 COPY prisma ./prisma
+
+# Generate Prisma Client
+RUN npx prisma generate
+
 COPY tsconfig.json tsconfig.build.json ./
 COPY src ./src
+COPY leader-elector.js ./leader-elector.js
 
 RUN npm run build
 

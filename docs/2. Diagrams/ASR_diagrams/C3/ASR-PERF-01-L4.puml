@@ -1,0 +1,56 @@
+@startuml ASR-PERF-01-L4-Component
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title ASR-PERF-01: Rate Limiting (C4 Level 4 - Component)
+
+Person(user, "User", "Makes API requests")
+Person(abuser, "Abuser", "Floods API with requests")
+
+System_Boundary(lms, "LMS System") {
+    Container_Boundary(middleware, "Express Middleware Layer") {
+        Component(rateLimitMiddleware, "Rate Limit Middleware", "Express Middleware", "Intercepts requests before route handlers")
+        Component(clientIdentifier, "Client Identifier", "Logic", "Extracts client identifier: IP or user ID")
+        Component(limiterFactory, "Limiter Factory", "Factory", "Creates/retrieves RateLimit instance per client")
+    }
+
+    Container_Boundary(rateLimitEngine, "Rate Limit Engine") {
+        Component(rateLimitStore, "Rate Limit Store", "Business Logic", "Tracks request count & window per client")
+        Component(windowCalculator, "Window Calculator", "Time Logic", "Computes sliding window based on timestamp")
+        Component(quotaChecker, "Quota Checker", "Validation", "Checks if client exceeded RATE_LIMIT_MAX")
+    }
+
+    Container_Boundary(redis, "Redis Cache") {
+        Component(rateLimitCache, "Rate Limit Cache", "Key-Value Store", "Stores client:request_count:window")
+    }
+
+    Container_Boundary(config, "Rate Limit Configuration") {
+        Component(limitConfig, "Limit Config", "Environment Config", "RATE_LIMIT_WINDOW_MS, RATE_LIMIT_MAX")
+    }
+
+    Container_Boundary(responseHandler, "Response Handler") {
+        Component(allowHandler, "Allow Handler", "Express", "Call next() to proceed with request")
+        Component(denyHandler, "Deny Handler", "Express", "Return 429 Too Many Requests")
+        Component(headerWriter, "Header Writer", "HTTP", "Add X-RateLimit-* response headers")
+    }
+}
+
+Rel(user, rateLimitMiddleware, "GET /api/courses")
+Rel(abuser, rateLimitMiddleware, "Rapid GET /api/*")
+Rel(rateLimitMiddleware, clientIdentifier, "Extract identifier")
+Rel(clientIdentifier, limiterFactory, "Get limiter for client")
+Rel(limiterFactory, rateLimitStore, "Retrieve or create store entry")
+Rel(rateLimitStore, windowCalculator, "Compute current window")
+Rel(windowCalculator, rateLimitCache, "Query Redis for counter")
+Rel(rateLimitStore, quotaChecker, "Check quota")
+Rel(quotaChecker, limitConfig, "Read RATE_LIMIT_MAX")
+Rel(quotaChecker, rateLimitCache, "Increment counter in Redis")
+
+Rel(quotaChecker, allowHandler, "Quota OK")
+Rel(quotaChecker, denyHandler, "Quota exceeded")
+Rel(allowHandler, headerWriter, "Allowed, add headers")
+Rel(denyHandler, headerWriter, "Denied, add headers")
+Rel(headerWriter, user, "200 OK with X-RateLimit-Remaining")
+Rel(headerWriter, abuser, "429 Too Many Requests")
+
+@enduml

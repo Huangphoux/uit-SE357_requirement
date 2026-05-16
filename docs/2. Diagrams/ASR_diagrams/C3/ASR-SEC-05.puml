@@ -1,0 +1,99 @@
+@startuml ASR-SEC-05
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-SEC-05: Role-Based Access Control (RBAC)\nEnforcing 100% Permission Checks on All Requests
+
+Person(regularUser, "Regular User", "Accesses resources within assigned roles")
+Person(admin, "Admin", "Manages roles and permissions")
+Person(attacker, "Attacker", "Attempts to access unauthorized resources")
+
+System_Boundary(lms, "LMS System") {
+
+    Container(clientApp, "Client Application", "React + TypeScript", "User interface")
+
+    Container_Boundary(apiGateway, "API Gateway [Express Middleware]") {
+        Component(authMiddleware, "Authentication Middleware", "Service", "Verifies JWT token and extracts user_id")
+        Component(rbacMiddleware, "RBAC Middleware", "Service", "Intercepts all requests and enforces permissions")
+        Component(permissionEnforcer, "Permission Enforcer", "Service", "Checks if user has required permission for resource/action")
+        Component(accessDecision, "Access Decision Engine", "Service", "Returns allow/deny based on role permissions")
+    }
+
+    Container_Boundary(apiServer, "API Server [Express.js + Node.js]") {
+        Component(requestHandler, "Request Handler", "Service", "Processes request after RBAC approval")
+        Component(resourceValidator, "Resource Validator", "Service", "Ensures user's org/scope matches resource")
+        Component(businessLogic, "Business Logic", "Service", "Executes core functionality")
+    }
+
+    Container_Boundary(permissionStore, "Permission Store [Database + Cache]") {
+        Component(roleStore, "Role Store", "Service", "teacher, student, admin, moderator")
+        Component(permissionCatalog, "Permission Catalog", "Service", "read_course, create_assignment, grade_submission, etc.")
+        Component(rolePermMapping, "Role-Permission Mapping", "Service", "Maps roles to permissions")
+        Component(userRoleMapping, "User-Role Mapping", "Service", "Maps users to roles")
+    }
+
+    Container_Boundary(database, "Database [PostgreSQL]") {
+        Component(usersTable, "Users Table", "DB", "user_id, email, organization_id")
+        Component(rolesTable, "Roles Table", "DB", "role_id, name (teacher, student, admin)")
+        Component(permissionsTable, "Permissions Table", "DB", "permission_id, resource_type, action")
+        Component(userRolesTable, "User-Roles Table", "DB", "Links users to roles (many-to-many)")
+        Component(rolePermTable, "Role-Permissions Table", "DB", "Links roles to permissions (many-to-many)")
+    }
+
+    Container_Boundary(permissionCache, "Permission Cache [Redis]") {
+        Component(cacheKey, "Cache Key", "Service", "user_id -> [list of permissions]")
+        Component(cacheTTL, "Cache TTL Manager", "Service", "Invalidates cache when permissions change (5-min TTL)")
+    }
+
+    Container_Boundary(adminInterface, "Admin Interface [Admin Portal]") {
+        Component(roleManager, "Role Manager", "UI", "Create/edit/delete roles")
+        Component(permissionManager, "Permission Manager", "UI", "Create/edit/delete permissions")
+        Component(roleAssigner, "Role Assigner", "UI", "Assign roles to users")
+        Component(permissionTester, "Permission Tester", "UI", "Test RBAC rules before deployment")
+    }
+
+    Container_Boundary(auditLog, "Audit Log [Database]") {
+        Component(accessAttemptLog, "Access Attempt Log", "DB", "user_id, resource, action, result (allow/deny), timestamp, ip")
+        Component(denialLog, "Denial Log", "DB", "Tracks unauthorized access attempts for security analysis")
+    }
+
+    Container_Boundary(alertingSystem, "Alerting System [Monitoring Service]") {
+        Component(denialDetector, "Denial Detector", "Service", "Detects repeated access denials from same user")
+        Component(anomalyDetector, "Anomaly Detector", "Service", "Detects unusual resource access patterns")
+        Component(adminAlert, "Admin Alert", "Service", "Sends alerts to admins")
+    }
+}
+
+Rel(authMiddleware, rbacMiddleware, "Pass authenticated user")
+Rel(rbacMiddleware, permissionEnforcer, "Check permission")
+Rel(permissionEnforcer, accessDecision, "Query permissions")
+Rel(requestHandler, resourceValidator, "Validate resource ownership")
+Rel(resourceValidator, businessLogic, "Execute if valid")
+Rel(roleStore, rolePermMapping, "Define permissions")
+Rel(permissionCatalog, rolePermMapping, "Link to roles")
+Rel(userRoleMapping, roleStore, "Link to roles")
+Rel(userRolesTable, usersTable, "Link to user")
+Rel(userRolesTable, rolesTable, "Link to role")
+Rel(rolePermTable, rolesTable, "Link to role")
+Rel(rolePermTable, permissionsTable, "Link to permission")
+Rel(cacheTTL, cacheKey, "Update cache")
+Rel(roleManager, roleAssigner, "Assign roles")
+Rel(permissionManager, roleAssigner, "Apply permissions")
+Rel(permissionTester, permissionEnforcer, "Test rules")
+Rel(denialLog, accessAttemptLog, "Log all denials")
+Rel(denialDetector, anomalyDetector, "Analyze patterns")
+Rel(anomalyDetector, adminAlert, "Send alert")
+Rel(regularUser, clientApp, "Access course materials")
+Rel(clientApp, apiGateway, "GET /courses/123/materials [JWT token]")
+Rel(apiGateway, permissionStore, "Check: user has read_course permission?")
+Rel(permissionStore, database, "Query user's roles and their permissions")
+Rel(database, permissionStore, "Return permissions")
+Rel(permissionStore, apiGateway, "Permission result")
+Rel(apiGateway, apiServer, "If allowed, process")
+Rel(apiServer, clientApp, "Return materials")
+Rel(apiGateway, auditLog, "Log access attempt")
+Rel(auditLog, alertingSystem, "Alert on repeated denials")
+Rel(admin, adminInterface, "Assign teacher role to user")
+Rel(adminInterface, database, "Update user_roles mapping")
+Rel(database, permissionCache, "Invalidate cache for that user")
+
+@enduml

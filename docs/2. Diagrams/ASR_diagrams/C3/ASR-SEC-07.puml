@@ -1,0 +1,90 @@
+@startuml ASR-SEC-07
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-SEC-07: Data Encryption at Rest\n100% Encryption of Sensitive Data in Database
+
+Person(user, "User", "Data stored securely at rest")
+Person(admin, "DBA", "Manages encryption keys and database security")
+
+System_Boundary(lms, "LMS System") {
+
+    Container_Boundary(apiServer, "API Server [Express.js + Node.js]") {
+        Component(dataClassifier, "Data Classifier", "Service", "Identifies sensitive fields (password, email, ssn, payment)")
+        Component(encryptionSvc, "Encryption Service", "Service", "Encrypts sensitive data before sending to database")
+        Component(keyProvider, "Key Provider", "Service", "Retrieves encryption keys from key manager")
+    }
+
+    Container_Boundary(database, "Database [PostgreSQL with Encryption]") {
+        Component(encryptedColHandler, "Encrypted Column Handler", "DB", "Handles encryption/decryption of individual columns")
+        Component(sensitiveDataCols, "Sensitive Data Columns", "DB", "password_hash, ssn, credit_card (all encrypted)")
+        Component(plainTextCols, "Plain Text Columns", "DB", "course_id, user_name, email (not PII, not encrypted)")
+        Component(dbEncryption, "Database-Level Encryption", "DB", "Transparent data encryption (TDE) for entire database")
+    }
+
+    Container_Boundary(keyMgmt, "Encryption Key Management [AWS KMS / HashiCorp Vault]") {
+        Component(masterKeyStore, "Master Key Store", "Service", "Stores master encryption key (KMS or Vault)")
+        Component(keyRotationScheduler, "Key Rotation Scheduler", "Service", "Rotates keys annually or on-demand")
+        Component(keyAccessControl, "Key Access Control", "Service", "Restricts key access to authorized services only")
+        Component(keyVersioning, "Key Versioning", "Service", "Maintains multiple key versions for decrypting old data")
+    }
+
+    Container_Boundary(diskEncryption, "Disk Encryption Layer [LUKS / dm-crypt / EBS]") {
+        Component(volumeEncryption, "Volume Encryption", "Service", "Encrypts entire disk volumes")
+        Component(bootVolumeProtection, "Boot Volume Protection", "Service", "Encrypts OS and boot partition")
+        Component(backupEncryption, "Backup Encryption", "Service", "All backups encrypted with same keys")
+    }
+
+    Container_Boundary(backupMgmt, "Backup Management [PostgreSQL Backups]") {
+        Component(backupScheduler, "Backup Scheduler", "Service", "Daily incremental, weekly full backups")
+        Component(backupEncryptor, "Backup Encryptor", "Service", "Encrypts backup files with KMS keys")
+        Component(backupValidation, "Backup Validation", "Service", "Verifies backup integrity and decryption ability")
+    }
+
+    Container_Boundary(decryptionSvc, "Decryption Service [On-demand Data Access]") {
+        Component(accessValidator, "Access Validator", "Service", "Validates user has permission to access data")
+        Component(auditLogger, "Audit Logger", "Service", "Logs all data access attempts and decryption events")
+        Component(decryptor, "Decryptor", "Service", "Decrypts data using KMS key")
+    }
+
+    Container_Boundary(secureFileStorage, "Secure File Storage [S3 / Cloud Storage]") {
+        Component(fileEncryptor, "File Encryptor", "Service", "Encrypts uploaded files before storage")
+        Component(fileKeyMapping, "File-Key Mapping", "Service", "Maps each file to its encryption key")
+    }
+
+    Container_Boundary(monitoringService, "Monitoring Service [Prometheus + Grafana]") {
+        Component(encHealthMonitor, "Encryption Health Monitor", "Service", "Checks all encrypted columns are properly encrypted")
+        Component(keyExpiryMonitor, "Key Expiry Monitor", "Service", "Alerts when keys need rotation")
+        Component(decryptFailDetector, "Decryption Failure Detector", "Service", "Alerts on decryption errors (possible key corruption)")
+    }
+}
+
+Rel(dataClassifier, encryptionSvc, "Mark sensitive data")
+Rel(encryptionSvc, keyProvider, "Get encryption key")
+Rel(sensitiveDataCols, encryptedColHandler, "Encrypted storage")
+Rel(plainTextCols, dbEncryption, "Plain text within encrypted DB")
+Rel(encryptedColHandler, dbEncryption, "Layer encryption")
+Rel(masterKeyStore, keyRotationScheduler, "Rotate keys")
+Rel(keyRotationScheduler, keyVersioning, "Maintain versions")
+Rel(masterKeyStore, keyAccessControl, "Control access")
+Rel(volumeEncryption, bootVolumeProtection, "Protect boot volume")
+Rel(backupEncryption, volumeEncryption, "Encrypt backups")
+Rel(backupScheduler, backupEncryptor, "Encrypt backup")
+Rel(backupEncryptor, backupValidation, "Validate encryption")
+Rel(accessValidator, auditLogger, "Log access")
+Rel(auditLogger, decryptor, "Decrypt if authorized")
+Rel(fileEncryptor, fileKeyMapping, "Store mapping")
+Rel(encHealthMonitor, keyExpiryMonitor, "Monitor key age")
+Rel(keyExpiryMonitor, decryptFailDetector, "Detect failures")
+Rel(user, apiServer, "Submit sensitive data (password, payment)")
+Rel(apiServer, keyMgmt, "Request encryption key")
+Rel(apiServer, database, "Store encrypted data")
+Rel(database, diskEncryption, "All data encrypted at rest")
+Rel(database, backupMgmt, "Backup encrypted data")
+Rel(admin, keyMgmt, "Rotate keys")
+Rel(admin, decryptionSvc, "Access encrypted data (authorized)")
+Rel(decryptionSvc, keyMgmt, "Retrieve key to decrypt")
+Rel(decryptionSvc, database, "Fetch encrypted data")
+Rel(monitoringService, database, "Monitor encryption")
+Rel(monitoringService, keyMgmt, "Monitor keys")
+
+@enduml

@@ -1,0 +1,87 @@
+@startuml ASR-SEC-04
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-SEC-04: Multi-Factor Authentication for Admin\nMandatory MFA on Admin Dashboard Access
+
+Person(admin, "Admin User", "Accesses admin dashboard with MFA")
+Person(attacker, "Attacker", "Attempts unauthorized admin access")
+
+System_Boundary(lms, "LMS System") {
+
+    Container_Boundary(clientApp, "Client Application [React + TypeScript]") {
+        Component(adminLoginForm, "Admin Login Form", "UI", "Captures admin email and password")
+        Component(mfaPrompt, "MFA Prompt", "UI", "Displays MFA challenge (TOTP/SMS/Email)")
+    }
+
+    Container_Boundary(apiServer, "API Server [Express.js + Node.js]") {
+        Component(adminAuthHandler, "Admin Auth Handler", "Service", "Processes admin credentials and orchestrates MFA")
+        Component(credentialValidator, "Credential Validator", "Service", "Validates admin email and password against secure store")
+        Component(mfaOrchestrator, "MFA Orchestrator", "Service", "Coordinates MFA challenge based on user preference")
+        Component(mfaCodeGenerator, "MFA Code Generator", "Service", "Generates time-based or one-time codes")
+        Component(sessionManager, "Session Manager", "Service", "Creates secure admin session after MFA success")
+    }
+
+    Container(auditLogSvc, "Audit Log Service", "Database", "Records all admin access attempts, MFA challenges, and results")
+
+    Container_Boundary(database, "Database [PostgreSQL]") {
+        Component(adminAccountStore, "Admin Account Store", "DB", "admin_id, email, password_hash, role, mfa_enabled")
+        Component(mfaSettingsStore, "MFA Settings Store", "DB", "Stores: totp_secret, phone_number, backup_codes, mfa_method")
+    }
+
+    Container_Boundary(mfaProviders, "MFA Providers [Multi-Channel]") {
+        Component(totpGenerator, "TOTP Generator", "Service", "Generates time-based one-time password (RFC 6238)")
+        Component(smsGateway, "SMS Gateway", "Service", "Sends OTP via SMS")
+        Component(emailSvc, "Email Service", "Service", "Sends OTP via Email")
+        Component(hwKeyValidator, "Hardware Key Validator", "Service", "Validates FIDO2/WebAuthn hardware keys")
+    }
+
+    Container_Boundary(mfaVerifier, "MFA Verification Engine [Express Middleware]") {
+        Component(codeValidator, "Code Validator", "Service", "Validates TOTP against current time window (30-sec)")
+        Component(timingValidator, "Timing Validator", "Service", "Checks code expiry and prevents replay attacks")
+        Component(mfaRateLimiter, "MFA Rate Limiter", "Service", "Limits MFA attempts (3 tries per challenge)")
+    }
+
+    Container_Boundary(adminDashboard, "Admin Dashboard [Admin Portal]") {
+        Component(accessControl, "Access Control", "Service", "Enforces RBAC and resource permissions for admin")
+        Component(dashboardContent, "Dashboard Content", "UI", "Admin functions: user management, system config, audit logs")
+    }
+
+    Container_Boundary(backupCodes, "Backup Codes Storage [Encrypted Database]") {
+        Component(codeStore, "Backup Code Store", "DB", "10 single-use recovery codes per admin")
+        Component(usageTracker, "Usage Tracker", "DB", "Tracks which backup codes have been used")
+    }
+
+    Container_Boundary(notifService, "Notification Service [Email + SMS]") {
+        Component(mfaFailureNotifier, "MFA Failure Notifier", "Service", "Sends alert after 3 failed MFA attempts")
+        Component(newDeviceNotifier, "New Device Notifier", "Service", "Alerts when admin logs in from new IP/device")
+    }
+}
+
+Rel(adminLoginForm, mfaPrompt, "Trigger MFA after credential validation")
+Rel(adminAuthHandler, credentialValidator, "Validate credentials")
+Rel(credentialValidator, mfaOrchestrator, "Trigger MFA challenge")
+Rel(mfaOrchestrator, mfaCodeGenerator, "Generate MFA code")
+Rel(mfaCodeGenerator, sessionManager, "Create session (after MFA verification)")
+Rel(mfaSettingsStore, adminAccountStore, "Link MFA settings to admin")
+Rel(totpGenerator, smsGateway, "Deliver via SMS")
+Rel(totpGenerator, emailSvc, "Deliver via Email")
+Rel(totpGenerator, hwKeyValidator, "Support hardware keys")
+Rel(codeValidator, timingValidator, "Verify within window")
+Rel(timingValidator, mfaRateLimiter, "Check attempt count")
+Rel(accessControl, dashboardContent, "Grant access if authorized")
+Rel(usageTracker, codeStore, "Mark codes as used")
+Rel(mfaFailureNotifier, newDeviceNotifier, "Track login patterns")
+Rel(admin, clientApp, "Login to admin dashboard")
+Rel(clientApp, apiServer, "POST /admin/login {email, password}")
+Rel(apiServer, database, "Verify admin credentials and MFA settings")
+Rel(apiServer, mfaProviders, "Send MFA code via preferred method")
+Rel(mfaProviders, clientApp, "Display MFA prompt")
+Rel(clientApp, mfaVerifier, "Submit MFA code")
+Rel(mfaVerifier, database, "Verify code")
+Rel(mfaVerifier, apiServer, "MFA verification result")
+Rel(apiServer, adminDashboard, "Grant access")
+Rel(apiServer, auditLogSvc, "Log admin access attempts")
+Rel(apiServer, notifService, "Alert on anomalies")
+Rel(attacker, clientApp, "Attempt unauthorized admin access")
+
+@enduml

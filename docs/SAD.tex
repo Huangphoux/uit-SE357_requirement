@@ -13,6 +13,7 @@
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{fancyhdr}
 \usepackage{titlesec}
 \usepackage{enumitem}
@@ -227,17 +228,12 @@ The \textbf{Learning Management System (LMS)} is a web-based platform for managi
 
 The system is deployed as a set of Docker containers orchestrated via Docker Compose, exposed to end-users through a Caddy reverse proxy that handles TLS termination and load balancing.
 
-\begin{lstlisting}[caption={System Context Diagram (C4 Level 1)}]
-                    +------------------------------+
-                    |  Learning Management System  |
-                    |       [Software System]      |
-                    +------+---------------+-------+
-            HTTPS          |               |        SMTP/TLS
-    +----------------------+     +--------------------+-----+
-    |            |         |     |         |                |
-[Student]   [Teacher]  [Admin]  [Email Service]
-(person)    (person)   (person)  (external)
-\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{2. Diagrams/ASR_diagrams/C1/C1.png}
+    \caption{C4 level 1}
+    \label{fig:c4-level-1}
+\end{figure}
 
 \textbf{System boundaries:}
 \begin{itemize}[noitemsep]
@@ -374,105 +370,50 @@ The following table lists all ASRs with \textbf{Status = Done} from the project'
 
 \subsubsection{User Authentication Flow (ASR-SEC-01, ASR-SEC-02, ASR-SEC-03)}
 
-\begin{lstlisting}[caption={Authentication Sequence}]
-Client       Caddy       Node.js API      PostgreSQL   Redis
-  |            |               |               |         |
-  |--POST /api/auth/login ----->|               |         |
-  |            |               |               |         |
-  |            |               |--SELECT LoginAttempt(ip)|
-  |            |               |               |         |
-  |            |  [if blocked: 429 Too Many Requests]     |
-  |            |               |               |         |
-  |            |               | bcrypt.compare(pwd,hash)|
-  |            |               | sign accessToken(1h)    |
-  |            |               | sign refreshToken       |
-  |            |               |--UPDATE User.refreshToken|
-  |            |               |--DELETE LoginAttempt(ip)|
-  |            |               |               |         |
-  |<-- 200 + httpOnly cookies --|               |         |
-\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{2. Diagrams/ASR_diagrams/C4/png/authentication_flow.png}
+    \caption{C4 level 4 authentication}
+    \label{fig:c4-level-4-authentication}
+\end{figure}
 
 \subsubsection{Rate-Limited API Request (ASR-SEC-15)}
 
-\begin{lstlisting}[caption={Rate-Limit Middleware Sequence}]
-Client       Caddy       Node.js API           Redis
-  |            |               |                  |
-  |--GET /api/courses--------->|                  |
-  |            |           rateLimiter            |
-  |            |               |--INCR key(ip)--->|
-  |            |               |<-----------------|
-  |            |   [if count > limit: 429]        |
-  |            |               | authMiddleware (JWT verify)
-  |            |               | controller logic |
-  |<-- 200 JSON response ------|                  |
-\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{2. Diagrams/ASR_diagrams/C4/png/rate-limit.png}
+    \caption{C4 level 4 authentication}
+    \label{fig:c4-level-4-authentication}
+\end{figure}
 
 \subsubsection{File Upload Flow (ASR-SEC-14)}
 
-\begin{lstlisting}[caption={Material Upload Sequence}]
-Client (Teacher)   File Upload Component   Node.js API   File Volume
-       |                   |                    |              |
-       |--select file------>|                    |              |
-       |                   | validate MIME type |              |
-       |                   | check size <= 50MB |              |
-       |                   | [if invalid: show error]         |
-       |                   |--POST /api/materials>|            |
-       |                   |                    | multer check |
-       |                   |                    | store to     |
-       |                   |                    | /app/uploads |
-       |                   |                    |>------------>|
-       |                   |                    | INSERT Material
-       |<-- 201 Created ----|<-------------------|              |
-\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{2. Diagrams/ASR_diagrams/C4/png/upload.png}
+    \caption{C4 level 4 authentication}
+    \label{fig:c4-level-4-authentication}
+\end{figure}
 
 \subsubsection{Audit Log Write (ASR-SEC-10)}
 
-\begin{lstlisting}[caption={Audit Log Emission}]
-Request Handler      Audit Module      server-logs volume
-       |                  |                    |
-       | [after key action]|                    |
-       |--auditLog({       |                    |
-       |    userId,        |                    |
-       |    action,        |                    |
-       |    resource,      |                    |
-       |    outcome })     |                    |
-       |                  |--append JSON line-->|
-       |                  |                    |
-       |<-----------------|                    |
-\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{2. Diagrams/ASR_diagrams/C4/png/audit.png}
+    \caption{C4 level 4 authentication}
+    \label{fig:c4-level-4-authentication}
+\end{figure}
 
 \subsection{Deployment View}
 
 All services are orchestrated by \textbf{Docker Compose} (\texttt{docker-compose.yml}).
 
-\begin{lstlisting}[caption={Container Topology}]
-Internet
-   | HTTPS :443
-   v
-+-----------------------------------------------+
-|  Caddy 2                                      |
-|  TLS termination | LB | gzip/zstd | SPA serve |
-+-------+-------------------+-------------------+
-        |         /api/*    |
-   active/passive failover
-        |                   |
-        v                   v
-+-------------------+ +-------------------+
-| backend-primary   | | backend-secondary |
-| Node.js 20 :8000  | | Node.js 20 :8000  |
-+--------+----------+ +----------+--------+
-         |                       |
-         +----------+------------+
-                    | shared services
-          +---------+---------+-----------+
-          |                   |           |
-          v                   v           v
-  +---------------+  +-----------+  +-----------+
-  | PostgreSQL 16 |  |  Redis 7  |  |  File     |
-  | postgres-data |  | (rate-lim |  |  Storage  |
-  | volume        |  |  cache)   |  |  volume   |
-  +---------------+  +-----------+  +-----------+
-\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{2. Diagrams/ASR_diagrams/C4/png/deploy.png}
+    \caption{C4 level 4 authentication}
+    \label{fig:c4-level-4-authentication}
+\end{figure}
 
 \begin{tabularx}{\textwidth}{L{3cm} L{2.5cm} L{2cm} L{3cm} L{3cm}}
   \toprule
@@ -501,29 +442,12 @@ Internet
 
 The data model is defined in \texttt{server/prisma/schema.prisma} and managed exclusively via Prisma migrations.
 
-\begin{lstlisting}[caption={Simplified E-R Diagram}]
-User (id, email, password[bcrypt], name, role, refreshToken)
- |
- +--< Enrollment >--+      <- unique(userId, classId)
- |                  |
- |           Class (id, courseId, title, teacherId)
- |           @@index(teacherId)
- |                  |
- |            Course (id, title, description)
- |
- +--< Submission >--+      <- unique(assignmentId, userId)
-                    |
-              Assignment (id, title, classId, createdBy, dueDate, maxScore)
-              @@index(createdBy)
-                    |
-              Feedback (id, submissionId, createdBy, comment, score)
-              @@index(createdBy)
-
-Material (id, title, type, url, classId, createdBy)
-@@index(classId), @@index(createdBy)
-
-LoginAttempt (ip[PK], attempts, lastTry, blockedUntil)
-\end{lstlisting}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{2. Diagrams/ASR_diagrams/C4/png/erd.png}
+    \caption{C4 level 4 authentication}
+    \label{fig:c4-level-4-authentication}
+\end{figure}
 
 \subsubsection{Model Descriptions}
 

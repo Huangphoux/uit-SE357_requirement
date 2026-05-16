@@ -1,0 +1,66 @@
+@startuml ASR-SEC-13
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-SEC-13: Secure File Storage Outside Web Root\nPreventing Directory Traversal via Secure File Storage
+
+Person(user, "User", "Downloads stored files")
+Person(attacker, "Attacker", "Attempts directory traversal")
+
+System_Boundary(lms, "LMS System") {
+
+    Container(clientApp, "Client Application", "React + TypeScript", "File download requests")
+
+    Container_Boundary(webServer, "Web Server [Caddy / Nginx]") {
+        Component(publicFileHandler, "Public File Handler", "Service", "Serves /public directory only")
+        Component(requestRouter, "Request Router", "Service", "Routes requests appropriately")
+    }
+
+    Container_Boundary(apiServer, "API Server [Express.js + Node.js]") {
+        Component(downloadHandler, "Download Handler", "Service", "Processes file download requests")
+        Component(pathValidator, "Path Validator", "Service", "Validates requested file path for traversal attempts")
+        Component(accessControl, "Access Control", "Service", "Verifies user has permission to download file")
+        Component(fileMetaLookup, "File Metadata Lookup", "Service", "Looks up file info by ID, not path")
+    }
+
+    Container_Boundary(secureFileStorage, "Secure File Storage [/opt/lms/uploads/ outside web root]") {
+        Component(directoryStructure, "Directory Structure", "Service", "Organized as: /opt/lms/uploads/{user_id}/{file_id}/")
+        Component(filePermissions, "File Permissions", "Service", "Files: 0640 (rw-r-----), Dirs: 0750 (rwxr-x---)")
+        Component(symlinkPrevention, "Symlink Prevention", "Service", "Detects and blocks symbolic links")
+        Component(pathNormalization, "Path Normalization", "Service", "Normalizes paths to prevent ../ traversal (realpath())")
+    }
+
+    Container_Boundary(fileServer, "File Serving Middleware [Express Middleware]") {
+        Component(idBasedLookup, "ID-Based Lookup", "Service", "Maps file_id to actual file path internally (not exposed)")
+        Component(streamingHandler, "Streaming Handler", "Service", "Streams file to user without buffering full file in memory")
+        Component(headerValidator, "Header Validator", "Service", "Validates HTTP headers to prevent directory traversal via headers")
+    }
+
+    Container_Boundary(auditLog, "Audit Log [Database]") {
+        Component(fileAccessLog, "File Access Log", "DB", "user_id, file_id, download_time, ip, success/failure")
+        Component(traversalAttemptLog, "Traversal Attempt Log", "DB", "Logs attempted directory traversal (../, ..\\, encoded variants)")
+    }
+
+    Container(alertingService, "Alerting Service", "Monitoring", "Alerts on directory traversal attempts")
+}
+
+Rel(requestRouter, publicFileHandler, "Route to public files")
+Rel(downloadHandler, pathValidator, "Validate path")
+Rel(pathValidator, fileMetaLookup, "Check if valid")
+Rel(directoryStructure, filePermissions, "Set permissions")
+Rel(filePermissions, symlinkPrevention, "Prevent symlinks")
+Rel(symlinkPrevention, pathNormalization, "Normalize paths")
+Rel(idBasedLookup, streamingHandler, "Stream file")
+Rel(streamingHandler, headerValidator, "Validate headers")
+Rel(traversalAttemptLog, fileAccessLog, "Log attempts")
+Rel(user, clientApp, "Request to download material")
+Rel(clientApp, apiServer, "GET /api/files/{file_id}/download [jwt]")
+Rel(apiServer, secureFileStorage, "Request file by ID (path not exposed)")
+Rel(secureFileStorage, fileServer, "Retrieve file")
+Rel(fileServer, clientApp, "Stream file bytes (not path)")
+Rel(apiServer, auditLog, "Log successful download")
+Rel(attacker, clientApp, "Request: GET /api/files/../../../../../../etc/passwd")
+Rel(apiServer, auditLog, "Log traversal attempt (blocked internally)")
+Rel(auditLog, alertingService, "Alert: directory traversal attempt")
+Rel(secureFileStorage, apiServer, "Blocked: symlink detected")
+
+@enduml

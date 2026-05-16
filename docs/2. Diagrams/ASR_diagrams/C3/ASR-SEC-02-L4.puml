@@ -1,0 +1,45 @@
+@startuml ASR-SEC-02-L4-Component
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title ASR-SEC-02: JWT Authentication with Refresh Tokens (C4 Level 4 - Component)
+
+Person(user, "User", "Accesses system with credentials")
+
+System_Boundary(lms, "LMS System") {
+    Container_Boundary(authContainer, "Auth Service") {
+        Component(authController, "Auth Controller", "Express", "Routes /login, /register, /refresh endpoints")
+        Component(authService, "Auth Service", "Business Logic", "Handles user registration, login, token generation")
+        Component(jwtGenerator, "JWT Generator", "Cryptography", "Creates access & refresh tokens with JWS signature")
+        Component(passwordHash, "Password Hasher", "Security", "bcrypt-based password hashing & comparison")
+    }
+
+    Container_Boundary(authMiddleware, "Auth Middleware") {
+        Component(tokenValidator, "Token Validator", "Express Middleware", "Validates JWT signature and expiration")
+        Component(tokenExtractor, "Token Extractor", "Express Middleware", "Extracts token from Authorization header")
+    }
+
+    Container_Boundary(database, "PostgreSQL Database") {
+        Component(userTable, "User Table", "Database", "user_id, email, password_hash, created_at")
+    }
+
+    Container_Boundary(config, "Auth Configuration") {
+        Component(authConfig, "Auth Config", "Environment Config", "AUTH_SECRET, AUTH_SECRET_EXPIRES_IN, AUTH_REFRESH_SECRET")
+    }
+}
+
+Rel(user, authController, "POST /auth/login with email & password")
+Rel(authController, authService, "Authenticate user")
+Rel(authService, userTable, "Query user by email")
+Rel(authService, passwordHash, "Verify password")
+Rel(authService, jwtGenerator, "Generate tokens")
+Rel(jwtGenerator, authConfig, "Read JWT secrets")
+Rel(jwtGenerator, authController, "Return access_token & refresh_token")
+Rel(authController, user, "Return JWT tokens")
+
+Rel(user, tokenExtractor, "Send request with token in header")
+Rel(tokenExtractor, tokenValidator, "Extract & validate token")
+Rel(tokenValidator, authConfig, "Verify JWT signature")
+Rel(tokenValidator, authController, "Authenticate request")
+
+@enduml

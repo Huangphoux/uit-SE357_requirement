@@ -1,0 +1,36 @@
+@startuml ASR-SEC-09
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-SEC-09: SQL Injection Prevention\nSQL Injection Attack Prevention via Prisma ORM
+
+Person(attacker, "Attacker", "Malicious actor attempting SQL injection")
+Person(user, "Legitimate User", "Regular system user")
+
+System_Boundary(lms, "LMS System") {
+
+    Container(clientApp, "Client Application", "React + TypeScript", "Web browser UI for form input and requests")
+
+    Container(apiServer, "API Server", "Express.js + Node.js", "REST API that processes requests and coordinates business logic")
+
+    Container_Boundary(prismaORM, "Prisma ORM [Node.js Library]") {
+        Component(inputValidator, "Input Validator", "Service", "Validates input format and type")
+        Component(queryBuilder, "Query Builder", "Service", "Constructs database queries with parameter placeholders")
+        Component(parameterBinder, "Parameter Binder", "Service", "Binds user input as parameters (not SQL code)")
+        Component(queryExecutor, "Query Executor", "Service", "Sends parameterized query to database")
+        Component(resultMapper, "Result Mapper", "Service", "Maps database results back to JavaScript objects")
+    }
+
+    ContainerDb(database, "Database", "PostgreSQL / SQLite", "Stores course data, user information, and submissions")
+}
+
+Rel(inputValidator, queryBuilder, "Validated input")
+Rel(queryBuilder, parameterBinder, "Query with placeholders")
+Rel(parameterBinder, queryExecutor, "Parameterized query + parameters")
+Rel(queryExecutor, resultMapper, "Raw results")
+Rel(attacker, clientApp, "Attempts SQL injection via form input")
+Rel(user, clientApp, "Submits form data normally")
+Rel(clientApp, apiServer, "Sends API requests (with user input)")
+Rel(apiServer, prismaORM, "Calls query builders")
+Rel(prismaORM, database, "Executes parameterized queries")
+
+@enduml

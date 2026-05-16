@@ -1,0 +1,66 @@
+@startuml ASR-PERF-03-L4-Component
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+title ASR-PERF-03: Response Caching & Compression (C4 Level 4 - Component)
+
+Person(client, "Client", "Requests resource")
+
+System_Boundary(lms, "LMS System") {
+    Container_Boundary(middleware, "Express Middleware") {
+        Component(compressionMiddleware, "Compression Middleware", "Express", "Automatically gzips responses")
+        Component(redisCache, "Redis Cache Middleware", "Custom", "Intercepts responses for caching")
+    }
+
+    Container_Boundary(compression, "Compression Engine") {
+        Component(gzipEncoder, "Gzip Encoder", "Compression", "Encodes response body with gzip")
+        Component(contentType, "Content Type Checker", "Logic", "Determines if response should be compressed")
+    }
+
+    Container_Boundary(cacheLayer, "Cache Layer") {
+        Component(cacheKey, "Cache Key Generator", "Logic", "Generates cache key: method:path:params")
+        Component(cacheStore, "Cache Store Manager", "Business Logic", "Manages cache get/set/invalidate")
+        Component(ttlManager, "TTL Manager", "Logic", "Sets expiration per resource type")
+    }
+
+    Container_Boundary(redis, "Redis Store") {
+        Component(cache, "Cache (Redis)", "In-Memory Store", "Stores serialized responses, key expires after TTL")
+    }
+
+    Container_Boundary(routes, "Route Handlers") {
+        Component(courseHandler, "Courses Route", "Express", "GET /api/courses")
+        Component(materialHandler, "Materials Route", "Express", "GET /api/materials")
+        Component(dataService, "Data Service", "Business Logic", "Fetches from database")
+    }
+
+    Container_Boundary(database, "PostgreSQL") {
+        Component(db, "Database", "Persistent Store", "Source of truth")
+    }
+}
+
+Rel(client, compressionMiddleware, "GET /api/courses")
+Rel(compressionMiddleware, redisCache, "Check cache")
+Rel(redisCache, cacheKey, "Generate key")
+Rel(cacheKey, cacheStore, "Look up in cache")
+Rel(cacheStore, cache, "HGET /api/courses")
+
+Rel(cache, redisCache, "Cache hit")
+Rel(redisCache, compressionMiddleware, "Return cached response")
+Rel(compressionMiddleware, gzipEncoder, "Compress response body")
+Rel(compressionMiddleware, client, "200 OK (gzipped, cached)")
+
+Rel(cache, redisCache, "Cache miss")
+Rel(redisCache, courseHandler, "Cache miss, proceed to route")
+Rel(courseHandler, dataService, "Fetch data")
+Rel(dataService, db, "SELECT * FROM courses")
+Rel(db, dataService, "Return rows")
+Rel(dataService, courseHandler, "Return formatted response")
+Rel(courseHandler, redisCache, "Cache response")
+Rel(redisCache, ttlManager, "Set TTL (e.g., 5 minutes)")
+Rel(ttlManager, cacheStore, "Store with expiration")
+Rel(cacheStore, cache, "SET /api/courses EX 300")
+Rel(redisCache, compressionMiddleware, "Return response")
+Rel(compressionMiddleware, gzipEncoder, "Compress for first response")
+Rel(compressionMiddleware, client, "200 OK (gzipped, first response)")
+
+@enduml

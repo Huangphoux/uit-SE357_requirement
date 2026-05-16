@@ -60,6 +60,8 @@ services:
         condition: service_healthy
     expose:
       - "8000"
+    ports:
+      - "8000:8000"
     volumes:
       - server-logs:/app/logs
     healthcheck:
@@ -106,6 +108,8 @@ services:
         condition: service_healthy
     expose:
       - "8000"
+    ports:
+      - "8001:8000"
     volumes:
       - server-logs:/app/logs
     healthcheck:

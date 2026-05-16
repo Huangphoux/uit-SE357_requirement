@@ -1,0 +1,107 @@
+@startuml ASR-ENROLL-01
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-ENROLL-01: Concurrent Enrollment Processing\nHandling 500 Concurrent Enrollment Requests in < 2 Seconds
+
+Person(students, "500 Students", "Enroll in courses simultaneously")
+
+System_Boundary(lms, "LMS System") {
+
+    Container(clientApp, "Client Application", "React + TypeScript", "Course enrollment form")
+
+    Container_Boundary(loadBalancer, "Load Balancer [Caddy / HAProxy]") {
+        Component(reqDistributor, "Request Distributor", "Service", "Balances across 5 API servers")
+        Component(connThrottler, "Connection Throttler", "Service", "Throttles connections per IP (max 10 per user)")
+    }
+
+    Container_Boundary(apiServers, "API Server Cluster [Node.js + Express]") {
+        Component(handler1, "Enrollment Handler 1", "Service", "Processes enrollment requests")
+        Component(handler2, "Enrollment Handler 2", "Service", "Processes enrollment requests")
+        Component(handler3, "Enrollment Handler 3", "Service", "Processes enrollment requests")
+        Component(handler4, "Enrollment Handler 4", "Service", "Processes enrollment requests")
+        Component(handler5, "Enrollment Handler 5", "Service", "Processes enrollment requests")
+    }
+
+    Container_Boundary(enrollLogic, "Enrollment Processing Logic [Core Business Logic]") {
+        Component(courseValidator, "Course Validator", "Service", "Verifies course exists and is open for enrollment")
+        Component(prereqChecker, "Prerequisite Checker", "Service", "Checks student completed prerequisites")
+        Component(quotaChecker, "Quota Checker", "Service", "Verifies course has available seats")
+        Component(conflictDetector, "Conflict Detector", "Service", "Detects schedule conflicts with existing enrollments")
+        Component(enrollmentCreator, "Enrollment Creator", "Service", "Creates enrollment record in database")
+    }
+
+    Container_Boundary(cache, "Cache Layer [Redis]") {
+        Component(courseInfoCache, "Course Info Cache", "Service", "course_id, name, quota, capacity (TTL: 5 min)")
+        Component(enrollmentCache, "Enrollment Cache", "Service", "Caches student's current enrollments by user_id (TTL: 2 min)")
+        Component(quotaCache, "Quota Cache", "Service", "Caches remaining seats per course (TTL: 1 sec)")
+    }
+
+    Container_Boundary(database, "Database [PostgreSQL with Transactions]") {
+        Component(enrollTable, "Enrollments Table", "DB", "student_id, course_id, enrollment_date (unique constraint)")
+        Component(coursesTable, "Courses Table", "DB", "course_id, name, capacity, current_enrollment")
+        Component(txManager, "Transaction Manager", "DB", "Uses transactions to prevent double-enrollment")
+        Component(lockManager, "Lock Manager", "DB", "Optimistic locking to prevent quota race conditions")
+    }
+
+    Container_Boundary(deadlockPrev, "Deadlock Prevention [Concurrency Control]") {
+        Component(lockOrdering, "Lock Ordering", "Service", "Orders locks by course_id to prevent circular waits")
+        Component(deadlockRetry, "Deadlock Retry Handler", "Service", "Retries enrollment if deadlock detected (3 retries with exponential backoff)")
+        Component(lockTimeout, "Lock Timeout", "Service", "Sets short timeout (500ms) to fail fast on conflicts")
+    }
+
+    Container_Boundary(queueFallback, "Queue Fallback [RabbitMQ / Redis]") {
+        Component(overloadDetector, "Overload Detector", "Service", "Monitors database response time (target: < 100ms)")
+        Component(enqueueSvc, "Enqueueing Service", "Service", "Queues enrollment for async processing")
+        Component(bgWorker, "Background Worker", "Service", "Processes queued enrollments asynchronously")
+    }
+
+    Container_Boundary(responseHandler, "Response Handler [HTTP Responses]") {
+        Component(successResp, "Success Response", "Service", "Returns 200 with enrollment confirmation")
+        Component(errorResp, "Error Response", "Service", "Returns 409 (conflict), 400 (validation error), 500 (retry)")
+    }
+
+    Container_Boundary(monitoringService, "Monitoring Service [Prometheus + Grafana]") {
+        Component(concurrencyMon, "Concurrency Monitor", "Service", "Tracks concurrent enrollment requests (target: 500)")
+        Component(latencyMon, "Latency Monitor", "Service", "Tracks response time p50/p95/p99 (target: < 2 sec)")
+        Component(successRateMon, "Success Rate Monitor", "Service", "Tracks successful vs failed enrollments")
+        Component(dbMon, "Database Monitor", "Service", "Tracks DB query latency, locks, deadlocks")
+    }
+
+    Container_Boundary(auditLog, "Audit Log [Database]") {
+        Component(enrollLog, "Enrollment Log", "DB", "student_id, course_id, status (success/failed), reason, timestamp")
+        Component(perfLog, "Performance Log", "DB", "Tracks response time for each enrollment request")
+    }
+}
+
+Rel(reqDistributor, connThrottler, "Throttle if needed")
+Rel(handler1, handler2, "Parallel processing")
+Rel(courseValidator, prereqChecker, "Validate course")
+Rel(prereqChecker, quotaChecker, "Check prerequisites")
+Rel(quotaChecker, conflictDetector, "Check quota")
+Rel(conflictDetector, enrollmentCreator, "Create if valid")
+Rel(courseInfoCache, enrollmentCache, "Share cache")
+Rel(enrollmentCache, quotaCache, "Update quotas")
+Rel(txManager, enrollTable, "Atomic insert")
+Rel(lockManager, coursesTable, "Prevent oversell")
+Rel(lockOrdering, deadlockRetry, "Handle deadlocks")
+Rel(deadlockRetry, lockTimeout, "Timeout management")
+Rel(overloadDetector, enqueueSvc, "Queue if overloaded")
+Rel(enqueueSvc, bgWorker, "Process async")
+Rel(concurrencyMon, latencyMon, "Monitor latency")
+Rel(latencyMon, successRateMon, "Track success")
+Rel(successRateMon, dbMon, "Monitor DB")
+Rel(perfLog, enrollLog, "Log enrollments")
+Rel(students, clientApp, "Request to enroll in course")
+Rel(clientApp, loadBalancer, "POST /enroll {student_id, course_id}")
+Rel(loadBalancer, apiServers, "Distribute across 5 servers (100 each)")
+Rel(apiServers, cache, "Check course info + student enrollments")
+Rel(apiServers, enrollLogic, "Validate and process")
+Rel(enrollLogic, deadlockPrev, "Apply optimistic locking")
+Rel(deadlockPrev, database, "Insert enrollment (transaction)")
+Rel(database, cache, "Update quota cache (if room available)")
+Rel(apiServers, responseHandler, "Prepare response")
+Rel(responseHandler, clientApp, "Return result (< 2 sec)")
+Rel(apiServers, auditLog, "Log enrollment attempt")
+Rel(apiServers, monitoringService, "Track performance")
+
+@enduml

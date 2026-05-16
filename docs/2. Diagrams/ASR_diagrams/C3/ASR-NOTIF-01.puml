@@ -1,0 +1,87 @@
+@startuml ASR-NOTIF-01
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-NOTIF-01: Bulk Notification Delivery\nDelivering Notifications to 500 Recipients in < 1 Minute
+
+Person(teacher, "Teacher", "Sends notification to entire course")
+Person(students, "Students", "Receive notifications")
+Person(admin, "Admin", "Monitors notification delivery")
+
+System_Boundary(lms, "LMS System") {
+
+    Container(clientApp, "Client Application", "React + TypeScript", "Notification composer UI")
+
+    Container_Boundary(apiServer, "API Server [Express.js + Node.js]") {
+        Component(notifReceiver, "Notification Receiver", "Service", "Receives notification content, course_id, recipients")
+        Component(recipientResolver, "Recipient Resolver", "Service", "Fetches all enrolled students for course (500+)")
+        Component(messageBuilder, "Message Builder", "Service", "Builds individual messages with personalization")
+    }
+
+    Container_Boundary(messageQueue, "Message Queue [RabbitMQ / Redis Queue]") {
+        Component(queueManager, "Queue Manager", "Service", "Manages message queue with priority")
+        Component(batchProcessor, "Batch Processor", "Service", "Groups messages into batches of 50-100 for efficient delivery")
+    }
+
+    Container_Boundary(workerPool, "Worker Pool [Node.js Worker Processes]") {
+        Component(worker1, "Worker 1", "Service", "Processes batch of notifications")
+        Component(worker2, "Worker 2", "Service", "Processes batch of notifications")
+        Component(worker3, "Worker 3", "Service", "Processes batch of notifications")
+        Component(worker4, "Worker 4", "Service", "Processes batch of notifications")
+        Component(worker5, "Worker 5", "Service", "Processes batch of notifications")
+    }
+
+    Container_Boundary(notifDelivery, "Notification Delivery Service [Multi-Channel]") {
+        Component(emailService, "Email Service", "Service", "Sends email notifications (bulk SMTP)")
+        Component(smsService, "SMS Service", "Service", "Sends SMS notifications (Twilio/AWS SNS)")
+        Component(pushService, "Push Service", "Service", "Sends push notifications (Firebase Cloud Messaging)")
+        Component(throttleCtrl, "Throttle Controller", "Service", "Throttles delivery to avoid rate limits (100-200/sec)")
+    }
+
+    ContainerDb_Boundary(database, "Database [PostgreSQL]") {
+        Component(notifRecord, "Notification Record", "DB", "Stores: notification_id, course_id, content, created_at")
+        Component(deliveryStatus, "Delivery Status", "DB", "Stores per-recipient status (pending, sent, failed)")
+    }
+
+    Container_Boundary(cache, "Cache Layer [Redis]") {
+        Component(recipientCache, "Recipient Cache", "Service", "Cached student lists by course_id (TTL: 5 min)")
+        Component(deliveryStatsCache, "Delivery Stats Cache", "Service", "Tracks real-time delivery progress (500/500 sent)")
+    }
+
+    Container_Boundary(monitoringService, "Monitoring Service [Prometheus + Grafana]") {
+        Component(deliveryMetrics, "Delivery Metrics", "Service", "Tracks: messages queued, delivered, failed, latency p50/p95/p99")
+        Component(perfMonitor, "Performance Monitor", "Service", "Ensures delivery completes in < 1 minute")
+        Component(alerting, "Alerting", "Service", "Alerts if delivery exceeds 60 seconds")
+    }
+
+    ContainerDb_Boundary(auditLog, "Audit Log [Database]") {
+        Component(notifLog, "Notification Log", "DB", "teacher_id, course_id, recipient_count, timestamp")
+        Component(deliveryLog, "Delivery Log", "DB", "Tracks delivery metrics: success_count, failure_count, avg_latency")
+    }
+}
+
+Rel(notifReceiver, recipientResolver, "Get recipients")
+Rel(recipientResolver, messageBuilder, "Build messages")
+Rel(queueManager, batchProcessor, "Process batches")
+Rel(worker1, worker2, "Parallel processing")
+Rel(emailService, throttleCtrl, "Rate limit")
+Rel(smsService, throttleCtrl, "Rate limit")
+Rel(pushService, throttleCtrl, "Rate limit")
+Rel(deliveryStatus, notifRecord, "Link to notification")
+Rel(recipientCache, deliveryStatsCache, "Track progress")
+Rel(deliveryMetrics, perfMonitor, "Check performance")
+Rel(perfMonitor, alerting, "Alert on SLA breach")
+Rel(deliveryLog, notifLog, "Log notifications")
+Rel(teacher, clientApp, "Compose notification for course")
+Rel(clientApp, apiServer, "POST /notifications/bulk {content, course_id}")
+Rel(apiServer, messageQueue, "Queue 500 notification messages")
+Rel(messageQueue, workerPool, "Process in parallel (5 workers)")
+Rel(workerPool, notifDelivery, "Deliver notifications")
+Rel(notifDelivery, students, "Email/SMS/Push to 500 students")
+Rel(notifDelivery, database, "Update delivery status")
+Rel(database, cache, "Cache delivery progress")
+Rel(messageQueue, monitoringService, "Track queue depth and delivery")
+Rel(monitoringService, apiServer, "< 1 minute delivery confirmation")
+Rel(apiServer, auditLog, "Log bulk notification sent")
+Rel(admin, monitoringService, "Monitor delivery dashboard")
+
+@enduml

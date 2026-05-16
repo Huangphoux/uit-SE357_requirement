@@ -57,6 +57,10 @@ export default class App {
     this.app.use(morgan("dev"));
     this.app.use(helmet());
     this.app.use(compression());
+
+    // Keep health checks outside API rate limiting so container healthchecks stay stable.
+    this.app.use("/api", healthRoute); // /api/health
+
     this.app.use(rateLimiter({
       endpoint: "/api",
       rate_limit: {
@@ -78,8 +82,6 @@ export default class App {
     this.app.use("/api/submissions", submissionRoute); // /api/submissions/*
     this.app.use("/api/feedback", feedbackRoute); // /api/feedback/*
     this.app.use("/api/audit", auditRoute); // /api/audit/*
-
-    this.app.use("/api", healthRoute); // /api/healthcheck
 
     this.app.get("/error", (req, res) => {
       throw new Error("Test error"); // Test route to trigger error

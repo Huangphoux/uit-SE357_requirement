@@ -1,0 +1,92 @@
+@startuml ASR-SEC-11
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-SEC-11: Audit Log Retention and Retrieval\n1-Year Minimum Audit Log Retention with Tiered Storage
+
+Person(auditor, "Auditor", "Queries audit logs from past periods")
+Person(admin, "Admin", "Manages log retention and archival")
+
+System_Boundary(lms, "LMS System") {
+
+    Container(auditLogCollection, "Audit Log Collection", "Event Streaming", "Collects audit events continuously")
+
+    ContainerDb_Boundary(hotstorageDB, "Hotstore Database [PostgreSQL]") {
+        Component(recentLogsTable, "Recent Logs Table", "DB", "Stores: event_id, user_id, action, timestamp, ip (last 90 days)")
+        Component(hotstorageIndex, "Hotstore Index", "DB", "Indexes on timestamp, user_id, action for quick queries")
+    }
+
+    Container_Boundary(coldstorageLT, "Coldstore Long-Term Archive [S3 Glacier]") {
+        Component(archiveStorage, "Archive Storage", "Service", "S3 Glacier for logs older than 3 months")
+        Component(compressionSvc, "Compression Service", "Service", "Compresses logs to reduce storage cost")
+        Component(archiveIndex, "Archive Index", "Service", "Metadata index: date range, log count, storage location")
+    }
+
+    Container_Boundary(logRotationScheduler, "Log Rotation Scheduler [Cron + Workflow]") {
+        Component(rotationPolicy, "Rotation Policy", "Service", "Rules: move logs > 3 months to coldstore, delete > 1 year")
+        Component(rotationExecutor, "Rotation Executor", "Service", "Executes scheduled transitions between storage tiers")
+        Component(retentionEnforcer, "Retention Enforcer", "Service", "Enforces minimum 1-year retention, deletes beyond policy")
+    }
+
+    Container_Boundary(auditLogRetrieval, "Audit Log Retrieval Service [Query Interface]") {
+        Component(queryRouter, "Query Router", "Service", "Routes query to hotstore (fast) or coldstore (slow)")
+        Component(hotstoreQuery, "Hotstore Query", "Service", "SQL queries for recent logs in PostgreSQL")
+        Component(coldstoreQuery, "Coldstore Query", "Service", "Initiates retrieval from Glacier (may take 1-5 hours)")
+        Component(resultCombiner, "Result Combiner", "Service", "Combines results from multiple storage tiers")
+    }
+
+    Container_Boundary(auditSearchUI, "Audit Log Search UI [Admin Portal]") {
+        Component(searchForm, "Search Form", "UI", "Filter by user, date range, action, outcome")
+        Component(resultDisplay, "Result Display", "UI", "Shows matching logs with pagination")
+        Component(exportFunction, "Export Function", "UI", "Exports logs to CSV/JSON for compliance reports")
+    }
+
+    Container_Boundary(complianceReporting, "Compliance Reporting [Report Generator]") {
+        Component(reportTemplate, "Report Template", "Service", "Pre-built templates for compliance frameworks")
+        Component(dataAggregator, "Data Aggregator", "Service", "Aggregates audit data into reportable metrics")
+        Component(signatureManager, "Signature Manager", "Service", "Digitally signs reports for audit trail")
+    }
+
+    Container_Boundary(retentionPolicyMgr, "Retention Policy Manager [Admin Tool]") {
+        Component(policyEditor, "Policy Editor", "UI", "Edit retention periods (minimum enforced: 1 year)")
+        Component(policyValidator, "Policy Validator", "Service", "Validates policies meet compliance requirements")
+        Component(complianceChecker, "Compliance Checker", "Service", "Ensures policy aligns with regulations")
+    }
+
+    Container_Boundary(integrityVerification, "Integrity Verification [Audit Trail]") {
+        Component(hashValidator, "Hash Validator", "Service", "Computes and verifies SHA-256 hashes of logs")
+        Component(tamperDetector, "Tamper Detector", "Service", "Detects if logs have been modified post-creation")
+    }
+}
+
+Rel(hotstorageIndex, recentLogsTable, "Index recent logs")
+Rel(compressionSvc, archiveStorage, "Store compressed")
+Rel(archiveIndex, archiveStorage, "Track location")
+Rel(rotationPolicy, rotationExecutor, "Execute rotation")
+Rel(rotationExecutor, retentionEnforcer, "Enforce retention")
+Rel(queryRouter, hotstoreQuery, "Query recent")
+Rel(queryRouter, coldstoreQuery, "Retrieve archived")
+Rel(hotstoreQuery, resultCombiner, "Combine results")
+Rel(coldstoreQuery, resultCombiner, "Combine results")
+Rel(searchForm, resultDisplay, "Display results")
+Rel(resultDisplay, exportFunction, "Export data")
+Rel(reportTemplate, dataAggregator, "Aggregate data")
+Rel(dataAggregator, signatureManager, "Sign report")
+Rel(policyEditor, policyValidator, "Validate policy")
+Rel(policyValidator, complianceChecker, "Check compliance")
+Rel(hashValidator, tamperDetector, "Detect tampering")
+Rel(auditor, auditSearchUI, "Search audit logs from 6 months ago")
+Rel(auditSearchUI, auditLogRetrieval, "Query logs")
+Rel(auditLogRetrieval, hotstorageDB, "Query if recent")
+Rel(auditLogRetrieval, coldstorageLT, "Retrieve if archived")
+Rel(auditSearchUI, complianceReporting, "Generate compliance report")
+Rel(complianceReporting, auditLogRetrieval, "Aggregate logs")
+Rel(admin, logRotationScheduler, "Configure retention policy")
+Rel(logRotationScheduler, hotstorageDB, "Move old logs")
+Rel(logRotationScheduler, coldstorageLT, "Archive to coldstore")
+Rel(logRotationScheduler, integrityVerification, "Verify before archival")
+Rel(admin, retentionPolicyMgr, "Define 1-year retention")
+Rel(retentionPolicyMgr, logRotationScheduler, "Enforce policy")
+Rel(auditLogCollection, hotstorageDB, "Store recent logs")
+Rel(auditLogCollection, logRotationScheduler, "Route for archival")
+
+@enduml

@@ -1,0 +1,70 @@
+@startuml ASR-AVAIL-02
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title ASR-AVAIL-02: Scheduled Maintenance with Read-Only Mode\nQuarterly Maintenance with Minimal Downtime
+
+Person(admin, "System Admin", "Performs quarterly system maintenance")
+Person(users, "Users", "Access system during maintenance window")
+
+System_Boundary(lms, "LMS System") {
+
+    Container_Boundary(maintenancePortal, "Maintenance Portal [Admin Dashboard]") {
+        Component(maintScheduler, "Maintenance Scheduler", "Service", "Schedules maintenance windows (2AM-4AM EST, last weekend of quarter)")
+        Component(modeToggle, "Mode Toggle Controller", "Service", "Switches system between read-write and read-only modes")
+        Component(maintStatus, "Maintenance Status", "Service", "Shows current system status (normal/read-only/maintenance)")
+    }
+
+    Container_Boundary(loadBalancer, "Load Balancer [Caddy]") {
+        Component(modeEnforcer, "Mode Enforcer", "Service", "Blocks write operations during read-only mode")
+        Component(requestFilter, "Request Filter", "Service", "Allows only GET/HEAD during read-only")
+    }
+
+    Container_Boundary(apiServers, "API Servers [Express.js + Node.js]") {
+        Component(readOnlyValidator, "Read-Only Validator", "Service", "Validates requests respect read-only restrictions")
+        Component(cacheWarmer, "Cache Warmer", "Service", "Pre-loads cache before maintenance begins")
+    }
+
+    Container_Boundary(dbMaintenance, "Database (Maintenance Mode) [PostgreSQL]") {
+        Component(backupMgr, "Backup Manager", "Service", "Creates full backup before maintenance")
+        Component(vacuumOptimizer, "Vacuum Optimizer", "Service", "Runs VACUUM ANALYZE on tables")
+        Component(migrationRunner, "Migration Runner", "Service", "Executes pending schema migrations")
+        Component(indexRebuild, "Index Rebuild", "Service", "Rebuilds fragmented indexes")
+    }
+
+    Container_Boundary(dbPrimary, "Database (Primary - Read-Only) [PostgreSQL]") {
+        Component(replPause, "Replication Pause", "DB", "Pauses replication during maintenance")
+        Component(consistencyCheck, "Consistency Check", "DB", "Verifies data consistency")
+    }
+
+    Container_Boundary(dbSecondary, "Database (Secondary - Hot Standby)", "PostgreSQL", "Continues accepting replicated data in read-only state")
+
+    Container_Boundary(notifService, "Notification Service [Email + SMS]") {
+        Component(maintNotifier, "Maintenance Notifier", "Service", "Sends advance notice to users (24-48 hours)")
+        Component(statusUpdater, "Status Updater", "Service", "Sends real-time status updates during maintenance")
+        Component(completionNotifier, "Completion Notifier", "Service", "Notifies when maintenance completes and system is back online")
+    }
+
+    Container(backupStorage, "Backup Storage", "S3 / Cloud Storage", "Stores database backups")
+}
+
+Rel(maintScheduler, modeToggle, "Trigger mode switch")
+Rel(modeToggle, maintStatus, "Update status")
+Rel(modeEnforcer, requestFilter, "Apply restrictions")
+Rel(readOnlyValidator, cacheWarmer, "Prepare for maintenance")
+Rel(backupMgr, migrationRunner, "After backup, run migrations")
+Rel(migrationRunner, vacuumOptimizer, "After migrations, optimize")
+Rel(vacuumOptimizer, indexRebuild, "After vacuum, rebuild indexes")
+Rel(replPause, consistencyCheck, "Check data integrity")
+Rel(maintNotifier, statusUpdater, "Start notifications")
+Rel(statusUpdater, completionNotifier, "Maintenance complete")
+Rel(admin, maintenancePortal, "Initiate maintenance")
+Rel(maintenancePortal, loadBalancer, "Switch to read-only")
+Rel(maintenancePortal, dbMaintenance, "Execute maintenance tasks")
+Rel(loadBalancer, apiServers, "Route with read-only enforcement")
+Rel(dbMaintenance, dbPrimary, "Maintenance operations")
+Rel(dbPrimary, dbSecondary, "Replicate to standby")
+Rel(dbPrimary, backupStorage, "Backup database")
+Rel(notifService, users, "Notify of maintenance")
+Rel(maintenancePortal, notifService, "Send notifications")
+
+@enduml

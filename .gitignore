@@ -143,3 +143,4 @@ settings.txt
 
 *.pdf
 .env
+k8s/base/secret.yaml
