@@ -34,6 +34,9 @@ export default class AuthController {
         "User successfully registered."
       );
     } catch (error: any) {
+      const errorMessage = error?.message || "Unknown error";
+      const errorStack = error?.stack || "";
+
       await writeAuditLog({
         category: "AUTH",
         action: "REGISTER_FAILED",
@@ -42,7 +45,7 @@ export default class AuthController {
         method: req.method,
         path: req.originalUrl,
         statusCode: 500,
-        message: error?.message,
+        message: errorMessage,
         metadata: { email },
       });
 
@@ -51,8 +54,17 @@ export default class AuthController {
         return Send.error(res, null, "Email already exists.");
       }
 
-      logger.error({ error }, "Registration failed");
-      return Send.error(res, null, "Registration failed.");
+      logger.error(
+        {
+          error: {
+            message: errorMessage,
+            stack: errorStack,
+            code: error?.code,
+          },
+        },
+        "Registration failed"
+      );
+      return Send.error(res, null, errorMessage || "Registration failed.");
     }
   }
 
@@ -60,17 +72,10 @@ export default class AuthController {
     const { email, password } = req.body as z.infer<typeof loginSchema>;
 
     // lấy IP chuẩn (support proxy)
-    const ip =
-      (req.headers["x-forwarded-for"] as string)?.split(",")[0] ||
-      req.socket.remoteAddress ||
-      "";
+    const ip = (req.headers["x-forwarded-for"] as string)?.split(",")[0] || req.socket.remoteAddress || "";
 
     try {
-      const { user, accessToken, refreshToken } = await AuthService.login(
-        email,
-        password,
-        ip
-      );
+      const { user, accessToken, refreshToken } = await AuthService.login(email, password, ip);
 
       await writeAuditLog({
         category: "AUTH",
@@ -104,6 +109,9 @@ export default class AuthController {
         role: user.role,
       });
     } catch (error: any) {
+      const errorMessage = error?.message || "Unknown error";
+      const errorStack = error?.stack || "";
+
       await writeAuditLog({
         category: "AUTH",
         action: "LOGIN_FAILED",
@@ -112,17 +120,22 @@ export default class AuthController {
         method: req.method,
         path: req.originalUrl,
         statusCode: 500,
-        message: error?.message,
+        message: errorMessage,
         metadata: { email },
       });
 
-      logger.error({ error }, "Login Failed");
-
-      return Send.error(
-        res,
-        null,
-        error.message || "Login failed."
+      logger.error(
+        {
+          error: {
+            message: errorMessage,
+            stack: errorStack,
+            code: error?.code,
+          },
+        },
+        "Login Failed"
       );
+
+      return Send.error(res, null, errorMessage || "Login failed.");
     }
   }
 
