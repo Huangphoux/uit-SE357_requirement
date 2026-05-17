@@ -1,0 +1,78 @@
+@startuml C4_L4_Availability
+title C4 Level 4 — High Availability & Health-Check Chain\n(ASR-AVAIL-01, ASR-PERF-01)
+
+skinparam backgroundColor #FAFAFA
+skinparam sequence {
+    ArrowColor #003366
+    ParticipantBackgroundColor #DDEEFF
+    ParticipantBorderColor #336699
+    LifeLineBackgroundColor #EEF4FF
+    LifeLineBorderColor #336699
+    NoteBackgroundColor #FFFDE7
+    NoteBorderColor #F9A825
+    FontName Arial
+}
+
+participant "Internet\nClient" as C #A8D8EA
+participant "Caddy :443\n(lb_policy first\nhealth_uri /api/health\nhealth_interval 10s)" as Caddy #95CAA0
+participant "backend-primary\n:8000\n(Node.js 20)" as BP #DDEEFF
+participant "backend-secondary\n:8000\n(Node.js 20)" as BS #CFE2F3
+participant "PostgreSQL 16\n(postgres-data\nvolume)" as PG #C5CAE9
+participant "Redis 7" as RD #FFB74D
+
+== Startup Health-Check Chain ==
+PG -> PG : pg_isready -U $POSTGRES_USER\nevery 10s [healthcheck]
+RD -> RD : redis-cli ping\nevery 10s [healthcheck]
+note over BP, BS
+  depends_on: db (service_healthy) + redis (service_healthy)
+  Both backends start only after DB + Redis pass health checks
+end note
+BP -> BP : npx prisma db push\n→ node dist/index.js
+BP -> BP : GET /api/health → HTTP 200\nevery 10s [healthcheck, 3 retries, 20s start]
+BS -> BS : npx prisma db push\n→ node dist/index.js
+BS -> BS : GET /api/health → HTTP 200\nevery 10s [healthcheck]
+
+== Steady-State: Primary Serves Traffic ==
+C -> Caddy : HTTPS request /api/*
+Caddy -> Caddy : encode gzip/zstd\n(ASR-PERF-01: reduce payload)
+Caddy -> BP : HTTP /api/*\n[active — lb_policy first]
+BP -> PG : Prisma query\n(parameterized)
+BP -> RD : rate-limit INCR\n/ cache read
+PG --> BP : result
+RD --> BP : counter / cache hit
+BP --> Caddy : HTTP 200
+Caddy --> C : HTTPS 200\n(compressed)
+
+== Failover: Primary Goes Down ==
+Caddy -> BP : GET /api/health
+BP --> Caddy : [no response / non-200]
+note over Caddy
+  health_fails 1 → mark backend-primary unhealthy
+  health_passes 1 → required to restore
+end note
+Caddy -> BS : HTTP /api/*\n[promoted to active]
+BS -> PG : Prisma query\n(same DB, shared state)
+BS -> RD : rate-limit / cache\n(same Redis, cross-instance accurate)
+BS --> Caddy : HTTP 200
+Caddy --> C : HTTPS 200\n(no visible interruption)
+
+== Recovery: Primary Restored ==
+BP -> BP : Docker restart: unless-stopped\nauto-restarts container
+BP -> BP : GET /api/health → HTTP 200
+Caddy -> BP : health_passes 1 → restored
+note over Caddy, BP
+  Caddy returns to lb_policy first (primary)
+  Zero downtime achieved via passive failover
+end note
+
+note over BP, BS
+  <b>ASR-AVAIL-01</b>: 99.9% uptime
+  Both instances are STATELESS (JWT auth, shared PG+Redis)
+  → Any instance can handle any request
+  → restart: unless-stopped guards against crash loops
+
+  <b>ASR-PERF-01</b>: < 2s under 500 concurrent users
+  Two instances share load; Caddy compresses responses;
+  Redis cache avoids expensive DB aggregations
+end note
+@enduml

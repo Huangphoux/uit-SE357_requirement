@@ -1,0 +1,120 @@
+@startuml C4_L4_Audit_Logging
+title C4 Level 4 — Audit Logging System\n(ASR-SEC-10, ASR-SEC-11)
+
+skinparam backgroundColor #FAFAFA
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor #DDEEFF
+    BorderColor #336699
+    ArrowColor #003366
+    FontName Arial
+}
+skinparam note {
+    BackgroundColor #FFFDE7
+    BorderColor #F9A825
+}
+
+class "AuthController" as AUC {
+    register() => AUTH/REGISTER_SUCCESS
+    login()     => AUTH/LOGIN_SUCCESS | FAILED
+    logout()    => AUTH/LOGOUT
+}
+
+class "MaterialsController" as MC {
+    getMaterials() => FILE_ACCESS/MATERIAL_READ
+    create()       => FILE_ACCESS/MATERIAL_UPLOAD
+}
+
+class "AuthMiddleware.requireAdmin()" as AMD {
+    check() => ADMIN/ACCESS_GRANTED | DENIED
+}
+
+class "writeAuditLog(payload)\n<<util/auditLogger>>" as WAL {
+    payload: Omit<AuditLogEntry, "timestamp">
+    ..
+    write(payload)
+    --
+    1. ensureAuditDir()
+    2. cleanupOldFiles() [once/day]
+    3. path = AUDIT_LOG_DIR / YYYY-MM-DD.log
+    4. fs.appendFile(path, JSON.stringify(entry) + newline)
+}
+
+class "AuditLogEntry" as ENTRY {
+    timestamp: ISO-8601
+    category: AUTH | ADMIN | FILE_ACCESS | SYSTEM
+    action: string
+    success: boolean
+    userId?: string
+    ip?: string
+    method?: string
+    path?: string
+    statusCode?: number
+    resourceType?: string
+    resourceId?: string
+    metadata?: Record<string, unknown>
+}
+
+class "cleanupOldFiles()\n<<scheduled: once/day>>" as CLEAN {
+    run()
+    --
+    files = fs.readdir(AUDIT_LOG_DIR)
+    cutoff = now - AUDIT_RETENTION_DAYS days
+    files where date < cutoff => fs.unlink()
+    [ASR-SEC-11: default 365 days]
+}
+
+class "queryAuditLogs(query)\n<<util/auditLogger>>" as QUERY {
+    query(from, to, category, action, userId, limit)
+    --
+    eachDay(from, to).map(getFilePath)
+    fs.readFile each day file
+    JSON.parse each JSONL line
+    filter by query params
+    sort desc by timestamp
+    slice(0, min(limit, 5000))
+}
+
+class "AuditController\nGET /api/audit/logs\n<<admin-only>>" as AC {
+    getLogs(req, res)
+    --
+    [requireAdmin guard]
+    queryAuditLogs(req.query)
+    return {logs, total, from, to, retentionDays}
+}
+
+class "server-logs Docker Volume\n/app/logs/audit/YYYY-MM-DD.log\n<<append-only JSONL>>" as LOGVOL {
+    append: writeAuditLog()
+    delete: cleanupOldFiles()
+    read:   queryAuditLogs()
+}
+
+AUC --> WAL : writeAuditLog(payload)
+MC --> WAL : writeAuditLog(payload)
+AMD --> WAL : writeAuditLog(payload)
+WAL --> ENTRY : instantiates
+WAL --> CLEAN : triggers once/day
+WAL --> LOGVOL : fs.appendFile()
+CLEAN --> LOGVOL : fs.unlink() [expired files]
+AC --> QUERY : queryAuditLogs(query)
+QUERY --> LOGVOL : fs.readFile()
+
+note right of LOGVOL
+  <b>ASR-SEC-10</b>: 100% key actions logged
+  Categories: AUTH, ADMIN, FILE_ACCESS, SYSTEM
+  Format: canonical wide-events (JSONL)
+  One file per calendar day
+
+  <b>ASR-SEC-11</b>: Retention >= 1 year
+  AUDIT_RETENTION_DAYS=365 (env var)
+  cleanupOldFiles() runs once per day
+  Volume survives container restarts
+end note
+
+note right of AC
+  Admin-only: GET /api/audit/logs
+  Guards: authenticateUser -> requireAdmin
+  Query params: from, to, category,
+    action, userId, limit (max 5000)
+end note
+@enduml

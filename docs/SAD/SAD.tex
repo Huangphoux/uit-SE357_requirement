@@ -1,0 +1,1159 @@
+\documentclass[12pt,a4paper]{article}
+
+% ──────────────────────────── Packages ────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{parskip}
+\usepackage{lmodern}
+\usepackage{mdframed}
+\usepackage{float}
+\usepackage{caption}
+
+% ──────────────────────────── Page layout ─────────────────────────
+\geometry{a4paper, top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm, headheight=15pt}
+
+% ──────────────────────────── Colours ─────────────────────────────
+\definecolor{ecblue}{RGB}{0,70,127}
+\definecolor{ecgray}{RGB}{89,89,89}
+\definecolor{lightgray}{RGB}{240,240,240}
+\definecolor{codegreen}{RGB}{0,128,0}
+\definecolor{codegray}{RGB}{128,128,128}
+\definecolor{warnyellow}{RGB}{255,248,220}
+\definecolor{warnborder}{RGB}{249,168,37}
+\definecolor{infoblue}{RGB}{227,242,253}
+\definecolor{infoborder}{RGB}{30,136,229}
+
+% ──────────────────────────── Hyperref ────────────────────────────
+\hypersetup{
+  colorlinks=true, linkcolor=ecblue, urlcolor=ecblue, citecolor=ecblue,
+  pdftitle={Software Architecture Document -- LMS},
+  pdfauthor={SE357 Team}, pdfsubject={Software Architecture},
+}
+
+% ──────────────────────────── Headers / Footers ───────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\textcolor{ecgray}{Software Architecture Document}}
+\fancyhead[R]{\small\textcolor{ecgray}{UIT SE357 -- LMS v1.0}}
+\fancyfoot[C]{\small\textcolor{ecgray}{\thepage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ──────────────────────────── Section styling ─────────────────────
+\titleformat{\section}{\large\bfseries\color{ecblue}}{\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{ecblue}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{ecgray}}{\thesubsubsection}{1em}{}
+
+% ──────────────────────────── Listings ────────────────────────────
+\lstset{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{lightgray},
+  frame=single, rulecolor=\color{ecgray},
+  breaklines=true, breakatwhitespace=true,
+  tabsize=2, showstringspaces=false,
+  commentstyle=\color{codegreen},
+  keywordstyle=\color{ecblue},
+  numberstyle=\tiny\color{codegray},
+}
+
+% ──────────────────────────── Table helpers ───────────────────────
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% ──────────────────────────── Callout boxes ───────────────────────
+\newmdenv[
+  backgroundcolor=warnyellow, linecolor=warnborder, linewidth=1.5pt,
+  innerleftmargin=8pt, innerrightmargin=8pt,
+  innertopmargin=6pt, innerbottommargin=6pt, skipabove=6pt, skipbelow=6pt,
+]{warnbox}
+\newmdenv[
+  backgroundcolor=infoblue, linecolor=infoborder, linewidth=1.5pt,
+  innerleftmargin=8pt, innerrightmargin=8pt,
+  innertopmargin=6pt, innerbottommargin=6pt, skipabove=6pt, skipbelow=6pt,
+]{infobox}
+
+% ──────────────────────────── Graphics path ───────────────────────
+\graphicspath{{imgs/}}
+
+% ══════════════════════════════════════════════════════════════════
+\begin{document}
+
+% ────────────────────── Title Page ───────────────────────────────
+\begin{titlepage}
+  \centering
+  \vspace*{2cm}
+  {\Huge\bfseries\color{ecblue} Software Architecture Document}\\[0.5cm]
+  {\large\color{ecgray} (SAD)}\\[2cm]
+  {\LARGE\bfseries Learning Management System (LMS)}\\[0.5cm]
+  {\large UIT SE357 Course Project}\\[2cm]
+  \begin{tabular}{ll}
+    \textbf{Version:}  & 1.0 \\[4pt]
+    \textbf{Date:}     & 2026-05-04 \\[4pt]
+    \textbf{Authors:}  & SE357 Team \\[4pt]
+    \textbf{Status:}   & Released \\
+  \end{tabular}
+  \vfill
+  \rule{\linewidth}{0.4pt}\\[0.3cm]
+  {\small\color{ecgray}
+    University of Information Technology (UIT) \\
+    Vietnam National University Ho Chi Minh City
+  }
+\end{titlepage}
+
+% ────────────────────── Document History ────────────────────────
+\section*{Document History}
+\begin{tabularx}{\textwidth}{C{1.5cm} C{2.5cm} L{3cm} L{7cm}}
+  \toprule
+  \textbf{Ver.} & \textbf{Date} & \textbf{Author} & \textbf{Description} \\
+  \midrule
+  0.1 & 2026-04-20 & SE357 Team & Initial draft \\
+  0.9 & 2026-05-02 & SE357 Team & Review -- added ADRs and QA scenarios \\
+  1.0 & 2026-05-04 & SE357 Team & Final release with C1--C4 diagrams \\
+  \bottomrule
+\end{tabularx}
+
+\clearpage
+\tableofcontents
+\clearpage
+
+% ══════════════════════════════════════════════════════════════════
+\section{Introduction}
+% ══════════════════════════════════════════════════════════════════
+
+\subsection{Purpose}
+
+This Software Architecture Document (SAD) describes the software architecture of the
+\textbf{Learning Management System (LMS)} developed as part of the UIT SE357 course project.
+It establishes the high-level structure of the system, documents key architectural decisions,
+and demonstrates how the design addresses the Architecturally Significant Requirements (ASRs)
+with Status~=~Done.
+
+The document is grounded in the actual project codebase (\texttt{server/},
+\texttt{client/}, \texttt{docker-compose.yml}, \texttt{Caddyfile}) and is the
+authoritative reference for the current release.
+
+\subsection{Scope}
+
+This document covers:
+
+\begin{itemize}[noitemsep]
+  \item A \textbf{React SPA} browser front end (\texttt{client/src/})
+  \item A \textbf{Node.js / Express REST API} in two identical HA instances (\texttt{server/src/})
+  \item A \textbf{PostgreSQL~16} relational database via \textbf{Prisma ORM} (\texttt{server/prisma/schema.prisma})
+  \item A \textbf{Redis~7} in-memory store (\texttt{server/src/middlewares/redis.ts})
+  \item A \textbf{Caddy~2} reverse proxy / load balancer / TLS terminator (\texttt{Caddyfile})
+  \item A \textbf{File Storage Docker volume} for uploaded materials and submissions
+\end{itemize}
+
+Unimplemented ASRs (Status~$\neq$~Done), business processes, and infrastructure outside the
+repository are out of scope.
+
+\subsection{Audience}
+
+\begin{tabularx}{\textwidth}{L{4.5cm} L{9cm}}
+  \toprule
+  \textbf{Audience} & \textbf{Relevance} \\
+  \midrule
+  Software Architects / Developers & Primary audience; design rationale and constraints \\
+  Security Reviewers & Sections~\ref{sec:views}, \ref{sec:c4l4}, \ref{sec:qa} \\
+  Operations / DevOps & Section~\ref{sec:deployment} and Docker Compose config \\
+  Project Supervisors / Assessors & Sections~\ref{sec:goals}, \ref{sec:adr}, \ref{sec:qa}, Appendix~\ref{app:traceability} \\
+  \bottomrule
+\end{tabularx}
+
+\subsection{Definitions and Abbreviations}
+
+\begin{tabularx}{\textwidth}{L{3cm} L{10.5cm}}
+  \toprule
+  \textbf{Term} & \textbf{Definition} \\
+  \midrule
+  ASR     & Architecturally Significant Requirement \\
+  ADR     & Architecture Decision Record \\
+  SAD     & Software Architecture Document \\
+  LMS     & Learning Management System \\
+  SPA     & Single-Page Application \\
+  JWT     & JSON Web Token (RFC~7519) \\
+  RBAC    & Role-Based Access Control \\
+  TLS     & Transport Layer Security \\
+  ORM     & Object-Relational Mapper \\
+  CUID    & Collision-resistant Unique Identifier \\
+  JSONL   & JSON Lines -- one JSON object per newline-delimited line \\
+  httpOnly Cookie & Browser cookie inaccessible to JavaScript (XSS-safe) \\
+  TTL     & Time-To-Live (cache or token expiry duration) \\
+  \bottomrule
+\end{tabularx}
+
+\subsection{Reference Documents}
+
+\begin{tabularx}{\textwidth}{C{1.5cm} L{4.5cm} L{7.5cm}}
+  \toprule
+  \textbf{ID} & \textbf{Title} & \textbf{Location} \\
+  \midrule
+  REF-01 & Business Requirements Document   & \texttt{docs/1.\ BRD/} \\
+  REF-02 & Software Requirements Specification & \texttt{docs/10.\ SRS/} \\
+  REF-03 & Architecture Design Document (ADD) & \texttt{add-diagram/ADD.md} \\
+  REF-04 & Structurizr DSL (C4 model)        & \texttt{add-diagram/workspace.dsl} \\
+  REF-05--11 & ADR-001 through ADR-007       & \texttt{add-diagram/ADR/} \\
+  REF-12 & ASR Register                      & \texttt{SE356-ASR.xlsx - ASR.csv} \\
+  REF-13 & Prisma Schema                     & \texttt{server/prisma/schema.prisma} \\
+  REF-14 & Docker Compose                    & \texttt{docker-compose.yml} \\
+  REF-15 & Caddyfile                         & \texttt{Caddyfile} \\
+  \bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════════════════════════════
+\section{System Overview}
+% ══════════════════════════════════════════════════════════════════
+
+\subsection{System Description}
+
+The \textbf{LMS} is a web-based platform for managing educational courses, classes, learning
+materials, assignments, and student submissions. Three distinct user roles ---
+Student, Teacher, and Admin --- are enforced by RBAC throughout.
+
+The system is deployed as Docker containers orchestrated via Docker Compose and exposed to
+end-users through a Caddy reverse proxy that handles TLS termination, gzip/zstd compression,
+and active/passive load balancing.
+
+\subsection{Actors and Roles}
+
+\begin{tabularx}{\textwidth}{L{2.2cm} L{1.8cm} L{9.5cm}}
+  \toprule
+  \textbf{Actor} & \textbf{Role} & \textbf{Key Capabilities} \\
+  \midrule
+  Student & \texttt{STUDENT} & Enrol in classes; download materials; submit assignments (text or file); view feedback \\
+  Teacher & \texttt{TEACHER} & Create and manage courses/classes; upload materials (PDF, VIDEO, LINK, DOC); create and grade assignments; provide feedback \\
+  Admin   & \texttt{ADMIN}   & Manage all users; view platform statistics; access and filter audit logs \\
+  Email Service & External & Receives notification delivery requests via SMTP/Nodemailer from the API \\
+  \bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════════════════════════════
+\section{Architectural Goals and Constraints}
+\label{sec:goals}
+% ══════════════════════════════════════════════════════════════════
+
+\subsection{Implemented ASRs (Status = Done)}
+
+\begingroup
+\small
+\begin{longtable}{L{2.1cm} L{1.8cm} L{3.4cm} L{2.4cm} L{4.1cm}}
+  \toprule
+  \textbf{ASR ID} & \textbf{Quality} & \textbf{Scenario} & \textbf{Measure} & \textbf{Architectural Response} \\
+  \midrule \endhead \midrule \multicolumn{5}{r}{\small\textit{Continued\ldots}}\\ \endfoot
+  \bottomrule \endlastfoot
+
+  ASR-PERF-01 & Performance & 500 concurrent users & $<$2\,s response & Dual API + Caddy LB + Redis cache \\
+  ASR-PERF-02 & Performance & 10\,000+ record queries & $<$2\,s response & Prisma indexes + pagination \\
+  ASR-AVAIL-01 & Availability & 24/7 access & $\geq$99.9\,\% uptime & Dual backend + Caddy health-check failover \\
+  ASR-SEC-01 & Security & Account registration & bcrypt salt $\geq$10 & \texttt{hashPassword()} in \texttt{util/hash.ts} \\
+  ASR-SEC-02 & Security & Login & JWT 1\,h; login $<$2\,s & JWT access + refresh token (\texttt{httpOnly} cookie) \\
+  ASR-SEC-03 & Security & Brute-force attack & Block after 5 fails/15\,min & \texttt{LoginAttempt} (PostgreSQL) + Redis limiter \\
+  ASR-SEC-05 & Security & Resource access & 100\,\% RBAC-checked & \texttt{AuthMiddleware.requireAdmin/Teacher/Student} \\
+  ASR-SEC-06 & Security & Data in transit & 100\,\% HTTPS/TLS & Caddy \texttt{tls internal} / ACME \\
+  ASR-SEC-07 & Security & Data at rest & 100\,\% encrypted & PostgreSQL volume encryption + bcrypt passwords \\
+  ASR-SEC-08 & Security & Input validation & 100\,\% validated & Zod \texttt{validateBody(schema)} on every route \\
+  ASR-SEC-09 & Security & SQL injection & 100\,\% parameterized & Prisma ORM (no raw SQL interpolation) \\
+  ASR-SEC-10 & Security & Key action logging & 100\,\% logged & \texttt{writeAuditLog()} canonical JSONL events \\
+  ASR-SEC-11 & Security & Log retention & $\geq$1\,year retained & \texttt{AUDIT\_RETENTION\_DAYS=365} + daily cleanup \\
+  ASR-SEC-14 & Security & Large file upload & Mat.$\leq$50\,MB; Sub.$\leq$20\,MB & \texttt{enforceMaxUploadSize} + client-side guard \\
+  ASR-SEC-15 & Security & API rate limiting & Limit on all \texttt{/api/*} & Redis sliding-window \texttt{rateLimiter} \\
+\end{longtable}
+\endgroup
+
+\subsection{Technical Constraints}
+
+\begin{tabularx}{\textwidth}{L{3.5cm} L{10cm}}
+  \toprule
+  \textbf{Constraint} & \textbf{Description} \\
+  \midrule
+  Technology stack & Node.js~20 + Express + TypeScript (API); React~18 + TypeScript + Vite (SPA); PostgreSQL~16; Redis~7; Caddy~2 \\
+  Containerisation & Docker Compose only; no Kubernetes in scope \\
+  Database ORM & Prisma is the sole DB access layer; raw SQL is prohibited \\
+  Authentication & JWT in \texttt{httpOnly} cookies; no external Identity Provider \\
+  Network & HTTPS on port~443 via Caddy; Docker-internal traffic is plain HTTP \\
+  File limits & Materials $\leq$50\,MB; Submissions $\leq$20\,MB \\
+  Logging & Pino for application logs; custom JSONL canonical log lines for audit \\
+  \bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════════════════════════════
+\section{Architecture Views}
+\label{sec:views}
+% ══════════════════════════════════════════════════════════════════
+
+The system is described using the C4 model across four levels of abstraction.
+All diagrams were generated from PlantUML sources in \texttt{add-diagram/diagrams/}.
+
+% ─────────────────────────────────────────────────────────────────
+\subsection{C4 Level 1 --- System Context}
+% ─────────────────────────────────────────────────────────────────
+
+The System Context diagram shows the LMS as a single software system and identifies its
+direct human users (Student, Teacher, Admin) and the one external system it integrates with
+(SMTP Email Service for notifications).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\linewidth]{c1_context}
+  \caption{C4 Level~1 -- System Context Diagram}
+  \label{fig:c1}
+\end{figure}
+
+\begin{tabularx}{\textwidth}{L{3cm} L{10.5cm}}
+  \toprule
+  \textbf{Element} & \textbf{Description} \\
+  \midrule
+  Student  & Enrolled student; accesses the LMS over HTTPS to view materials, submit assignments \\
+  Teacher  & Instructor; manages courses, uploads materials, grades submissions over HTTPS \\
+  Admin    & Platform administrator; manages users, views audit logs, monitors health over HTTPS \\
+  LMS (Web Application) & The system under description: React SPA + Node.js API + data stores \\
+  External Services & SMTP relay (e.g.\ Gmail SMTP) for notification emails \\
+  \bottomrule
+\end{tabularx}
+
+% ─────────────────────────────────────────────────────────────────
+\subsection{C4 Level 2 --- Container}
+% ─────────────────────────────────────────────────────────────────
+
+The Container diagram shows the six deployable units inside the LMS boundary, their
+technologies, and how they communicate.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{c2_container}
+  \caption{C4 Level~2 -- Container Diagram}
+  \label{fig:c2}
+\end{figure}
+
+\begin{tabularx}{\textwidth}{L{3cm} L{2.5cm} L{8cm}}
+  \toprule
+  \textbf{Container} & \textbf{Technology} & \textbf{Responsibility} \\
+  \midrule
+  React SPA        & React~18 / Vite    & Browser SPA; role-specific dashboards for Student, Teacher, Admin \\
+  Admin SPA        & React~18 / Vite    & Dedicated admin interface (user management, audit log viewer, stats dashboard) \\
+  Web API          & Node.js~20 / Express / TypeScript & Stateless RESTful back end; two identical instances (\texttt{backend-primary}, \texttt{backend-secondary}) behind Caddy \\
+  PostgreSQL~16    & PostgreSQL / Prisma & Relational store for all domain data; parameterized queries via Prisma \\
+  Redis~7          & Redis              & Rate-limit counters; aggregation cache (5-min TTL); login-lockout complement \\
+  SMTP Server      & External SMTP      & Email delivery for notifications (Nodemailer) \\
+  \bottomrule
+\end{tabularx}
+
+\textbf{Communication summary:}
+\begin{itemize}[noitemsep]
+  \item Users $\rightarrow$ Caddy: HTTPS~:443
+  \item Caddy $\rightarrow$ API: HTTP (internal Docker network); active/passive LB; health-check every 10\,s
+  \item API $\rightarrow$ PostgreSQL: TCP~5432 via Prisma
+  \item API $\rightarrow$ Redis: TCP~6379
+  \item API $\rightarrow$ SMTP: port~587 (TLS)
+\end{itemize}
+
+% ─────────────────────────────────────────────────────────────────
+\subsection{C4 Level 3 --- Component}
+\label{sec:c4l3}
+% ─────────────────────────────────────────────────────────────────
+
+Level~3 Component diagrams zoom into the Node.js API container for the most
+architecturally significant ASR groups.
+
+\subsubsection{ASR-AVAIL-01 --- Availability \& Health-Check Failover}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\linewidth]{c3_avail_01}
+  \caption{C4 Level~3 -- Availability: Dual Backend + Caddy Health-Check (ASR-AVAIL-01)}
+  \label{fig:c3-avail}
+\end{figure}
+
+The diagram shows how Caddy's \texttt{lb\_policy first} keeps \texttt{backend-primary}
+active and promotes \texttt{backend-secondary} when \texttt{GET /api/health} fails.
+Both instances share PostgreSQL and Redis, making failover stateless and transparent.
+
+\subsubsection{ASR-SEC-03 --- Brute-Force Login Protection}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\linewidth]{c3_sec_03}
+  \caption{C4 Level~3 -- IP Lockout Logic (ASR-SEC-03)}
+  \label{fig:c3-sec03}
+\end{figure}
+
+The diagram shows the component interactions inside the API for the login lockout flow:
+\texttt{AuthRouter} $\rightarrow$ \texttt{AuthController} $\rightarrow$ \texttt{AuthService}
+$\rightarrow$ \texttt{LoginAttempt} (PostgreSQL). After \texttt{MAX\_LOGIN\_ATTEMPTS}
+consecutive failures from the same IP, \texttt{AuthService} sets \texttt{blockedUntil} and
+all subsequent requests are rejected before password comparison.
+
+\subsubsection{ASR-SEC-11 --- Audit Log Retention}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\linewidth]{c3_sec_11}
+  \caption{C4 Level~3 -- Audit Log Retention Components (ASR-SEC-11)}
+  \label{fig:c3-sec11}
+\end{figure}
+
+The diagram shows the \texttt{AuditLogger} utility writing JSONL entries to daily files,
+\texttt{AuditConfig} resolving \texttt{AUDIT\_LOG\_DIR} and \texttt{AUDIT\_RETENTION\_DAYS},
+and the daily cleanup job removing files older than the retention threshold.
+The \texttt{AuditController} (\texttt{GET /api/audit/logs}) is admin-only and reads from
+the same file store.
+
+\subsubsection{ASR-SEC-14 --- File Upload Size Enforcement}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\linewidth]{c3_sec_14}
+  \caption{C4 Level~3 -- File Upload Pipeline (ASR-SEC-14)}
+  \label{fig:c3-sec14}
+\end{figure}
+
+The dual-layer enforcement is visible: the \textbf{client-side} File Upload Component
+validates MIME type and file size before any HTTP request; the \textbf{server-side}
+\texttt{enforceMaxUploadSize} middleware checks \texttt{Content-Length} and returns
+HTTP~413 before Multer parses the body.
+
+\subsubsection{ASR-SEC-15 --- Redis Rate Limiting}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\linewidth]{c3_sec_15}
+  \caption{C4 Level~3 -- Redis-Backed Rate Limiting (ASR-SEC-15)}
+  \label{fig:c3-sec15}
+\end{figure}
+
+The diagram shows the \texttt{App} class registering \texttt{rateLimiter} for
+\texttt{/api/*}, the middleware calling \texttt{redisClient.incr(endpoint+"/"+ip)} and
+\texttt{expire}, and returning HTTP~429 when the counter exceeds the configured limit.
+Because Redis is shared across both API instances, the counter is accurate under load
+balancing.
+
+% ─────────────────────────────────────────────────────────────────
+\subsection{Logical View --- Component Inventory}
+% ─────────────────────────────────────────────────────────────────
+
+\subsubsection{React SPA Components (\texttt{client/src/})}
+
+\begin{tabularx}{\textwidth}{L{3.5cm} L{6.5cm} L{3.5cm}}
+  \toprule
+  \textbf{Component} & \textbf{Responsibility} & \textbf{ASR Coverage} \\
+  \midrule
+  Auth Context & Stores JWT in \texttt{httpOnly} cookie; refresh-token flow; \texttt{useAuth()} hook & ASR-SEC-02 \\
+  Login Page & Client-side Zod validation; calls \texttt{POST /api/auth/login}; surfaces lockout messages & ASR-SEC-08, ASR-SEC-03 \\
+  Student Dashboard & Enrolled classes, assignment deadlines, recent materials & --- \\
+  Teacher Dashboard & Class management, material upload, assignment creation, grading & --- \\
+  Admin Dashboard & Cached statistics, user management, audit log viewer & ASR-SEC-10, ASR-SEC-11 \\
+  Course / Class Pages & Enrolment UI (students); class-management forms (teachers) & --- \\
+  Assignment Pages & Assignment list; submission form; graded feedback display & ASR-SEC-14 \\
+  Material Pages & Material listing; teacher upload form with 50\,MB client guard & ASR-SEC-14 \\
+  Notification Hub & Polls \texttt{/api/notifications}; unread badge and drawer & --- \\
+  File Upload Component & MIME whitelist + max-size check before HTTP upload & ASR-SEC-14 \\
+  \bottomrule
+\end{tabularx}
+
+\subsubsection{Node.js API Components (\texttt{server/src/})}
+
+\begingroup
+\small
+\begin{longtable}{L{3cm} L{2.5cm} L{5cm} L{3cm}}
+  \toprule
+  \textbf{Component} & \textbf{Route Prefix} & \textbf{Responsibility} & \textbf{ASR Coverage} \\
+  \midrule \endhead \midrule \multicolumn{4}{r}{\small\textit{Continued\ldots}}\\ \endfoot
+  \bottomrule \endlastfoot
+
+  Auth Module       & \texttt{/api/auth}         & Register (bcrypt $\geq$10), login, logout, refresh-token & ASR-SEC-01, SEC-02 \\
+  Auth Middleware   & \textit{all protected}      & JWT verify; \texttt{requireAdmin/Teacher/Student} RBAC guards & ASR-SEC-05 \\
+  Rate-Limit Middleware & \texttt{/api/*}         & Redis \texttt{INCR/EXPIRE} sliding window; HTTP~429 & ASR-SEC-15 \\
+  Login-Lockout     & \textit{part of AuthService} & \texttt{LoginAttempt} upsert; blocks after \texttt{MAX\_LOGIN\_ATTEMPTS} & ASR-SEC-03 \\
+  Input Validation  & \textit{all routes}         & \texttt{validateBody(ZodSchema)}; HTTP~400 on invalid input & ASR-SEC-08 \\
+  User Module       & \texttt{/api/users}         & CRUD for user profiles; role-based permissions & ASR-SEC-05 \\
+  Courses Module    & \texttt{/api/courses}       & Course CRUD with pagination; indexed queries & ASR-PERF-02 \\
+  Classes Module    & \texttt{/api/classes}       & Class management; teacher assignment; enrolment & ASR-PERF-02 \\
+  Materials Module  & \texttt{/api/materials}     & Upload pipeline; MIME + size check; store outside web root & ASR-SEC-14 \\
+  Assignments Module & \texttt{/api/assignments}  & Assignment CRUD for teachers; view for students & --- \\
+  Submissions Module & \texttt{/api/submissions}  & Student submissions ($\leq$20\,MB file or text) & ASR-SEC-14 \\
+  Feedback Module   & \texttt{/api/feedback}      & Teacher comment + numeric score on submissions & --- \\
+  Audit Module      & \texttt{/api/audit}         & Admin-only log reader; \texttt{writeAuditLog()} canonical events & ASR-SEC-10, SEC-11 \\
+  Health Module     & \texttt{/api/health}        & HTTP~200; polled by Caddy and Docker healthcheck & ASR-AVAIL-01 \\
+\end{longtable}
+\endgroup
+
+% ─────────────────────────────────────────────────────────────────
+\subsection{Process View --- Key Runtime Flows}
+% ─────────────────────────────────────────────────────────────────
+
+\subsubsection{Authentication Flow (ASR-SEC-01/02/03/15)}
+
+\begin{lstlisting}[caption={Login sequence -- auth.controller.ts + auth.service.ts}]
+Client     Caddy    rateLimiter  validateBody  AuthController  AuthService  PostgreSQL  Redis
+  |          |            |             |              |             |            |        |
+  |--POST /api/auth/login------------>  |              |             |            |        |
+  |          |            |-- INCR "login/<ip>" ---------------------------------------->|
+  |          | [count > RATE_LIMIT_MAX => HTTP 429]    |             |            |        |
+  |          |            |-- Zod loginSchema check    |             |            |        |
+  |          | [schema error => HTTP 400]              |             |            |        |
+  |          |            |----------------------------> login(email, password, ip)        |
+  |          |            |                                          |-- SELECT LoginAttempt(ip) -->|
+  |          | [blockedUntil > now => HTTP 429]                     |            |        |
+  |          |            |                                          |-- SELECT User(email) ----->|
+  |          |            |                                          | bcrypt.compare()   |        |
+  |          | [invalid => UPSERT LoginAttempt; HTTP 400]           |            |        |
+  |          |            |                             jwt.sign(accessToken 1h) |        |
+  |          |            |                             jwt.sign(refreshToken)   |        |
+  |          |            |                                          |-- UPDATE User.refreshToken->|
+  |          |            |                                          |-- DELETE LoginAttempt -->   |
+  |<-- HTTP 200 + Set-Cookie(accessToken, refreshToken httpOnly) ---|            |        |
+\end{lstlisting}
+
+\subsubsection{RBAC-Protected Request (ASR-SEC-05/08/15)}
+
+\begin{lstlisting}[caption={Middleware chain -- rateLimit.ts + auth.middleware.ts}]
+Client   rateLimiter  validateBody  authenticateUser  requireAdmin  Controller
+  |           |              |              |               |             |
+  |--GET /api/audit/logs-->  |              |               |             |
+  |      INCR Redis key      |              |               |             |
+  | [> limit => HTTP 429]    |              |               |             |
+  |           | Zod check    |              |               |             |
+  | [invalid => HTTP 400]    |              |               |             |
+  |           |              | jwt.verify(cookie.accessToken)             |
+  | [no/expired => HTTP 401] |              |               |             |
+  |           |              | req.userId = decoded.userId  |             |
+  |           |              |              | prisma.user.findUnique()    |
+  |           |              |              | writeAuditLog(GRANTED|DENIED)
+  | [role != ADMIN => HTTP 403]             |               |             |
+  |           |              |              |               | business logic + Prisma
+  |<-- HTTP 200 JSON ----------------------------------------------------------------|
+\end{lstlisting}
+
+\subsubsection{Audit Log Write (ASR-SEC-10/11)}
+
+\begin{lstlisting}[caption={Audit log lifecycle -- util/auditLogger.ts}]
+Controller          writeAuditLog()          server-logs volume
+     |                    |                        |
+     | [after key action] |                        |
+     |--writeAuditLog({   |                        |
+     |    category,       |                        |
+     |    action,         |                        |
+     |    success,        |                        |
+     |    userId, ip,     |                        |
+     |    statusCode })   |                        |
+     |                    | ensureAuditDir()        |
+     |                    | cleanupOldFiles() [1/day; delete files > 365 days]
+     |                    |--fs.appendFile(YYYY-MM-DD.log, JSON+\n)-->|
+\end{lstlisting}
+
+% ─────────────────────────────────────────────────────────────────
+\subsection{Deployment View}
+\label{sec:deployment}
+% ─────────────────────────────────────────────────────────────────
+
+\begin{lstlisting}[caption={Container topology -- docker-compose.yml + Caddyfile}]
+Internet
+   | HTTPS :443  /  HTTP :80 (-> HTTPS redirect)
+   v
++------------------------------------------------------------+
+|  Caddy 2                                                   |
+|  tls internal (dev) | ACME (prod)                         |
+|  encode gzip zstd                                          |
+|  lb_policy first   health_uri /api/health   interval 10s  |
++--------+-------------------------+---------------------------+
+         |  /api/*  /docs*         |  handle {} -- SPA
+   active/passive failover         | root /srv; file_server
+         |              |
+         v              v
++------------------+ +------------------+
+| backend-primary  | | backend-secondary|
+| Node.js 20 :8000 | | Node.js 20 :8000 |
+| restart: unless- | | (identical clone)|
+|   stopped        | |                  |
++--------+---------+ +---------+--------+
+         |                     |
+         +----------+----------+
+                    | shared
+          +---------+--------+----------+
+          v                  v          v
+  +---------------+  +----------+  +----------+
+  | PostgreSQL 16 |  |  Redis 7 |  | server-  |
+  | postgres-data |  | :6379    |  | logs vol |
+  | volume :5432  |  | (rate,   |  | /app/    |
+  | Prisma ORM    |  |  cache)  |  |  logs/   |
+  +---------------+  +----------+  +----------+
+\end{lstlisting}
+
+\begin{tabularx}{\textwidth}{L{3.2cm} L{2.5cm} L{1.8cm} L{3cm} L{3.3cm}}
+  \toprule
+  \textbf{Container} & \textbf{Image} & \textbf{Port} & \textbf{Volumes} & \textbf{Health Check} \\
+  \midrule
+  \texttt{caddy}              & caddy:2            & 443, 80       & \texttt{/srv} (SPA) & --- \\
+  \texttt{backend-primary}    & Node.js~20 build   & 8000 (int.)   & server-logs         & \texttt{GET /api/health} / 10\,s \\
+  \texttt{backend-secondary}  & Node.js~20 build   & 8000 (int.)   & server-logs         & \texttt{GET /api/health} / 10\,s \\
+  \texttt{db}                 & postgres:16-alpine & 5432 (int.)   & postgres-data       & \texttt{pg\_isready} / 10\,s \\
+  \texttt{redis}              & redis:7-alpine     & 6379 (int.)   & ---                 & \texttt{redis-cli ping} / 10\,s \\
+  \texttt{web}                & client build       & 80 (int.)     & ---                 & --- \\
+  \bottomrule
+\end{tabularx}
+
+\textbf{Start-up dependency chain:}
+\begin{enumerate}[noitemsep]
+  \item \texttt{db} passes \texttt{pg\_isready} (up to 10 retries × 10\,s)
+  \item \texttt{redis} passes \texttt{redis-cli ping} (up to 10 retries × 10\,s)
+  \item Both \texttt{backend-*} containers start only after (1) and (2) reach \texttt{service\_healthy}
+  \item Each backend runs \texttt{npx prisma db push} then \texttt{node dist/index.js}; own health-check on \texttt{/api/health} with 20\,s start period and 3 retries
+  \item Caddy polls \texttt{backend-*:8000/api/health} every 10\,s; \texttt{health\_fails~1} marks unhealthy and routes all traffic to the surviving instance
+\end{enumerate}
+
+% ─────────────────────────────────────────────────────────────────
+\subsection{Data View}
+\label{sec:data}
+% ─────────────────────────────────────────────────────────────────
+
+\subsubsection{Entity-Relationship Overview (from \texttt{server/prisma/schema.prisma})}
+
+\begin{lstlisting}[caption={Data model -- schema.prisma}]
+User (id[cuid], email[unique], password[bcrypt], name,
+      role[STUDENT|TEACHER|ADMIN], refreshToken?)
+ |
+ +--< Enrollment >----------+   @@unique([userId, classId])
+ |                          |   status: ACTIVE | COMPLETED | DROPPED
+ |                    Class (id, courseId, title, teacherId?)
+ |                    @@index([teacherId])
+ |                          |
+ |                    Course (id, title, description)
+ |
+ +--< Submission >----------+   @@unique([assignmentId, userId])
+                            |   status: PENDING | SUBMITTED | GRADED
+                     Assignment (id, title, classId, createdBy,
+                                 dueDate, maxScore)
+                     @@index([createdBy])
+                            |
+                     Feedback (id, submissionId, createdBy,
+                               comment?, score?)
+                     @@index([createdBy])
+
+Material (id, title, type[PDF|VIDEO|LINK|DOC],
+          url, classId, createdBy)
+@@index([classId]),  @@index([createdBy])
+
+LoginAttempt (ip[PK], attempts, lastTry, blockedUntil?)
+\end{lstlisting}
+
+\subsubsection{Model Descriptions}
+
+\begingroup
+\small
+\begin{longtable}{L{2.5cm} L{4cm} L{7cm}}
+  \toprule
+  \textbf{Model} & \textbf{Purpose} & \textbf{Key Constraints} \\
+  \midrule \endhead \bottomrule \endlastfoot
+
+  \texttt{User}         & Accounts for all roles & \texttt{email} unique; \texttt{password} bcrypt-hashed (ASR-SEC-01); \texttt{refreshToken} cleared on logout \\
+  \texttt{LoginAttempt} & Per-IP failure counter & \texttt{ip} is PK; \texttt{blockedUntil} nullable; deleted on successful login (ASR-SEC-03) \\
+  \texttt{Course}       & Top-level catalogue entry & Cascade-deletes \texttt{Class} records \\
+  \texttt{Class}        & Session of a course & \texttt{@@index([teacherId])} for fast teacher-class queries (ASR-PERF-02) \\
+  \texttt{Enrollment}   & Student $\leftrightarrow$ Class join & \texttt{@@unique([userId, classId])} prevents duplicates \\
+  \texttt{Assignment}   & Teacher-created task & \texttt{@@index([createdBy])}; \texttt{dueDate} and \texttt{maxScore} fields \\
+  \texttt{Submission}   & Student answer & \texttt{@@unique([assignmentId, userId])}; \texttt{fileUrl} nullable \\
+  \texttt{Feedback}     & Teacher score + comment & \texttt{@@index([createdBy])} \\
+  \texttt{Material}     & Learning resource & \texttt{@@index([classId])}, \texttt{@@index([createdBy])} (ASR-PERF-02) \\
+\end{longtable}
+\endgroup
+
+\subsubsection{Audit Log Storage}
+
+Audit entries are stored as \textbf{JSON Lines} in daily files
+(\texttt{YYYY-MM-DD.log}) under \texttt{AUDIT\_LOG\_DIR=/app/logs/audit}
+on the shared \texttt{server-logs} Docker volume. They are \emph{not} stored in PostgreSQL.
+The admin-only endpoint \texttt{GET /api/audit/logs} reads and filters entries in-process.
+
+Each entry follows the canonical wide-event format:
+
+\begin{lstlisting}[language={}]
+{
+  "timestamp":    "2026-05-04T08:00:00.000Z",
+  "category":     "AUTH",
+  "action":       "LOGIN_SUCCESS",
+  "success":      true,
+  "userId":       "clv1abc123",
+  "ip":           "192.168.1.10",
+  "method":       "POST",
+  "path":         "/api/auth/login",
+  "statusCode":   200,
+  "resourceType": "USER",
+  "resourceId":   "clv1abc123"
+}
+\end{lstlisting}
+
+% ══════════════════════════════════════════════════════════════════
+\section{C4 Level 4 --- Code Diagrams}
+\label{sec:c4l4}
+% ══════════════════════════════════════════════════════════════════
+
+Level~4 diagrams zoom to classes, functions, and their call relationships directly traceable
+to source files. Each diagram covers one ASR group.
+
+% ─────────────────────────────────────────────────────────────────
+\subsection{Authentication \& Brute-Force Protection (ASR-SEC-01/02/03/15)}
+% ─────────────────────────────────────────────────────────────────
+
+\begin{infobox}
+  \textbf{Source:} \texttt{auth.service.ts}, \texttt{auth.controller.ts},
+  \texttt{middlewares/rateLimit.ts}, \texttt{middlewares/redis.ts},
+  \texttt{util/auditLogger.ts}
+\end{infobox}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{c4_auth_flow}
+  \caption{C4 Level~4 -- Authentication \& Brute-Force Protection}
+  \label{fig:c4-auth}
+\end{figure}
+
+\textbf{Key implementation details:}
+\begin{itemize}[noitemsep]
+  \item \textbf{ASR-SEC-01}: \texttt{bcrypt.compare(plain, hash)} with salt rounds $\geq$10 via \texttt{util/hash.ts::hashPassword()}
+  \item \textbf{ASR-SEC-02}: \texttt{jwt.sign(\{userId, role\}, secret, \{expiresIn: "1h"\})} issued in \texttt{AuthService.login()}; stored in \texttt{httpOnly} cookie by \texttt{AuthController}
+  \item \textbf{ASR-SEC-03}: \texttt{LoginAttempt} upserted per IP; \texttt{blockedUntil = now() + LOCKOUT\_TIME\_MS} when \texttt{attempts $\geq$ MAX\_ATTEMPTS}; record deleted on success
+  \item \textbf{ASR-SEC-15}: Redis key \texttt{"login/<ip>"} incremented with \texttt{INCR}/\texttt{EXPIRE}; shared across both API instances
+\end{itemize}
+
+% ─────────────────────────────────────────────────────────────────
+\subsection{RBAC Middleware Chain (ASR-SEC-05/08/15)}
+% ─────────────────────────────────────────────────────────────────
+
+\begin{infobox}
+  \textbf{Source:} \texttt{auth/auth.middleware.ts}, \texttt{middlewares/rateLimit.ts},
+  \texttt{util/validation.ts}
+\end{infobox}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{c4_rbac}
+  \caption{C4 Level~4 -- RBAC Middleware Chain}
+  \label{fig:c4-rbac}
+\end{figure}
+
+\textbf{Key implementation details:}
+\begin{itemize}[noitemsep]
+  \item \textbf{ASR-SEC-05}: Three guard methods (\texttt{requireAdmin}, \texttt{requireTeacher}, \texttt{requireStudent}) perform a live DB lookup on every request; 100\,\% of protected routes covered
+  \item \textbf{ASR-SEC-08}: \texttt{validateBody(schema)} wraps every route's Zod schema; malformed requests rejected with HTTP~400 before any DB interaction
+  \item \texttt{requireAdmin} emits \texttt{ADMIN\_ACCESS\_GRANTED/DENIED} audit entries on every admin access check (ASR-SEC-10)
+\end{itemize}
+
+% ─────────────────────────────────────────────────────────────────
+\subsection{File Upload Pipeline (ASR-SEC-14)}
+% ─────────────────────────────────────────────────────────────────
+
+\begin{infobox}
+  \textbf{Source:} \texttt{middlewares/fileSizeLimit.ts}, \texttt{materials/materials.controller.ts},
+  \texttt{submissions/submissions.controller.ts}
+\end{infobox}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{c4_file_upload}
+  \caption{C4 Level~4 -- File Upload Pipeline}
+  \label{fig:c4-file}
+\end{figure}
+
+\textbf{Key implementation details:}
+\begin{itemize}[noitemsep]
+  \item \textbf{Layer 1 (client)}: File Upload Component checks \texttt{file.size} and MIME type before the HTTP request is sent
+  \item \textbf{Layer 2 (server)}: \texttt{enforceMaxUploadSize(maxBytes, resourceName)} reads \texttt{Content-Length}; returns HTTP~413 if exceeded
+  \item Constants: \texttt{MATERIAL\_MAX\_UPLOAD\_BYTES = 50 * MB}; \texttt{SUBMISSION\_MAX\_UPLOAD\_BYTES = 20 * MB}
+  \item Files stored at \texttt{/app/uploads} (Docker volume, outside Caddy web root)
+\end{itemize}
+
+% ─────────────────────────────────────────────────────────────────
+\subsection{Audit Logging System (ASR-SEC-10/11)}
+% ─────────────────────────────────────────────────────────────────
+
+\begin{infobox}
+  \textbf{Source:} \texttt{util/auditLogger.ts}, \texttt{audit/audit.controller.ts},
+  \texttt{config/audit.config.ts}
+\end{infobox}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{c4_audit}
+  \caption{C4 Level~4 -- Audit Logging System}
+  \label{fig:c4-audit}
+\end{figure}
+
+\textbf{Key implementation details:}
+\begin{itemize}[noitemsep]
+  \item \textbf{ASR-SEC-10}: \texttt{writeAuditLog()} called from \texttt{AuthController}, \texttt{MaterialsController}, and \texttt{AuthMiddleware.requireAdmin()} after every security-sensitive action
+  \item \textbf{ASR-SEC-11}: \texttt{cleanupOldFiles()} runs once per calendar day; deletes \texttt{YYYY-MM-DD.log} files with date older than \texttt{AUDIT\_RETENTION\_DAYS} (default~365)
+  \item Admin query endpoint: \texttt{GET /api/audit/logs}; params: \texttt{from}, \texttt{to}, \texttt{category}, \texttt{action}, \texttt{userId}, \texttt{limit} (max~5000)
+\end{itemize}
+
+% ─────────────────────────────────────────────────────────────────
+\subsection{High Availability \& Failover (ASR-AVAIL-01, ASR-PERF-01)}
+% ─────────────────────────────────────────────────────────────────
+
+\begin{infobox}
+  \textbf{Source:} \texttt{Caddyfile}, \texttt{docker-compose.yml},
+  \texttt{server/src/health/health.controller.ts}
+\end{infobox}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{c4_availability}
+  \caption{C4 Level~4 -- High Availability \& Failover Chain}
+  \label{fig:c4-avail}
+\end{figure}
+
+\textbf{Key implementation details:}
+\begin{itemize}[noitemsep]
+  \item Caddy: \texttt{lb\_policy first}, \texttt{health\_uri /api/health}, \texttt{health\_interval 10s}, \texttt{health\_fails 1}, \texttt{health\_passes 1}
+  \item Both backends: \texttt{restart: unless-stopped}; health-check with 20\,s start period, 3 retries
+  \item \texttt{encode gzip zstd} in Caddyfile reduces payload bytes, lowering TTFB under load (\textbf{ASR-PERF-01})
+  \item Stateless design (JWT, shared PG + Redis) means any instance handles any request
+\end{itemize}
+
+% ─────────────────────────────────────────────────────────────────
+\subsection{Database Query Optimisation (ASR-PERF-02, ASR-SEC-09)}
+% ─────────────────────────────────────────────────────────────────
+
+\begin{infobox}
+  \textbf{Source:} \texttt{server/prisma/schema.prisma}, \texttt{courses/courses.service.ts},
+  \texttt{classes/classes.service.ts}, \texttt{materials/materials.service.ts}
+\end{infobox}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{c4_db_perf}
+  \caption{C4 Level~4 -- Database Query Optimisation}
+  \label{fig:c4-db}
+\end{figure}
+
+\textbf{Key implementation details:}
+\begin{itemize}[noitemsep]
+  \item \textbf{ASR-PERF-02}: Indexes reduce filtered queries from $O(n)$ table scan to $O(\log n)$ index seek:
+    \texttt{Class.@@index([teacherId])},
+    \texttt{Assignment.@@index([createdBy])},
+    \texttt{Feedback.@@index([createdBy])},
+    \texttt{Material.@@index([classId])},
+    \texttt{Material.@@index([createdBy])}
+  \item Pagination: all list endpoints expose \texttt{page}/\texttt{limit}; \texttt{skip = (page-1)*limit} passed to Prisma \texttt{findMany}
+  \item \textbf{ASR-SEC-09}: Prisma compiles all \texttt{findMany}/\texttt{create}/\texttt{update} to parameterized statements; no \texttt{\$queryRaw} with string interpolation exists in the codebase
+\end{itemize}
+
+% ══════════════════════════════════════════════════════════════════
+\section{Architecture Decisions}
+\label{sec:adr}
+% ══════════════════════════════════════════════════════════════════
+
+\begin{tabularx}{\textwidth}{L{1.8cm} L{5cm} L{1.8cm} L{5cm}}
+  \toprule
+  \textbf{ADR} & \textbf{Title} & \textbf{Status} & \textbf{Addressed ASRs} \\
+  \midrule
+  ADR-001 & Caddy as Reverse Proxy, LB \& TLS  & Accepted & ASR-PERF-01, AVAIL-01, SEC-06 \\
+  ADR-002 & JWT Access + Refresh Token Auth     & Accepted & ASR-SEC-01, SEC-02 \\
+  ADR-003 & Redis Rate Limiting \& Login Lockout & Accepted & ASR-SEC-03, SEC-15 \\
+  ADR-004 & PostgreSQL + Prisma ORM             & Accepted & ASR-PERF-02, SEC-07, SEC-09 \\
+  ADR-005 & RBAC with JWT Role Claims           & Accepted & ASR-SEC-05 \\
+  ADR-006 & Secure File Storage Outside Web Root & Accepted & ASR-SEC-14 \\
+  ADR-007 & Canonical Audit Logging, 1-Year Retention & Accepted & ASR-SEC-10, SEC-11 \\
+  \bottomrule
+\end{tabularx}
+
+\subsection{ADR-001: Caddy as Entry Point}
+
+\textbf{Context:} Need a single TLS-terminating entry point that routes between two stateless
+API instances and serves the React SPA as static files, with minimal configuration overhead.
+
+\textbf{Decision:} Caddy~2 is the sole inbound gateway. It provides \texttt{tls internal}
+(dev) / ACME auto-cert (prod), \texttt{encode gzip zstd}, active/passive load balancing
+(\texttt{lb\_policy first}), health-check every 10\,s, and static SPA serving from
+\texttt{/srv}.
+
+\textbf{Consequences:} One decision simultaneously satisfies ASR-PERF-01, ASR-AVAIL-01,
+and ASR-SEC-06. Caddy is itself a single point of failure (Risk~R-01).
+
+\subsection{ADR-002: JWT Authentication}
+
+\textbf{Context:} Two stateless API instances cannot share in-memory session state.
+
+\textbf{Decision:} Passwords hashed with \texttt{bcrypt} ($\geq$10 salt rounds).
+Login issues a JWT access token (1\,h, \texttt{AUTH\_SECRET}) and a refresh token
+(\texttt{AUTH\_REFRESH\_SECRET}), both in \texttt{httpOnly} cookies. Either instance
+can verify tokens independently without shared session store.
+
+\textbf{Consequences:} Satisfies ASR-SEC-01 and ASR-SEC-02. Access tokens cannot be
+revoked before expiry (Risk~R-04).
+
+\subsection{ADR-003: Redis Rate Limiting}
+
+\textbf{Context:} Rate limits must be accurate across two API instances; lockout state must
+survive API restarts.
+
+\textbf{Decision:} Redis \texttt{INCR}/\texttt{EXPIRE} backs the \texttt{rateLimiter}
+middleware for cross-instance accuracy. Login lockout is additionally persisted in
+PostgreSQL's \texttt{LoginAttempt} table for durability.
+
+\textbf{Consequences:} Satisfies ASR-SEC-03 and ASR-SEC-15. Redis failure causes the rate
+limiter to fail open (Risk~R-03).
+
+\subsection{ADR-004: PostgreSQL + Prisma}
+
+\textbf{Context:} Need a relational store with type-safe, injection-free queries and explicit
+performance tuning.
+
+\textbf{Decision:} PostgreSQL~16 is the sole relational store. Prisma ORM compiles all
+queries to parameterized prepared statements. Explicit \texttt{@@index} directives on
+high-cardinality FK columns support sub-2-second queries on 10\,000+ records.
+
+\textbf{Consequences:} Satisfies ASR-PERF-02, ASR-SEC-07, ASR-SEC-09.
+
+\subsection{ADR-005: RBAC}
+
+\textbf{Context:} Three distinct roles (\texttt{STUDENT}, \texttt{TEACHER}, \texttt{ADMIN})
+with non-overlapping permissions must be enforced uniformly before any business logic.
+
+\textbf{Decision:} Role stored in the \texttt{User} model and in the JWT payload.
+\texttt{AuthMiddleware.requireAdmin/Teacher/Student()} performs a live DB lookup before
+every protected route's controller runs.
+
+\textbf{Consequences:} Satisfies ASR-SEC-05. Each role-guard call adds one DB round-trip;
+acceptable given \texttt{User} primary-key lookup latency.
+
+\subsection{ADR-006: Secure File Storage}
+
+\textbf{Context:} Uploaded files must not be directly accessible over HTTP and must respect
+defined size limits.
+
+\textbf{Decision:} Files stored in \texttt{/app/uploads} on the \texttt{server-logs}
+Docker volume, outside Caddy's \texttt{/srv} web root. Size enforced at client
+(File Upload Component) and server (\texttt{enforceMaxUploadSize} middleware).
+
+\textbf{Consequences:} Satisfies ASR-SEC-14. Full malware scanning (ASR-SEC-12) and
+guaranteed out-of-web-root enforcement (ASR-SEC-13) not yet complete (Risks~R-06, R-07).
+
+\subsection{ADR-007: Canonical Audit Logging}
+
+\textbf{Context:} Security-sensitive actions must be logged with structured metadata and
+retained for at least one year.
+
+\textbf{Decision:} \texttt{writeAuditLog()} appends JSON Lines to daily files on the
+\texttt{server-logs} volume. \texttt{AUDIT\_RETENTION\_DAYS=365} drives an in-process
+daily cleanup. Admin reads via \texttt{GET /api/audit/logs}.
+
+\textbf{Consequences:} Satisfies ASR-SEC-10 and ASR-SEC-11. Logs are stored only locally
+with no off-site backup (Risk~R-05).
+
+% ══════════════════════════════════════════════════════════════════
+\section{Quality Attribute Analysis}
+\label{sec:qa}
+% ══════════════════════════════════════════════════════════════════
+
+\subsection{Performance}
+
+\subsubsection{ASR-PERF-01 --- 500 Concurrent Users, $<$2\,s Response}
+
+\textbf{Tactics:} Horizontal scale, response compression, stateless instances, in-memory
+caching.
+
+\begin{tabularx}{\textwidth}{L{4cm} L{9.5cm}}
+  \toprule
+  \textbf{Layer} & \textbf{Mechanism} \\
+  \midrule
+  Caddy & Active/passive LB; \texttt{encode gzip zstd} reduces payload bytes \\
+  Stateless API & No in-process shared state; either instance serves any request \\
+  Redis cache & Aggregation results cached with 5-min TTL; avoids expensive re-computation \\
+  Docker \texttt{restart} & Auto-recovery prevents sustained outage from transient crashes \\
+  \bottomrule
+\end{tabularx}
+
+Benchmark results: \texttt{docs/asr-perf-01-results.csv} --- response time $<$2\,s under 500
+concurrent simulated users validated.
+
+\subsubsection{ASR-PERF-02 --- Paginated Queries on 10\,000+ Records, $<$2\,s}
+
+\textbf{Tactics:} Database indexing, offset pagination.
+
+\begin{tabularx}{\textwidth}{L{5cm} L{8.5cm}}
+  \toprule
+  \textbf{Index} & \textbf{Purpose} \\
+  \midrule
+  \texttt{Class.@@index([teacherId])} & Fast class-by-teacher queries \\
+  \texttt{Assignment.@@index([createdBy])} & Fast assignments-by-teacher queries \\
+  \texttt{Feedback.@@index([createdBy])} & Fast feedback-by-teacher queries \\
+  \texttt{Material.@@index([classId])} & Fast materials-by-class queries \\
+  \texttt{Material.@@index([createdBy])} & Fast materials-by-teacher queries \\
+  \texttt{page}/\texttt{limit} pagination & Caps row transfer per request \\
+  \bottomrule
+\end{tabularx}
+
+Benchmark results: \texttt{docs/asr-perf-02-results.csv}.
+
+\subsection{Availability}
+
+\subsubsection{ASR-AVAIL-01 --- $\geq$99.9\,\% Uptime}
+
+\textbf{Tactics:} Redundancy, automatic failover, health-check probing.
+
+\begin{tabularx}{\textwidth}{L{4.5cm} L{9cm}}
+  \toprule
+  \textbf{Mechanism} & \textbf{Detail} \\
+  \midrule
+  Dual backend instances & \texttt{backend-primary} and \texttt{backend-secondary} are identical \\
+  Caddy health polling & \texttt{health\_uri /api/health}, interval 10\,s, \texttt{health\_fails 1} \\
+  \texttt{restart: unless-stopped} & Containers auto-restart after crashes \\
+  \texttt{service\_healthy} \texttt{depends\_on} & Backends wait for healthy DB and Redis before starting \\
+  Stateless design & JWT auth + shared PG + Redis; no sticky sessions \\
+  \bottomrule
+\end{tabularx}
+
+\subsection{Security}
+
+\subsubsection{ASR-SEC-01 \& SEC-02 --- Authentication}
+Passwords hashed with \texttt{bcrypt} ($\geq$10 salt rounds) in \texttt{util/hash.ts}.
+Login issues a JWT access token (1\,h) and refresh token in \texttt{httpOnly} cookies,
+preventing JavaScript access.  Stateless design requires no cross-instance session sync.
+
+\subsubsection{ASR-SEC-03 --- Brute-Force Protection}
+\texttt{LoginAttempt} records per-IP failure counts.  After \texttt{MAX\_LOGIN\_ATTEMPTS}
+failures, \texttt{blockedUntil = now() + LOCKOUT\_TIME\_MS} is set.  Lockout survives
+API restarts because it is persisted in PostgreSQL.  Record deleted on successful login.
+
+\subsubsection{ASR-SEC-05 --- RBAC}
+Every protected route passes through \texttt{authenticateUser} then an appropriate role
+guard (\texttt{requireAdmin/Teacher/Student}).  Guards perform a live DB lookup rather than
+trusting only the JWT claim.  \texttt{requireAdmin} additionally emits an audit event on
+every check, providing defence-in-depth.
+
+\subsubsection{ASR-SEC-06 --- HTTPS/TLS}
+Caddy terminates TLS for all inbound connections.  \texttt{tls internal} for local dev;
+ACME (Let's Encrypt) for production.  Internal Docker network uses plain HTTP on the
+trusted bridge.
+
+\subsubsection{ASR-SEC-07 --- Encryption at Rest}
+PostgreSQL data-at-rest encryption at the volume/OS level.  Passwords are additionally
+bcrypt-hashed in the application layer.
+
+\subsubsection{ASR-SEC-08 --- Input Validation}
+\texttt{validateBody(schema)} (Zod) guards every API route.  HTTP~400 with structured
+errors returned on invalid/missing fields before any business logic or DB call.
+
+\subsubsection{ASR-SEC-09 --- SQL Injection Prevention}
+Prisma ORM is the exclusive DB access layer.  All \texttt{findMany}/\texttt{create}/
+\texttt{update}/\texttt{delete} calls compile to parameterized prepared statements.
+No \texttt{\$queryRaw} with string interpolation exists in the codebase.
+
+\subsubsection{ASR-SEC-10 \& SEC-11 --- Audit Logging and Retention}
+\texttt{writeAuditLog()} called from controllers and middleware after every
+security-sensitive action.  Entries are append-only JSONL in daily files.
+\texttt{AUDIT\_RETENTION\_DAYS=365} drives \texttt{cleanupOldFiles()} which runs once
+per calendar day, deleting expired files.
+
+\subsubsection{ASR-SEC-14 --- File Upload Size Limits}
+Enforced at two independent layers:
+\begin{enumerate}[noitemsep]
+  \item \textbf{Client}: File Upload Component checks \texttt{file.size} before the HTTP request
+  \item \textbf{Server}: \texttt{enforceMaxUploadSize(maxBytes, name)} checks \texttt{Content-Length}; HTTP~413 if exceeded
+\end{enumerate}
+
+\subsubsection{ASR-SEC-15 --- API Rate Limiting}
+\texttt{rateLimiter(rule)} middleware calls \texttt{redisClient.incr(endpoint+"/"+ip)} and
+\texttt{expire}.  Counter key scopes by endpoint and IP.  Shared Redis ensures accuracy
+across both API instances.
+
+% ══════════════════════════════════════════════════════════════════
+\section{Risks and Technical Debt}
+\label{sec:risks}
+% ══════════════════════════════════════════════════════════════════
+
+\begin{warnbox}
+  Risks below reflect ASRs with Status~$\neq$~Done and technical debt identified from the
+  codebase.  Address before a production deployment.
+\end{warnbox}
+
+\begin{longtable}{C{0.6cm} L{4.2cm} C{1.5cm} L{7.5cm}}
+  \toprule
+  \textbf{\#} & \textbf{Risk / Debt} & \textbf{Severity} & \textbf{Mitigation / Recommendation} \\
+  \midrule \endhead \bottomrule \endlastfoot
+
+  R-01 & Caddy is a single point of failure for all inbound traffic & High & Place Caddy behind a managed cloud LB or run Caddy in cluster mode \\
+  R-02 & \texttt{lb\_policy first} means one backend handles steady-state load & Medium & Switch to \texttt{lb\_policy round\_robin} for active/active distribution \\
+  R-03 & Redis failure causes \texttt{rateLimiter} to fail open & Medium & Circuit-breaker with graceful degradation or in-process fallback counter \\
+  R-04 & JWT access tokens cannot be revoked before expiry & Medium & Redis token blacklist; check on every \texttt{authenticateUser} call \\
+  R-05 & Audit logs stored only on local Docker volume; no off-site backup & Medium & Periodic export to append-only remote object storage (S3, GCS) \\
+  R-06 & ASR-SEC-04: MFA for Admin not implemented & High & TOTP-based MFA (e.g.\ \texttt{speakeasy}); required on every Admin login \\
+  R-07 & ASR-SEC-12: File malware scanning not implemented & High & ClamAV sidecar or cloud AV API before \texttt{INSERT Material} \\
+  R-08 & ASR-SEC-13: Out-of-web-root serving not fully verified & Medium & Integration test confirming direct HTTP access to upload volume returns 404 \\
+  R-09 & ASR-PERF-03: 20\,\% annual data growth not load-tested & Low & Establish capacity model; run growth simulations \\
+  R-10 & ASR-AVAIL-02: Read-only maintenance mode not implemented & Medium & Caddy upstream switch + API middleware returning 503 with \texttt{Retry-After} during maintenance windows \\
+\end{longtable}
+
+% ══════════════════════════════════════════════════════════════════
+\appendix
+\section{Glossary}
+% ══════════════════════════════════════════════════════════════════
+
+\begin{tabularx}{\textwidth}{L{3.5cm} L{10cm}}
+  \toprule
+  \textbf{Term} & \textbf{Definition} \\
+  \midrule
+  Access Token   & Short-lived JWT (1\,h) authorising individual API requests; in \texttt{httpOnly} cookie \\
+  Audit Log      & Immutable, append-only JSONL record of security-sensitive events \\
+  bcrypt         & Password-hashing algorithm based on Blowfish; resistant to brute-force attacks \\
+  Caddy          & Open-source HTTP/2 server with automatic HTTPS; used as reverse proxy and LB \\
+  CUID           & Collision-resistant Unique Identifier; primary keys in Prisma schema \\
+  Docker Compose & Tool for defining and running multi-container Docker applications \\
+  Enrollment     & Student $\leftrightarrow$ Class join; status: \texttt{ACTIVE / COMPLETED / DROPPED} \\
+  httpOnly Cookie & Cookie inaccessible to JavaScript; protects tokens from XSS theft \\
+  JSONL          & JSON Lines format; one JSON object per newline; used for audit log files \\
+  Prisma         & TypeScript ORM generating type-safe, parameterized DB clients from a schema \\
+  Rate Limiting  & Throttling requests from a single source within a sliding time window \\
+  Refresh Token  & Long-lived token for obtaining new access tokens without re-authentication \\
+  RBAC           & Role-Based Access Control; permissions assigned to \texttt{STUDENT/TEACHER/ADMIN} \\
+  Redis          & In-memory store; used for rate-limit counters and aggregation caching \\
+  Zod            & TypeScript-first schema validation library for API input validation \\
+  \bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════════════════════════════
+\section{ASR Traceability Matrix}
+\label{app:traceability}
+% ══════════════════════════════════════════════════════════════════
+
+\begingroup
+\small
+\begin{longtable}{L{2cm} L{1.8cm} L{3.5cm} L{3.8cm} L{2.5cm}}
+  \toprule
+  \textbf{ASR ID} & \textbf{Quality} & \textbf{Container(s)} & \textbf{Component(s)} & \textbf{ADR(s)} \\
+  \midrule \endhead \bottomrule \endlastfoot
+
+  ASR-PERF-01 & Performance & Caddy, Node.js API~$\times$2        & Rate-Limit Middleware, Health Module & ADR-001 \\
+  ASR-PERF-02 & Performance & PostgreSQL                           & Courses, Classes, Materials, Assignments & ADR-004 \\
+  ASR-AVAIL-01 & Availability & Caddy, Node.js API~$\times$2      & Health Module                        & ADR-001 \\
+  ASR-SEC-01  & Security    & Node.js API                          & Auth Module (\texttt{auth.service.ts})& ADR-002 \\
+  ASR-SEC-02  & Security    & Node.js API                          & Auth Module (\texttt{auth.controller.ts}) & ADR-002 \\
+  ASR-SEC-03  & Security    & API, Redis, PostgreSQL               & Login-Lockout, Rate-Limit Middleware  & ADR-003 \\
+  ASR-SEC-05  & Security    & Node.js API                          & Auth Middleware (\texttt{auth.middleware.ts}) & ADR-005 \\
+  ASR-SEC-06  & Security    & Caddy                                & \texttt{Caddyfile} \texttt{tls} directive & ADR-001 \\
+  ASR-SEC-07  & Security    & PostgreSQL                           & Volume encryption                    & ADR-004 \\
+  ASR-SEC-08  & Security    & Node.js API                          & Input Validation (\texttt{util/validation.ts}) & --- \\
+  ASR-SEC-09  & Security    & API, PostgreSQL                      & All DB modules (Prisma ORM)           & ADR-004 \\
+  ASR-SEC-10  & Security    & API, File Storage                    & Audit Module (\texttt{util/auditLogger.ts}) & ADR-007 \\
+  ASR-SEC-11  & Security    & API, File Storage                    & Audit Module cleanup job              & ADR-007 \\
+  ASR-SEC-14  & Security    & API, File Storage                    & \texttt{fileSizeLimit.ts}; Materials, Submissions & ADR-006 \\
+  ASR-SEC-15  & Security    & Node.js API, Redis                   & Rate-Limit Middleware (\texttt{rateLimit.ts}) & ADR-003 \\
+\end{longtable}
+\endgroup
+
+\end{document}
