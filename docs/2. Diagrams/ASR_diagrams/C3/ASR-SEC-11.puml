@@ -10,7 +10,7 @@ System_Boundary(lms, "LMS System") {
 
     Container(auditLogCollection, "Audit Log Collection", "Event Streaming", "Collects audit events continuously")
 
-    ContainerDb_Boundary(hotstorageDB, "Hotstore Database [PostgreSQL]") {
+    Container_Boundary(hotstorageDB, "Hotstore Database [PostgreSQL]") {
         Component(recentLogsTable, "Recent Logs Table", "DB", "Stores: event_id, user_id, action, timestamp, ip (last 90 days)")
         Component(hotstorageIndex, "Hotstore Index", "DB", "Indexes on timestamp, user_id, action for quick queries")
     }

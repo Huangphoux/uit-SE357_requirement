@@ -1,0 +1,98 @@
+@startuml C4_L4_File_Upload
+title C4 Level 4 — File Upload Pipeline\n(ASR-SEC-14, ASR-SEC-08)
+
+skinparam backgroundColor #FAFAFA
+skinparam sequence {
+    ArrowColor #003366
+    ParticipantBackgroundColor #DDEEFF
+    ParticipantBorderColor #336699
+    LifeLineBackgroundColor #EEF4FF
+    LifeLineBorderColor #336699
+    NoteBackgroundColor #FFFDE7
+    NoteBorderColor #F9A825
+    FontName Arial
+}
+
+participant "Client\n(Teacher Browser)" as C #A8D8EA
+participant "File Upload\nComponent\n[React]" as FUC #95CAA0
+participant "Caddy\n:443" as Caddy #95CAA0
+participant "rateLimiter\n[Redis]" as RL #FFD59E
+participant "authenticateUser\n[JWT cookie]" as AM #DDEEFF
+participant "requireTeacher\n[RBAC]" as RT #DDEEFF
+participant "enforceMaxUploadSize\n(50MB / 20MB)" as FSL #FFEB99
+participant "MaterialsController\n/ SubmissionsController" as CTRL #DDEEFF
+participant "MaterialsService\n/ SubmissionsService" as SVC #DDEEFF
+participant "multer\n(multipart parser)" as MUL #FFD59E
+participant "File Storage\n/app/uploads\n(Docker volume)" as FS #B2DFDB
+participant "PostgreSQL\n(Material /\nSubmission)" as PG #C5CAE9
+participant "AuditLogger\n(JSONL)" as AL #CFE2F3
+
+' ── Client-side validation ────────────────────────────────────────
+C -> FUC : select file
+FUC -> FUC : check MIME type\nagainst whitelist\n[PDF, VIDEO, LINK, DOC]
+alt MIME type invalid
+    FUC --> C : show error (no request sent)
+end
+
+FUC -> FUC : check file.size\n≤ 50 MB (materials)\n≤ 20 MB (submissions)
+alt size > limit
+    FUC --> C : show "File too large" error
+end
+
+' ── Server-side pipeline ──────────────────────────────────────────
+FUC -> Caddy : POST /api/materials (or /api/submissions)\nmultipart/form-data\n[HTTPS :443]
+Caddy -> RL : forward
+RL -> RL : Redis INCR/EXPIRE\n[ASR-SEC-15]
+alt rate limit exceeded
+    RL --> C : HTTP 429
+end
+
+RL -> AM : next()
+AM -> AM : jwt.verify(cookie)\nreq.userId = decoded.userId
+alt JWT invalid / missing
+    AM --> C : HTTP 401
+end
+
+AM -> RT : next()
+RT -> PG : prisma.user.findUnique(userId)
+PG --> RT : {role}
+alt role != TEACHER && != ADMIN
+    RT --> C : HTTP 403
+end
+
+RT -> FSL : next()
+FSL -> FSL : read Content-Length header\ncompare to maxBytes\n(MATERIAL_MAX=50MB / SUBMISSION_MAX=20MB)
+alt Content-Length > maxBytes
+    FSL --> C : HTTP 413\n"Upload exceeds limit of XMB"
+end
+
+FSL -> CTRL : next()
+CTRL -> MUL : parse multipart body\nsave to /app/uploads/<uuid>.<ext>
+MUL -> FS : write file bytes\n[outside web root — ASR-SEC-13]
+FS --> MUL : file path
+MUL --> CTRL : req.file = {path, size, mimetype}
+
+CTRL -> SVC : create(classId, title, fileUrl, userId)
+SVC -> PG : INSERT Material / Submission\n{title, url: fileUrl, classId, createdBy}
+PG --> SVC : saved record
+
+SVC --> CTRL : created entity
+CTRL -> AL : writeAuditLog(FILE_UPLOAD_SUCCESS\n| SUBMISSION_CREATED)
+CTRL --> C : HTTP 201 {material/submission}
+
+note over FSL
+  <b>ASR-SEC-14</b> enforced at TWO layers:
+  1. Client: File Upload Component (React)
+  2. Server: enforceMaxUploadSize middleware
+     + multer limits
+  Both must reject independently
+end note
+
+note over FS
+  <b>ASR-SEC-13</b>: /app/uploads is a
+  Docker volume NOT under Caddy's
+  /srv web root. Direct HTTP access
+  is impossible; files served only
+  through API controllers.
+end note
+@enduml

@@ -1,0 +1,96 @@
+@startuml C4_L4_Auth_Flow
+title C4 Level 4 — Authentication & Brute-Force Protection\n(ASR-SEC-01, ASR-SEC-02, ASR-SEC-03, ASR-SEC-05, ASR-SEC-15)
+
+skinparam classAttributeIconSize 0
+skinparam backgroundColor #FAFAFA
+skinparam class {
+    BackgroundColor #DDEEFF
+    BorderColor #336699
+    ArrowColor #003366
+    FontName Arial
+}
+skinparam note {
+    BackgroundColor #FFFDE7
+    BorderColor #F9A825
+}
+skinparam sequence {
+    ArrowColor #003366
+    ParticipantBackgroundColor #DDEEFF
+    ParticipantBorderColor #336699
+    LifeLineBackgroundColor #EEF4FF
+    LifeLineBorderColor #336699
+}
+
+' ── Participants ──────────────────────────────────────────────────
+participant "Client\n(Browser)" as C #A8D8EA
+participant "Caddy\nReverse Proxy\n:443" as Caddy #95CAA0
+participant "rateLimiter\nmiddleware\n(Redis INCR/EXPIRE)" as RL #FFD59E
+participant "validateBody\n(Zod Schema)" as ZOD #FFEB99
+participant "AuthController\n.login()" as AC #DDEEFF
+participant "AuthService\n.login()" as AS #DDEEFF
+participant "PostgreSQL\n(LoginAttempt,\nUser)" as PG #C5CAE9
+participant "Redis\n:6379" as RD #FFB74D
+participant "AuditLogger\nwriteAuditLog()" as AL #CFE2F3
+
+' ── Sequence ──────────────────────────────────────────────────────
+C -> Caddy : POST /api/auth/login\n{email, password}\n[HTTPS :443]
+Caddy -> RL : forward /api/auth/login
+
+RL -> RD : INCR "login/<ip>"\nEXPIRE key if new
+RD --> RL : count
+alt count > RATE_LIMIT_MAX
+    RL --> C : HTTP 429\n"Too many requests"
+else count OK
+    RL -> ZOD : next()
+    ZOD -> ZOD : validate loginSchema\n(email format, password non-empty)
+    alt schema invalid
+        ZOD --> C : HTTP 400\nvalidation errors
+    else schema valid
+        ZOD -> AC : next() → login(req, res)
+
+        AC -> AS : login(email, password, ip)
+
+        AS -> PG : SELECT LoginAttempt WHERE ip = $ip
+        PG --> AS : {attempts, blockedUntil} | null
+
+        alt blockedUntil > now()
+            AS --> AC : throw "Too many failed attempts"
+            AC -> AL : writeAuditLog(LOGIN_BLOCKED)
+            AC --> C : HTTP 429 "Blocked"
+        else not blocked
+            AS -> PG : SELECT User WHERE email = $email
+            PG --> AS : User {id, password[bcrypt], role} | null
+
+            AS -> AS : bcrypt.compare(plain, hash)\n[salt rounds ≥ 10 — ASR-SEC-01]
+
+            alt password invalid
+                AS -> PG : UPSERT LoginAttempt\nattempts++;\nif attempts ≥ MAX → set blockedUntil
+                PG --> AS : updated
+                AS --> AC : throw "Invalid credentials"
+                AC -> AL : writeAuditLog(LOGIN_FAILED)
+                AC --> C : HTTP 400 "Invalid credentials"
+            else password valid
+                AS -> PG : DELETE LoginAttempt WHERE ip = $ip
+                AS -> AS : jwt.sign({userId,role}, secret, {expiresIn:"1h"})\njwt.sign({userId}, refresh_secret, {expiresIn:cfg})\n[ASR-SEC-02]
+                AS -> PG : UPDATE User SET refreshToken = $hash
+                AS --> AC : {user, accessToken, refreshToken}
+                AC -> AL : writeAuditLog(LOGIN_SUCCESS)
+                AC --> C : HTTP 200\nSet-Cookie: accessToken (httpOnly, Secure)\nSet-Cookie: refreshToken (httpOnly, Secure)\n{id, name, email, role}
+            end
+        end
+    end
+end
+
+note over RL, RD
+  <b>ASR-SEC-15</b>: Redis INCR/EXPIRE sliding window
+  Key: "login/<client-ip>"
+  Shared across both API instances
+end note
+
+note over AS, PG
+  <b>ASR-SEC-03</b>: LoginAttempt table
+  MAX_ATTEMPTS env var (default 5)
+  LOCKOUT_TIME_MS env var (default 900 000 ms)
+  Survives API restarts (DB-persisted)
+end note
+@enduml

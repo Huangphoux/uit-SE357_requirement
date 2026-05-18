@@ -1,0 +1,128 @@
+@startuml C4_L4_RBAC_Middleware
+title C4 Level 4 — RBAC Middleware Chain\n(ASR-SEC-05, ASR-SEC-08, ASR-SEC-15)
+
+skinparam backgroundColor #FAFAFA
+skinparam classAttributeIconSize 0
+skinparam class {
+    BackgroundColor #DDEEFF
+    BorderColor #336699
+    ArrowColor #003366
+    FontName Arial
+}
+skinparam note {
+    BackgroundColor #FFFDE7
+    BorderColor #F9A825
+}
+
+class "rateLimiter(rule)\n<<middleware>>" as RL {
+    rule: { endpoint, rate_limit: {time, limit} }
+    ..
+    handle(req, res, next)
+    --
+    redisClient.incr(endpoint+"/"+ip)
+    redisClient.expire(key, time)
+    count > limit => HTTP 429
+}
+
+class "validateBody(schema)\n<<middleware>> [Zod]" as ZOD {
+    schema: ZodSchema
+    ..
+    handle(req, res, next)
+    --
+    schema.safeParse(req.body)
+    error => HTTP 400 + zodErrors
+    success => req.body = parsed
+}
+
+class "AuthMiddleware.authenticateUser()\n<<middleware>>" as AM {
+    handle(req, res, next)
+    --
+    cookie = req.cookies.accessToken
+    no cookie => HTTP 401
+    decoded = jwt.verify(cookie, secret)
+    req.userId = decoded.userId
+    next()
+}
+
+class "AuthMiddleware.requireAdmin()\n<<middleware>>" as RA {
+    handle(req, res, next)
+    --
+    userId = req.userId
+    not userId => HTTP 401
+    user = prisma.user.findUnique(userId)
+    role != ADMIN => writeAuditLog(DENIED) + HTTP 403
+    writeAuditLog(GRANTED)
+    next()
+}
+
+class "AuthMiddleware.requireTeacher()\n<<middleware>>" as RT {
+    handle(req, res, next)
+    --
+    user = prisma.user.findUnique(userId)
+    role != TEACHER && != ADMIN => HTTP 403
+    next()
+}
+
+class "AuthMiddleware.requireStudent()\n<<middleware>>" as RS {
+    handle(req, res, next)
+    --
+    user = prisma.user.findUnique(userId)
+    role != STUDENT && != ADMIN => HTTP 403
+    next()
+}
+
+class "Domain Controller\n(Courses, Materials, etc.)" as CTRL {
+    handler(req, res)
+    --
+    req.userId    set by authenticateUser
+    req.body      validated by Zod
+    business logic
+    prisma query (ASR-SEC-09)
+}
+
+class "PostgreSQL\n(User table)" as PG {
+    findUnique(id): {role}
+}
+
+class "Redis\n(rate counters)" as RD {
+    INCR / EXPIRE
+}
+
+class "AuditLogger\n(JSONL files)" as AL {
+    writeAuditLog(entry)
+}
+
+RL --> RD : INCR / EXPIRE
+RL --> ZOD : next() [count OK]
+ZOD --> AM : next() [schema valid]
+AM --> CTRL : next() [JWT valid, no role guard]
+AM --> RA : if admin-only route
+AM --> RT : if teacher route
+AM --> RS : if student route
+RA --> PG : prisma.user.findUnique
+RT --> PG : prisma.user.findUnique
+RS --> PG : prisma.user.findUnique
+RA --> AL : writeAuditLog()
+CTRL --> PG : Prisma parameterized query\n(ASR-SEC-09)
+
+note right of AM
+  <b>ASR-SEC-02</b>: JWT in httpOnly cookie
+  Expiry: AUTH_SECRET_EXPIRES_IN (1h)
+  Not accessible to JavaScript (XSS-safe)
+end note
+
+note right of RA
+  <b>ASR-SEC-05</b>: 100% RBAC coverage
+  Admin routes: authenticateUser → requireAdmin
+  Teacher routes: authenticateUser → requireTeacher
+  Student routes: authenticateUser → requireStudent
+  All checks BEFORE any business logic executes
+end note
+
+note bottom of ZOD
+  <b>ASR-SEC-08</b>: Zod schema validation
+  validateBody(schema) on every route
+  HTTP 400 on invalid/missing fields
+  No DB interaction before validation passes
+end note
+@enduml
