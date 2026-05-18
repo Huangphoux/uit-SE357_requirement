@@ -12,36 +12,34 @@ export async function seedDatabase() {
 
   const hash = async (pwd: string) => bcrypt.hash(pwd, 10);
 
-  // Users
-  const _admin = await prisma.user.create({
+  // Admin
+  await prisma.user.create({
     data: { name: "Admin", email: "admin@example.com", password: await hash("Admin123!"), role: "ADMIN" },
   });
 
-  const t1 = await prisma.user.create({
-    data: {
-      name: "Dr. John Smith",
-      email: "teacher1@example.com",
-      password: await hash("Teacher123!"),
-      role: "TEACHER",
-    },
-  });
+  // Create 250 teachers
+  console.log("Creating 250 teachers...");
+  const teachers = [];
+  for (let i = 1; i <= 250; i++) {
+    const teacher = await prisma.user.create({
+      data: {
+        name: `Teacher ${i}`,
+        email: `teacher${i}@example.com`,
+        password: await hash("Teacher123!"),
+        role: "TEACHER",
+      },
+    });
+    teachers.push(teacher);
+  }
 
-  const t2 = await prisma.user.create({
-    data: {
-      name: "Prof. Sarah Johnson",
-      email: "teacher2@example.com",
-      password: await hash("Teacher123!"),
-      role: "TEACHER",
-    },
-  });
-
-  // Create 500 student accounts
+  // Create 250 students
+  console.log("Creating 250 students...");
   const students = [];
-  for (let i = 1; i <= 500; i++) {
+  for (let i = 1; i <= 250; i++) {
     const student = await prisma.user.create({
       data: {
         name: `Student ${i}`,
-        email: `user${i}@example.com`,
+        email: `student${i}@example.com`,
         password: await hash("Student123!"),
         role: "STUDENT",
       },
@@ -49,14 +47,8 @@ export async function seedDatabase() {
     students.push(student);
   }
 
-  // Use first 4 for initial enrollments
-  const s1 = students[0];
-  const s2 = students[1];
-  const s3 = students[2];
-  const s4 = students[3];
-
   // Courses
-  const [web, db, algo] = await Promise.all([
+  const [course1, course2, course3] = await Promise.all([
     prisma.course.create({
       data: {
         title: "English Beginner (A1)",
@@ -77,171 +69,101 @@ export async function seedDatabase() {
     }),
   ]);
 
-  // Classes
-  const [c1, c2, c3, c4] = await Promise.all([
-    prisma.class.create({ data: { courseId: web.id, teacherId: t1.id, title: "A1-F24" } }),
-    prisma.class.create({ data: { courseId: web.id, teacherId: t2.id, title: "IELTS-F24" } }),
-    prisma.class.create({ data: { courseId: db.id, teacherId: t1.id, title: "SPEAK-F24" } }),
-    prisma.class.create({ data: { courseId: algo.id, teacherId: t2.id, title: "TOEIC450-S25" } }),
-  ]);
+  // Create 250 classes (one per teacher)
+  console.log("Creating 250 classes...");
+  const classes = [];
+  for (let i = 0; i < 250; i++) {
+    const courseIdx = i % 3;
+    const courses = [course1, course2, course3];
+    const cls = await prisma.class.create({
+      data: {
+        courseId: courses[courseIdx].id,
+        teacherId: teachers[i].id,
+        title: `Class-${i + 1}`,
+      },
+    });
+    classes.push(cls);
+  }
 
-  // Enrollments
-  await Promise.all([
-    prisma.enrollment.create({ data: { userId: s1.id, classId: c1.id, status: "ACTIVE" } }),
-    prisma.enrollment.create({ data: { userId: s1.id, classId: c3.id, status: "ACTIVE" } }),
-    prisma.enrollment.create({ data: { userId: s2.id, classId: c1.id, status: "ACTIVE" } }),
-    prisma.enrollment.create({ data: { userId: s2.id, classId: c4.id, status: "ACTIVE" } }),
-    prisma.enrollment.create({ data: { userId: s3.id, classId: c2.id, status: "ACTIVE" } }),
-    prisma.enrollment.create({ data: { userId: s4.id, classId: c3.id, status: "ACTIVE" } }),
-  ]);
+  // Enroll all 250 students across classes (each student in their corresponding class)
+  console.log("Enrolling students...");
+  const enrollmentData = [];
+  for (let i = 0; i < 250; i++) {
+    const classIdx = i % 250;
+    enrollmentData.push({
+      userId: students[i].id,
+      classId: classes[classIdx].id,
+      status: "ACTIVE" as const,
+    });
+  }
+  await prisma.enrollment.createMany({ data: enrollmentData });
 
-  // Materials
-  await Promise.all([
-    prisma.material.create({
+  // Create assignments for each class
+  console.log("Creating assignments...");
+  const assignments = [];
+  for (let i = 0; i < 250; i++) {
+    const assignment = await prisma.assignment.create({
       data: {
-        classId: c1.id,
-        createdBy: t1.id,
-        title: "Basic Vocabulary PDF",
-        description:
-          "A beginner-friendly vocabulary list including 150 essential daily-use words with pictures and examples.",
-        type: "PDF",
-        url: "https://example.com/materials/basic-vocabulary.pdf",
-      },
-    }),
-    prisma.material.create({
-      data: {
-        classId: c1.id,
-        createdBy: t1.id,
-        title: "Present Simple Grammar Guide",
-        description: "A detailed explanation of Present Simple tense rules, structure, examples, and common mistakes.",
-        type: "VIDEO",
-        url: "https://example.com/materials/present-simple-guide.pdf",
-      },
-    }),
-    prisma.material.create({
-      data: {
-        classId: c3.id,
-        createdBy: t1.id,
-        title: "Daily Activities Listening Audio",
-        description: "An audio file containing simple dialogues about daily routines to support listening practice.",
-        type: "PDF",
-        url: "https://example.com/materials/self-introduction-sample.mp4",
-      },
-    }),
-    prisma.material.create({
-      data: {
-        classId: c4.id,
-        createdBy: t2.id,
-        title: "Beginner Workbook – Unit 1",
-        description:
-          "Workbook exercises for Unit 1, including vocabulary practice, sentence building, and simple dialogues.",
-        type: "PDF",
-        url: "https://example.com/materials/beginner-workbook-unit1.pdf",
-      },
-    }),
-  ]);
-
-  // Assignments
-  const [a1, a2, a3, _a4] = await Promise.all([
-    prisma.assignment.create({
-      data: {
-        classId: c1.id,
-        createdBy: t1.id,
-        title: "Vocabulary Quiz 1 – Basic Words",
-        description:
-          "A short quiz focusing on essential beginner-level vocabulary, helping learners review and strengthen basic daily-use words.",
-        dueDate: new Date("2024-02-28"),
+        classId: classes[i].id,
+        createdBy: teachers[i].id,
+        title: `Assignment ${i + 1}`,
+        description: `Assignment description for class ${i + 1}`,
+        dueDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
         maxScore: 100,
       },
-    }),
-    prisma.assignment.create({
-      data: {
-        classId: c1.id,
-        createdBy: t1.id,
-        title: "Grammar Exercise – Present Simple",
-        description:
-          "Practice activities on the Present Simple tense, including affirmative, negative, and question forms to reinforce basic grammar usage.",
-        dueDate: new Date("2024-03-15"),
-        maxScore: 100,
-      },
-    }),
-    prisma.assignment.create({
-      data: {
-        classId: c3.id,
-        createdBy: t1.id,
-        title: "Listening Practice – Daily Activities",
-        description:
-          "A listening task featuring simple conversations about everyday routines, designed to improve comprehension of common phrases and actions.",
-        dueDate: new Date("2024-03-20"),
-        maxScore: 150,
-      },
-    }),
-    prisma.assignment.create({
-      data: {
-        classId: c4.id,
-        createdBy: t2.id,
-        title: "Speaking Task – Self Introduction",
-        description:
-          "Students record or present a short self-introduction to practice speaking fluency, basic sentence structure, and personal information vocabulary.",
-        dueDate: new Date("2024-10-15"),
-        maxScore: 100,
-      },
-    }),
-  ]);
+    });
+    assignments.push(assignment);
+  }
 
-  // Submissions
-  const [sub1, _sub2, sub3, _sub4] = await Promise.all([
-    prisma.submission.create({
-      data: {
-        assignmentId: a1.id,
-        userId: s1.id,
-        content: "https://github.com/s1/portfolio",
-        status: "GRADED",
-        submittedAt: new Date("2024-02-25"),
-      },
-    }),
-    prisma.submission.create({
-      data: {
-        assignmentId: a2.id,
-        userId: s1.id,
-        content: "https://github.com/s1/calc",
-        status: "SUBMITTED",
-        submittedAt: new Date("2024-03-14"),
-      },
-    }),
-    prisma.submission.create({
-      data: {
-        assignmentId: a1.id,
-        userId: s2.id,
-        content: "https://github.com/s2/portfolio",
-        status: "GRADED",
-        submittedAt: new Date("2024-02-27"),
-      },
-    }),
-    prisma.submission.create({
-      data: {
-        assignmentId: a3.id,
-        userId: s1.id,
-        content: "https://github.com/s1/library-db",
-        status: "SUBMITTED",
-        submittedAt: new Date("2024-03-19"),
-      },
-    }),
-  ]);
+  // Create submissions for all students
+  console.log("Creating submissions and feedback...");
+  const submissionBatchSize = 50;
+  for (let batch = 0; batch < Math.ceil(250 / submissionBatchSize); batch++) {
+    const batchStart = batch * submissionBatchSize;
+    const batchEnd = Math.min(batchStart + submissionBatchSize, 250);
+    const submissionData = [];
 
-  // Feedback
-  await Promise.all([
-    prisma.feedback.create({
-      data: { submissionId: sub1.id, createdBy: t1.id, comment: "Excellent work! Clean code.", score: 95 },
-    }),
-    prisma.feedback.create({
-      data: { submissionId: sub3.id, createdBy: t1.id, comment: "Good effort. Improve accessibility.", score: 82 },
-    }),
-  ]);
+    for (let i = batchStart; i < batchEnd; i++) {
+      const classIdx = i % 250;
+      submissionData.push({
+        assignmentId: assignments[classIdx].id,
+        userId: students[i].id,
+        content: `Submission content from student ${i + 1}`,
+        status: "GRADED" as const,
+        submittedAt: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000),
+      });
+    }
+
+    await prisma.submission.createMany({ data: submissionData });
+  }
+
+  // Get all submissions and create feedback for each
+  console.log("Adding feedback to submissions...");
+  const submissions = await prisma.submission.findMany();
+  const feedbackBatchSize = 50;
+
+  for (let batch = 0; batch < Math.ceil(submissions.length / feedbackBatchSize); batch++) {
+    const batchStart = batch * feedbackBatchSize;
+    const batchEnd = Math.min(batchStart + feedbackBatchSize, submissions.length);
+    const feedbackData = [];
+
+    for (let i = batchStart; i < batchEnd; i++) {
+      const submission = submissions[i];
+      const classIdx = i % 250;
+      feedbackData.push({
+        submissionId: submission.id,
+        createdBy: teachers[classIdx].id,
+        comment: `Great work! Keep improving.`,
+        score: Math.floor(Math.random() * 40) + 60,
+      });
+    }
+
+    await prisma.feedback.createMany({ data: feedbackData });
+  }
 
   console.log("✅ Seeding finished!");
   console.log(
-    "📊 Data: 502 users (1 admin, 1 teacher, 500 students), 3 courses, 4 classes, 6 enrollments, 4 materials, 4 assignments, 4 submissions, 2 feedback"
+    "📊 Data: 501 users (1 admin, 250 teachers, 250 students), 3 courses, 250 classes, 250 enrollments, 250 assignments, 250 submissions, 250 feedback"
   );
 }
 
